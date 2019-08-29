@@ -133,8 +133,4 @@ public class UsuarioDto {
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
-    
-    
-    
-    
 }

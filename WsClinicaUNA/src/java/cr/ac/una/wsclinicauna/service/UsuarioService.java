@@ -28,20 +28,18 @@ import javax.persistence.Query;
 public class UsuarioService {
 
     private static final Logger LOG = Logger.getLogger(UsuarioService.class.getName());
-
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
 
     public Respuesta validarUsuario(String usuario, String clave) {
         try {
-             Query qryActividad = em.createNamedQuery("Usuario.findByUsuClave", Usuario.class);
+            Query qryActividad = em.createNamedQuery("Usuario.findByUsuClave", Usuario.class);
             qryActividad.setParameter("usUsuario", usuario);
             qryActividad.setParameter("usClave", clave);
             qryActividad.setParameter("usClaveTemp", clave);
 
-           return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto((Usuario) qryActividad.getSingleResult()));
-             
-            
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto((Usuario) qryActividad.getSingleResult()));
+
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con las credenciales ingresadas.", "validarUsuario NoResultException");
         } catch (NonUniqueResultException ex) {
@@ -52,4 +50,32 @@ public class UsuarioService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "validarUsuario " + ex.getMessage());
         }
     }
+
+    public Respuesta guardarUsuario(UsuarioDto UsuarioDto) {
+        try {
+            Usuario Usuario;
+            if (UsuarioDto.getID() != null && UsuarioDto.getID() > 0) {
+                Usuario = em.find(Usuario.class, UsuarioDto.getID());
+
+                if (Usuario == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Usuario a modificar.", "guardarUsuario NoResultException");
+                }
+
+                Usuario.actualizarUsuario(UsuarioDto);
+                Usuario = em.merge(Usuario);
+
+            } else {
+                Usuario = new Usuario(UsuarioDto);
+                em.persist(Usuario);
+            }
+
+            em.flush();
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(Usuario));
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Usuario.", "guardarUsuario " + ex.getMessage());
+        }
+    }
+
 }

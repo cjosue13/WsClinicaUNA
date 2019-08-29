@@ -12,11 +12,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -52,6 +55,8 @@ public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "USU_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_USUARIOS", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USU_ID_GENERATOR")
     @Basic(optional = false)
     @Column(name = "US_ID")
     private Long usId;
@@ -107,6 +112,24 @@ public class Usuario implements Serializable {
         this.usContrasenatemp = usContrasenatemp;
     }
 
+    public Usuario(UsuarioDto UsuarioDto) {
+        this.usId = UsuarioDto.getID();
+        actualizarUsuario(UsuarioDto);
+    }
+
+    public void actualizarUsuario(UsuarioDto UsuarioDto) {
+        this.usCedula = UsuarioDto.getCedula();
+        this.usContrasena =  UsuarioDto.getContrasenna();
+        this.usContrasenatemp =  UsuarioDto.getContrasennaTemp();
+        this.usCorreo = UsuarioDto.getCorreo();
+        this.usEstado = UsuarioDto.getEstado();
+        this.usIdioma = UsuarioDto.getIdioma();
+        this.usNombre = UsuarioDto.getNombre();
+        this.usNombreUsuario = UsuarioDto.getNombreUsuario();
+        this.usPapellido = UsuarioDto.getpApellido();
+        this.usSapellido = UsuarioDto.getsApellido();
+        this.usTipousuario = UsuarioDto.getTipoUsuario();
+    }
     public Long getUsId() {
         return usId;
     }
@@ -236,5 +259,6 @@ public class Usuario implements Serializable {
     public void setUsNombreUsuario(String usNombreUsuario) {
         this.usNombreUsuario = usNombreUsuario;
     }
+
     
 }

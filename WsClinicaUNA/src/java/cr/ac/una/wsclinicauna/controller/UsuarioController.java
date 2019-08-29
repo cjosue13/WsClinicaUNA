@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -26,10 +27,10 @@ import javax.ws.rs.core.Response;
  */
 @Path("/UsuarioController")
 public class UsuarioController {
-   
+
     @EJB
     UsuarioService usuarioService;
-    
+
     @GET
     @Path("/usuario/{usuario}/{clave}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +46,23 @@ public class UsuarioController {
         } catch (Exception ex) {
             Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();
+        }
+    }
+
+    @POST
+    @Path("/guardar")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response guardarUsuario(UsuarioDto Usuario) {
+        try {
+            Respuesta respuesta = usuarioService.guardarUsuario(Usuario);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            return Response.ok((UsuarioDto) respuesta.getResultado("Usuario")).build();
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el Usuario").build();
         }
     }
 
