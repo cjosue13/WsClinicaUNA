@@ -17,9 +17,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UsuarioDto {
     private Long ID;
-    private String nombre,pApellido,estado,sApellido, cedula, correo, contrasennaTemp, contrasenna, tipoUsuario,idioma;
+    private String nombre,pApellido,estado,sApellido, cedula, correo,nombreUsuario ,contrasennaTemp, contrasenna, tipoUsuario,idioma;
 
     public UsuarioDto() {     
+    }
+
+    public UsuarioDto(Usuario usuario) {
+        this.ID = usuario.getUsId();
+        this.cedula = usuario.getUsCedula();
+        this.nombreUsuario = usuario.getUsNombreUsuario();
+        this.contrasenna = usuario.getUsContrasena();
+        this.contrasennaTemp = usuario.getUsContrasenatemp();
+        this.correo = usuario.getUsCorreo();
+        this.estado = usuario.getUsEstado();
+        this.idioma = usuario.getUsIdioma();
+        this.nombre = usuario.getUsNombre();
+        this.pApellido = usuario.getUsPapellido();
+        this.sApellido = usuario.getUsSapellido();
+        this.tipoUsuario = usuario.getUsTipousuario();
+        
     }
 
     public Long getID() {
@@ -108,6 +124,14 @@ public class UsuarioDto {
 
     public void setIdioma(String idioma) {
         this.idioma = idioma;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
     
     
