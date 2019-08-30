@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -65,5 +66,23 @@ public class UsuarioController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el Usuario").build();
         }
     }
+    
+    @DELETE
+    @Path("/eliminar/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response EliminarUsuario(@PathParam("id") Long ID) {
+        try {
+            Respuesta respuesta = usuarioService.eliminarUsuario(ID);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            return Response.ok((UsuarioDto) respuesta.getResultado("Usuario")).build();
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el Usuario").build();
+        }
+    }
+    
 
 }

@@ -8,9 +8,12 @@ package cr.ac.una.wsclinicauna.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,7 +59,7 @@ public class Medico implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MED_ID_GENERATOR")
     @Basic(optional = false)
     @Column(name = "MED_ID")
-    private BigDecimal medId;
+    private Long medId;
     @Basic(optional = false)
     @Column(name = "MED_CODIGO")
     private String medCodigo;
@@ -79,24 +82,24 @@ public class Medico implements Serializable {
     private Date medFinjornada;
     @Basic(optional = false)
     @Column(name = "MED_ESPACIOSPORHORA")
-    private BigInteger medEspaciosporhora;
+    private Integer medEspaciosporhora;
     @JoinTable(name = "CLN_TB_MEDICOS_PACIENTES", joinColumns = {
         @JoinColumn(name = "MED_ID", referencedColumnName = "MED_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")})
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Paciente> pacienteList;
     @JoinColumn(name = "US_ID", referencedColumnName = "US_ID")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private Usuario usId;
 
     public Medico() {
     }
 
-    public Medico(BigDecimal medId) {
+    public Medico(Long medId) {
         this.medId = medId;
     }
 
-    public Medico(BigDecimal medId, String medCodigo, String medFolio, String medCarne, String medEstado, Date medIniciojornada, Date medFinjornada, BigInteger medEspaciosporhora) {
+    public Medico(Long medId, String medCodigo, String medFolio, String medCarne, String medEstado, Date medIniciojornada, Date medFinjornada, Integer medEspaciosporhora) {
         this.medId = medId;
         this.medCodigo = medCodigo;
         this.medFolio = medFolio;
@@ -106,12 +109,31 @@ public class Medico implements Serializable {
         this.medFinjornada = medFinjornada;
         this.medEspaciosporhora = medEspaciosporhora;
     }
+    public Medico(MedicoDto MedicoDto) {
+        this.medId = MedicoDto.getID();
+        actualizarMedico(MedicoDto);
+    }
 
-    public BigDecimal getMedId() {
+    public void actualizarMedico(MedicoDto MedicoDto) {
+        this.medCarne = MedicoDto.getCarne();
+        this.medCodigo =  MedicoDto.getCodigo();
+        this.medEspaciosporhora =  MedicoDto.getEspacios();
+        this.medEstado = MedicoDto.getEstado();
+        this.medFinjornada = Date.from(MedicoDto.getFinJornada().atZone(ZoneId.systemDefault()).toInstant());
+        this.medFolio = MedicoDto.getFolio();
+        this.medId = MedicoDto.getID();
+        this.medIniciojornada = Date.from(MedicoDto.getInicioJornada().atZone(ZoneId.systemDefault()).toInstant());
+        this.pacienteList = new ArrayList<>();
+        //this.usId = MedicoDto.getID();
+    }
+
+    
+    
+    public Long getMedId() {
         return medId;
     }
 
-    public void setMedId(BigDecimal medId) {
+    public void setMedId(Long medId) {
         this.medId = medId;
     }
 
@@ -163,11 +185,11 @@ public class Medico implements Serializable {
         this.medFinjornada = medFinjornada;
     }
 
-    public BigInteger getMedEspaciosporhora() {
+    public Integer getMedEspaciosporhora() {
         return medEspaciosporhora;
     }
 
-    public void setMedEspaciosporhora(BigInteger medEspaciosporhora) {
+    public void setMedEspaciosporhora(Integer medEspaciosporhora) {
         this.medEspaciosporhora = medEspaciosporhora;
     }
 

@@ -99,7 +99,8 @@ public class Usuario implements Serializable {
         this.usId = usId;
     }
 
-    public Usuario(Long usId, String usNombre, String usPapellido, String usSapellido, String usCedula, String usCorreo, String usTipousuario, String usIdioma, String usEstado, String usContrasenatemp) {
+    public Usuario(String usNombreUsuario, Long usId, String usNombre, String usPapellido, String usSapellido, String usCedula, String usCorreo, String usTipousuario, String usIdioma, String usEstado, String usContrasenatemp, String usContrasena, List<Medico> medicoList) {
+        this.usNombreUsuario = usNombreUsuario;
         this.usId = usId;
         this.usNombre = usNombre;
         this.usPapellido = usPapellido;
@@ -110,7 +111,11 @@ public class Usuario implements Serializable {
         this.usIdioma = usIdioma;
         this.usEstado = usEstado;
         this.usContrasenatemp = usContrasenatemp;
+        this.usContrasena = usContrasena;
+        this.medicoList = medicoList;
     }
+
+  
 
     public Usuario(UsuarioDto UsuarioDto) {
         this.usId = UsuarioDto.getID();
@@ -129,6 +134,7 @@ public class Usuario implements Serializable {
         this.usPapellido = UsuarioDto.getpApellido();
         this.usSapellido = UsuarioDto.getsApellido();
         this.usTipousuario = UsuarioDto.getTipoUsuario();
+        //this.medicoList = UsuarioDto.get
     }
     public Long getUsId() {
         return usId;

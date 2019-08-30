@@ -7,6 +7,8 @@ package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -52,7 +54,7 @@ public class Paciente implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PAC_ID_GENERATOR")
     @Basic(optional = false)
     @Column(name = "PAC_ID")
-    private BigDecimal pacId;
+    private Long pacId;
     @Basic(optional = false)
     @Column(name = "PAC_NOMBRE")
     private String pacNombre;
@@ -81,11 +83,16 @@ public class Paciente implements Serializable {
     public Paciente() {
     }
 
-    public Paciente(BigDecimal pacId) {
+    public Paciente(Long pacId) {
         this.pacId = pacId;
     }
 
-    public Paciente(BigDecimal pacId, String pacNombre, String pacPapellido, String pacSapellido, String pacCedula, String pacCorreo, String pacGenero, Date pacFechanacimiento) {
+    public Paciente(PacienteDto PacienteDto) {
+        this.pacId = PacienteDto.getID();
+        actualizarPaciente(PacienteDto);
+    }
+    
+    public Paciente(Long pacId, String pacNombre, String pacPapellido, String pacSapellido, String pacCedula, String pacCorreo, String pacGenero, Date pacFechanacimiento) {
         this.pacId = pacId;
         this.pacNombre = pacNombre;
         this.pacPapellido = pacPapellido;
@@ -96,11 +103,24 @@ public class Paciente implements Serializable {
         this.pacFechanacimiento = pacFechanacimiento;
     }
 
-    public BigDecimal getPacId() {
+    public void actualizarPaciente(PacienteDto PacienteDto) {
+        this.pacCedula = PacienteDto.getCedula();
+        this.pacCorreo =  PacienteDto.getCorreo();
+        this.pacFechanacimiento =  Date.from(PacienteDto.getFechaNacimiento().atZone(ZoneId.systemDefault()).toInstant());
+        this.pacGenero = PacienteDto.getGenero();
+        this.pacId = PacienteDto.getID();
+        this.pacNombre = PacienteDto.getNombre();
+        this.pacPapellido = PacienteDto.getpApellido();
+        this.pacSapellido = PacienteDto.getsApellido();
+        //this.medicoList = new ArrayList<>();
+        //this.usId = MedicoDto.getID();
+    }
+    
+    public Long getPacId() {
         return pacId;
     }
 
-    public void setPacId(BigDecimal pacId) {
+    public void setPacId(Long pacId) {
         this.pacId = pacId;
     }
 

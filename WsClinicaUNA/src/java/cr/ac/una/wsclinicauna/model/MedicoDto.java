@@ -4,6 +4,8 @@ import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import cr.ac.una.wsclinicauna.util.LocalDateTimeAdapter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -23,6 +25,9 @@ public class MedicoDto {
     private String Folio;
     private String carne;
     private String Estado;
+    private Integer Espacios;
+
+    
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime InicioJornada;
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -31,6 +36,25 @@ public class MedicoDto {
     public MedicoDto() {
     }
 
+    public MedicoDto(Medico medico) {
+        this.ID = medico.getMedId();
+        this.Codigo = medico.getMedCodigo();
+        this.Folio = medico.getMedFolio();
+        this.carne = medico.getMedCarne();
+        this.Estado = medico.getMedEstado();
+        this.Espacios = medico.getMedEspaciosporhora();
+        this.InicioJornada = LocalDateTime.ofInstant(medico.getMedIniciojornada().toInstant(),ZoneId.systemDefault());
+        this.FinJornada = LocalDateTime.ofInstant(medico.getMedFinjornada().toInstant(),ZoneId.systemDefault());
+    }
+    
+    public Integer getEspacios() {
+        return Espacios;
+    }
+
+    public void setEspacios(Integer Espacios) {
+        this.Espacios = Espacios;
+    }
+    
     public Long getID() {
         return ID;
     }

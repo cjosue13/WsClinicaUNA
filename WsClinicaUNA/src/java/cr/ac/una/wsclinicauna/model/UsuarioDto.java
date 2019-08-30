@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class UsuarioDto {
     private Long ID;
     private String nombre,pApellido,estado,sApellido, cedula, correo,nombreUsuario ,contrasennaTemp, contrasenna, tipoUsuario,idioma;
-
+    
     public UsuarioDto() {     
     }
 
