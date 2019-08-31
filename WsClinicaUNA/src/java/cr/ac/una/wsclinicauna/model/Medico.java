@@ -120,13 +120,13 @@ public class Medico implements Serializable {
         this.medCodigo =  MedicoDto.getCodigo();
         this.medEspaciosporhora =  MedicoDto.getEspacios();
         this.medEstado = MedicoDto.getEstado();
-        this.medFinjornada = Date.from(MedicoDto.getInicioJornada().atStartOfDay()
-      .atZone(ZoneId.systemDefault())
+        this.medFinjornada = java.util.Date
+      .from(MedicoDto.getInicioJornada().atZone(ZoneId.systemDefault())
       .toInstant());
         this.medFolio = MedicoDto.getFolio();
         this.medId = MedicoDto.getID();
-        this.medIniciojornada = Date.from(MedicoDto.getFinJornada().atStartOfDay()
-      .atZone(ZoneId.systemDefault())
+        this.medIniciojornada = java.util.Date
+      .from(MedicoDto.getFinJornada().atZone(ZoneId.systemDefault())
       .toInstant());
         this.pacienteList = new ArrayList<>();
         //this.usId = MedicoDto.getID();
