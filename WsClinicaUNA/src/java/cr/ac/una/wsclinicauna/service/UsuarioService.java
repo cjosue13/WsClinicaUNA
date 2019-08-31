@@ -10,6 +10,8 @@ import cr.ac.una.wsclinicauna.model.UsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
@@ -53,6 +55,26 @@ public class UsuarioService {
         }
     }
 
+    
+    public Respuesta getUsuarios() {
+        try {
+            Query qryUsuario = em.createNamedQuery("Usuario.findAll", Usuario.class);
+            List<Usuario> usuario = qryUsuario.getResultList();
+            List<UsuarioDto> usuariosDto = new ArrayList<>();
+            for (Usuario usuario1 : usuario) {
+                usuariosDto.add(new UsuarioDto(usuario1));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuarios", usuariosDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen usuarios con los criterios ingresados.", "getUsuarios NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getUsuario " + ex.getMessage());
+        }
+    }
+    
     public Respuesta guardarUsuario(UsuarioDto UsuarioDto) {
         try {
             Usuario Usuario;
@@ -86,11 +108,11 @@ public class UsuarioService {
             if (id != null && id > 0) {
                 usuario = em.find(Usuario.class, id);
                 if (usuario == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO,"No se encontró el empleado a eliminar.", "EliminarUsuario NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO,"No se encontró el usuario a eliminar.", "EliminarUsuario NoResultException");
                 }
                 em.remove(usuario);
             } else {
-                return new Respuesta(false,CodigoRespuesta.ERROR_CLIENTE, "Debe cargar el usuario a eliminar.", "EliminarEmpleado NoResultException");
+                return new Respuesta(false,CodigoRespuesta.ERROR_CLIENTE, "Debe cargar el usuario a eliminar.", "EliminarUsuario NoResultException");
             }
             return new Respuesta(true,CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {

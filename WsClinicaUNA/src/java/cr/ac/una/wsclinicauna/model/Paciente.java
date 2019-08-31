@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -44,7 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Paciente.findByPacCedula", query = "SELECT p FROM Paciente p WHERE p.pacCedula = :pacCedula")
     , @NamedQuery(name = "Paciente.findByPacCorreo", query = "SELECT p FROM Paciente p WHERE p.pacCorreo = :pacCorreo")
     , @NamedQuery(name = "Paciente.findByPacGenero", query = "SELECT p FROM Paciente p WHERE p.pacGenero = :pacGenero")
-    , @NamedQuery(name = "Paciente.findByPacFechanacimiento", query = "SELECT p FROM Paciente p WHERE p.pacFechanacimiento = :pacFechanacimiento")})
+    , @NamedQuery(name = "Paciente.findByPacFechanacimiento", query = "SELECT p FROM Paciente p WHERE p.pacFechanacimiento = :pacFechanacimiento", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
 public class Paciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -106,7 +107,9 @@ public class Paciente implements Serializable {
     public void actualizarPaciente(PacienteDto PacienteDto) {
         this.pacCedula = PacienteDto.getCedula();
         this.pacCorreo =  PacienteDto.getCorreo();
-        this.pacFechanacimiento =  Date.from(PacienteDto.getFechaNacimiento().atZone(ZoneId.systemDefault()).toInstant());
+        this.pacFechanacimiento = Date.from(PacienteDto.getFechaNacimiento().atStartOfDay()
+      .atZone(ZoneId.systemDefault())
+      .toInstant());
         this.pacGenero = PacienteDto.getGenero();
         this.pacId = PacienteDto.getID();
         this.pacNombre = PacienteDto.getNombre();

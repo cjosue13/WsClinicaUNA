@@ -26,6 +26,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -49,7 +50,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Medico.findByMedEstado", query = "SELECT m FROM Medico m WHERE m.medEstado = :medEstado")
     , @NamedQuery(name = "Medico.findByMedIniciojornada", query = "SELECT m FROM Medico m WHERE m.medIniciojornada = :medIniciojornada")
     , @NamedQuery(name = "Medico.findByMedFinjornada", query = "SELECT m FROM Medico m WHERE m.medFinjornada = :medFinjornada")
-    , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora")})
+    , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora" , hints = @QueryHint(name = "eclipselink.refresh", value = "true") )})
 public class Medico implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -119,10 +120,14 @@ public class Medico implements Serializable {
         this.medCodigo =  MedicoDto.getCodigo();
         this.medEspaciosporhora =  MedicoDto.getEspacios();
         this.medEstado = MedicoDto.getEstado();
-        this.medFinjornada = Date.from(MedicoDto.getFinJornada().atZone(ZoneId.systemDefault()).toInstant());
+        this.medFinjornada = Date.from(MedicoDto.getInicioJornada().atStartOfDay()
+      .atZone(ZoneId.systemDefault())
+      .toInstant());
         this.medFolio = MedicoDto.getFolio();
         this.medId = MedicoDto.getID();
-        this.medIniciojornada = Date.from(MedicoDto.getInicioJornada().atZone(ZoneId.systemDefault()).toInstant());
+        this.medIniciojornada = Date.from(MedicoDto.getFinJornada().atStartOfDay()
+      .atZone(ZoneId.systemDefault())
+      .toInstant());
         this.pacienteList = new ArrayList<>();
         //this.usId = MedicoDto.getID();
     }

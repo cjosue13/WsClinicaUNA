@@ -13,6 +13,8 @@ import cr.ac.una.wsclinicauna.model.Paciente;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
@@ -37,6 +39,24 @@ public class PacienteService {
     private EntityManager em;
     private EntityTransaction et;
     
+    public Respuesta getPacientes() {
+        try {
+            Query qrypacientes = em.createNamedQuery("Paciente.findAll", Paciente.class);
+            List<Paciente> pacientes = qrypacientes.getResultList();
+            List<PacienteDto> pacientesDto = new ArrayList<>();
+            for (Paciente pacientes1 : pacientes) {
+                pacientesDto.add(new PacienteDto(pacientes1));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Pacientes", pacientesDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen pacientes con los criterios ingresados.", "getPacientes NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el paciente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el paciente.", "getPacientes " + ex.getMessage());
+        }
+    }
     
     public Respuesta guardarPaciente(PacienteDto PacienteDto) {
         try {

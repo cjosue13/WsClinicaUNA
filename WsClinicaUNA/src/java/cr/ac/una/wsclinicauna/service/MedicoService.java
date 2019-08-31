@@ -9,10 +9,13 @@ import cr.ac.una.wsclinicauna.model.Medico;
 import cr.ac.una.wsclinicauna.model.MedicoDto;
 import cr.ac.una.wsclinicauna.model.Medico;
 import cr.ac.una.wsclinicauna.model.MedicoDto;
-import cr.ac.una.wsclinicauna.model.Usuario;
+import cr.ac.una.wsclinicauna.model.Medico;
+import cr.ac.una.wsclinicauna.model.MedicoDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
@@ -36,6 +39,25 @@ public class MedicoService {
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
     private EntityTransaction et;
+    
+    public Respuesta getMedicos() {
+        try {
+            Query qryMedicos = em.createNamedQuery("Medico.findAll", Medico.class);
+            List<Medico> Medicos = qryMedicos.getResultList();
+            List<MedicoDto> MedicosDto = new ArrayList<>();
+            for (Medico Medicos1 : Medicos) {
+                MedicosDto.add(new MedicoDto(Medicos1));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medicos", MedicosDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen Medicos con los criterios ingresados.", "getMedicos NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Medico.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Medico.", "getMedicos " + ex.getMessage());
+        }
+    }
     
     public Respuesta guardarMedico(MedicoDto MedicoDto) {
         try {

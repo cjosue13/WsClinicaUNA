@@ -26,12 +26,10 @@ public class MedicoDto {
     private String carne;
     private String Estado;
     private Integer Espacios;
-
-    
-    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-    private LocalDateTime InicioJornada;
-    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-    private LocalDateTime FinJornada;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate InicioJornada;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate FinJornada;
 
     public MedicoDto() {
     }
@@ -43,8 +41,12 @@ public class MedicoDto {
         this.carne = medico.getMedCarne();
         this.Estado = medico.getMedEstado();
         this.Espacios = medico.getMedEspaciosporhora();
-        this.InicioJornada = LocalDateTime.ofInstant(medico.getMedIniciojornada().toInstant(),ZoneId.systemDefault());
-        this.FinJornada = LocalDateTime.ofInstant(medico.getMedFinjornada().toInstant(),ZoneId.systemDefault());
+        this.InicioJornada = medico.getMedIniciojornada().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        this.FinJornada = medico.getMedFinjornada().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
     
     public Integer getEspacios() {
@@ -95,19 +97,19 @@ public class MedicoDto {
         this.Estado = Estado;
     }
 
-    public LocalDateTime getInicioJornada() {
+    public LocalDate getInicioJornada() {
         return InicioJornada;
     }
 
-    public void setInicioJornada(LocalDateTime InicioJornada) {
+    public void setInicioJornada(LocalDate InicioJornada) {
         this.InicioJornada = InicioJornada;
     }
 
-    public LocalDateTime getFinJornada() {
+    public LocalDate getFinJornada() {
         return FinJornada;
     }
 
-    public void setFinJornada(LocalDateTime FinJornada) {
+    public void setFinJornada(LocalDate FinJornada) {
         this.FinJornada = FinJornada;
     }
 }

@@ -5,12 +5,14 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
@@ -19,6 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "PacienteDto")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PacienteDto {
+
     private Long ID;
     private String nombre;
     private String pApellido;
@@ -26,7 +29,8 @@ public class PacienteDto {
     private String cedula;
     private String correo;
     private String genero;
-    private LocalDateTime fechaNacimiento;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate fechaNacimiento;
 
     public PacienteDto() {
     }
@@ -38,8 +42,11 @@ public class PacienteDto {
         this.sApellido = Paciente.getPacSapellido();
         this.cedula = Paciente.getPacCedula();
         this.correo = Paciente.getPacCorreo();
-        this.fechaNacimiento = LocalDateTime.ofInstant(Paciente.getPacFechanacimiento().toInstant(),ZoneId.systemDefault());
+        this.fechaNacimiento = Paciente.getPacFechanacimiento().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
         this.genero = Paciente.getPacGenero();
+        System.out.println(this.fechaNacimiento.toString());
     }
 
     public Long getID() {
@@ -98,12 +105,12 @@ public class PacienteDto {
         this.genero = genero;
     }
 
-    public LocalDateTime getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(LocalDateTime fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-    
+
 }

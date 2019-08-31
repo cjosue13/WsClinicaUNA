@@ -9,6 +9,8 @@ import cr.ac.una.wsclinicauna.model.MedicoDto;
 import cr.ac.una.wsclinicauna.service.MedicoService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -19,6 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -46,6 +49,26 @@ public class MedicoController {
         } catch (Exception ex) {
             Logger.getLogger(MedicoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el Medico").build();
+        }
+    }
+    
+    @GET
+    @Path("/medicos")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getMedicos() {
+        try {
+            Respuesta respuesta = medicoService.getMedicos();
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            ArrayList<MedicoDto> medicosDto = (ArrayList<MedicoDto>) respuesta.getResultado("Medicos");
+            
+            return Response.ok(new GenericEntity<List<MedicoDto>>(medicosDto){}).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(MedicoController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el medico").build();
         }
     }
     
