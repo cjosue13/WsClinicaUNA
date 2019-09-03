@@ -5,6 +5,7 @@ import cr.ac.una.wsclinicauna.util.LocalDateTimeAdapter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,10 +27,9 @@ public class MedicoDto {
     private String carne;
     private String Estado;
     private Integer Espacios;
-    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-    private LocalDateTime InicioJornada;
-    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-    private LocalDateTime FinJornada;
+    private String InicioJornada;
+    private String FinJornada;
+    private  UsuarioDto us;
 
     public MedicoDto() {
     }
@@ -41,14 +41,28 @@ public class MedicoDto {
         this.carne = medico.getMedCarne();
         this.Estado = medico.getMedEstado();
         this.Espacios = medico.getMedEspaciosporhora();
-        this.InicioJornada = medico.getMedIniciojornada().toInstant()
+        //this.InicioJornada = medico.getMedIniciojornada().toString();
+        LocalDateTime localDateTime = medico.getMedIniciojornada().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
-        this.FinJornada = medico.getMedFinjornada().toInstant()
+        this.InicioJornada = localDateTime.toLocalTime().toString();
+
+        LocalDateTime localDateTime2 = medico.getMedFinjornada().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
+        this.FinJornada = localDateTime2.toLocalTime().toString();
+        this.us = new UsuarioDto(medico.getUsId());
+        //this.FinJornada = medico.getMedFinjornada().toString();
     }
-    
+
+    public UsuarioDto getUs() {
+        return us;
+    }
+
+    public void setUs(UsuarioDto us) {
+        this.us = us;
+    }
+
     public Integer getEspacios() {
         return Espacios;
     }
@@ -56,7 +70,7 @@ public class MedicoDto {
     public void setEspacios(Integer Espacios) {
         this.Espacios = Espacios;
     }
-    
+
     public Long getID() {
         return ID;
     }
@@ -97,19 +111,19 @@ public class MedicoDto {
         this.Estado = Estado;
     }
 
-    public LocalDateTime getInicioJornada() {
+    public String getInicioJornada() {
         return InicioJornada;
     }
 
-    public void setInicioJornada(LocalDateTime InicioJornada) {
+    public void setInicioJornada(String InicioJornada) {
         this.InicioJornada = InicioJornada;
     }
 
-    public LocalDateTime getFinJornada() {
+    public String getFinJornada() {
         return FinJornada;
     }
 
-    public void setFinJornada(LocalDateTime FinJornada) {
+    public void setFinJornada(String FinJornada) {
         this.FinJornada = FinJornada;
     }
 }

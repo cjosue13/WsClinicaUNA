@@ -8,6 +8,8 @@ package cr.ac.una.wsclinicauna.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_TB_MEDICOS",schema = "ClinicaUNA")
+@Table(name = "CLN_TB_MEDICOS", schema = "ClinicaUNA")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m")
@@ -50,7 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Medico.findByMedEstado", query = "SELECT m FROM Medico m WHERE m.medEstado = :medEstado")
     , @NamedQuery(name = "Medico.findByMedIniciojornada", query = "SELECT m FROM Medico m WHERE m.medIniciojornada = :medIniciojornada")
     , @NamedQuery(name = "Medico.findByMedFinjornada", query = "SELECT m FROM Medico m WHERE m.medFinjornada = :medFinjornada")
-    , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora" , hints = @QueryHint(name = "eclipselink.refresh", value = "true") )})
+    , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
 public class Medico implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -90,7 +92,7 @@ public class Medico implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Paciente> pacienteList;
     @JoinColumn(name = "US_ID", referencedColumnName = "US_ID")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Usuario usId;
 
     public Medico() {
@@ -110,6 +112,7 @@ public class Medico implements Serializable {
         this.medFinjornada = medFinjornada;
         this.medEspaciosporhora = medEspaciosporhora;
     }
+
     public Medico(MedicoDto MedicoDto) {
         this.medId = MedicoDto.getID();
         actualizarMedico(MedicoDto);
@@ -117,23 +120,32 @@ public class Medico implements Serializable {
 
     public void actualizarMedico(MedicoDto MedicoDto) {
         this.medCarne = MedicoDto.getCarne();
-        this.medCodigo =  MedicoDto.getCodigo();
-        this.medEspaciosporhora =  MedicoDto.getEspacios();
+        this.medCodigo = MedicoDto.getCodigo();
+        this.medEspaciosporhora = MedicoDto.getEspacios();
         this.medEstado = MedicoDto.getEstado();
-        this.medFinjornada = java.util.Date
+
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        try {
+            
+            this.medIniciojornada = formato.parse(MedicoDto.getInicioJornada());
+            this.medFinjornada = formato.parse(MedicoDto.getFinJornada());
+        } catch (ParseException ex) {
+            System.out.println(ex);
+        }
+
+        /*this.medFinjornada = java.util.Date
       .from(MedicoDto.getInicioJornada().atZone(ZoneId.systemDefault())
-      .toInstant());
+      .toInstant());*/
         this.medFolio = MedicoDto.getFolio();
         this.medId = MedicoDto.getID();
-        this.medIniciojornada = java.util.Date
+        /*this.medIniciojornada = java.util.Date
       .from(MedicoDto.getFinJornada().atZone(ZoneId.systemDefault())
-      .toInstant());
+      .toInstant());*/
         this.pacienteList = new ArrayList<>();
         //this.usId = MedicoDto.getID();
     }
 
-    
-    
     public Long getMedId() {
         return medId;
     }
@@ -239,5 +251,5 @@ public class Medico implements Serializable {
     public String toString() {
         return "cr.ac.una.wsclinicauna.model.Medico[ medId=" + medId + " ]";
     }
-    
+
 }

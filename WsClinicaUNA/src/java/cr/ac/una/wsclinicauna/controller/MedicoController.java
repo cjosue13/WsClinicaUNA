@@ -62,6 +62,7 @@ public class MedicoController {
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
+            
             ArrayList<MedicoDto> medicosDto = (ArrayList<MedicoDto>) respuesta.getResultado("Medicos");
             
             return Response.ok(new GenericEntity<List<MedicoDto>>(medicosDto){}).build();
