@@ -10,7 +10,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -124,16 +126,13 @@ public class Medico implements Serializable {
         this.medEspaciosporhora = MedicoDto.getEspacios();
         this.medEstado = MedicoDto.getEstado();
 
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //SimpleDateFormat formato = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        if (MedicoDto.getInicioJornada() != null && MedicoDto.getFinJornada() != null) {
+            LocalDateTime inicioJornada = LocalDateTime.parse(MedicoDto.getInicioJornada(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+            LocalDateTime finJornada = LocalDateTime.parse(MedicoDto.getFinJornada(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+            this.medIniciojornada = Date.from(inicioJornada.atZone(ZoneId.systemDefault()).toInstant());
 
-        try {
-            if (MedicoDto.getInicioJornada()!=null && MedicoDto.getFinJornada()!=null) {
-                this.medIniciojornada = formato.parse(MedicoDto.getInicioJornada());
-                this.medFinjornada = formato.parse(MedicoDto.getFinJornada());
-            }
-
-        } catch (ParseException ex) {
-            System.out.println(ex);
+            this.medFinjornada = Date.from(finJornada.atZone(ZoneId.systemDefault()).toInstant());
         }
 
         /*this.medFinjornada = java.util.Date
