@@ -89,7 +89,7 @@ public class Usuario implements Serializable {
     private String usContrasenatemp;
     @Column(name = "US_CONTRASENA")
     private String usContrasena;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usId", fetch = FetchType.LAZY)
     private List<Medico> medicoList;
 
     public Usuario() {

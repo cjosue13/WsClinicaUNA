@@ -125,11 +125,13 @@ public class Medico implements Serializable {
         this.medEstado = MedicoDto.getEstado();
 
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
         try {
-            
-            this.medIniciojornada = formato.parse(MedicoDto.getInicioJornada());
-            this.medFinjornada = formato.parse(MedicoDto.getFinJornada());
+            if (MedicoDto.getInicioJornada()!=null && MedicoDto.getFinJornada()!=null) {
+                this.medIniciojornada = formato.parse(MedicoDto.getInicioJornada());
+                this.medFinjornada = formato.parse(MedicoDto.getFinJornada());
+            }
+
         } catch (ParseException ex) {
             System.out.println(ex);
         }
@@ -144,6 +146,7 @@ public class Medico implements Serializable {
       .toInstant());*/
         this.pacienteList = new ArrayList<>();
         //this.usId = MedicoDto.getID();
+        this.usId = new Usuario(MedicoDto.getUs());
     }
 
     public Long getMedId() {
