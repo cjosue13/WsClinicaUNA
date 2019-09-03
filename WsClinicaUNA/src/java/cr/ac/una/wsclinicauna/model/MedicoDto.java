@@ -29,7 +29,7 @@ public class MedicoDto {
     private Integer Espacios;
     private String InicioJornada;
     private String FinJornada;
-    private  UsuarioDto us;
+    private UsuarioDto us;
 
     public MedicoDto() {
     }
@@ -41,18 +41,19 @@ public class MedicoDto {
         this.carne = medico.getMedCarne();
         this.Estado = medico.getMedEstado();
         this.Espacios = medico.getMedEspaciosporhora();
-        //this.InicioJornada = medico.getMedIniciojornada().toString();
-        LocalDateTime localDateTime = medico.getMedIniciojornada().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-        this.InicioJornada = localDateTime.toLocalTime().toString();
+        if (medico.getMedIniciojornada() != null && medico.getMedFinjornada() != null) {
+            LocalDateTime localDateTime = medico.getMedIniciojornada().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            this.InicioJornada = localDateTime.toLocalTime().toString();
 
-        LocalDateTime localDateTime2 = medico.getMedFinjornada().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-        this.FinJornada = localDateTime2.toLocalTime().toString();
+            LocalDateTime localDateTime2 = medico.getMedFinjornada().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            this.FinJornada = localDateTime2.toLocalTime().toString();
+        }
+
         this.us = new UsuarioDto(medico.getUsId());
-        //this.FinJornada = medico.getMedFinjornada().toString();
     }
 
     public UsuarioDto getUs() {
