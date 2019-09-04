@@ -6,6 +6,7 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -45,8 +46,14 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByUsContrasenatemp", query = "SELECT u FROM Usuario u WHERE u.usContrasenatemp = :usContrasenatemp")
     , @NamedQuery(name = "Usuario.findByUsContrasena", query = "SELECT u FROM Usuario u WHERE u.usContrasena = :usContrasena")
     , @NamedQuery(name = "Usuario.findByUsuClave", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario and (u.usContrasena = :usClave OR u.usContrasenatemp =:usClaveTemp)", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))    
+    , @NamedQuery(name = "Usuario.findByUsuNombreUsuario", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario")    
+        
 })
 public class Usuario implements Serializable {
+
+    @Basic(optional = false)
+    @Column(name = "US_VERSION")
+    private Long usVersion;
 
     @Basic(optional = false)
     @Column(name = "US_NOMBRE_USUARIO")
@@ -99,7 +106,8 @@ public class Usuario implements Serializable {
         this.usId = usId;
     }
 
-    public Usuario(String usNombreUsuario, Long usId, String usNombre, String usPapellido, String usSapellido, String usCedula, String usCorreo, String usTipousuario, String usIdioma, String usEstado, String usContrasenatemp, String usContrasena, List<Medico> medicoList) {
+    public Usuario(Long usVersion, String usNombreUsuario, Long usId, String usNombre, String usPapellido, String usSapellido, String usCedula, String usCorreo, String usTipousuario, String usIdioma, String usEstado, String usContrasenatemp, String usContrasena) {
+        this.usVersion = usVersion;
         this.usNombreUsuario = usNombreUsuario;
         this.usId = usId;
         this.usNombre = usNombre;
@@ -112,8 +120,9 @@ public class Usuario implements Serializable {
         this.usEstado = usEstado;
         this.usContrasenatemp = usContrasenatemp;
         this.usContrasena = usContrasena;
-        this.medicoList = medicoList;
     }
+
+    
 
   
 
@@ -134,6 +143,7 @@ public class Usuario implements Serializable {
         this.usPapellido = UsuarioDto.getpApellido();
         this.usSapellido = UsuarioDto.getsApellido();
         this.usTipousuario = UsuarioDto.getTipoUsuario();
+        this.usVersion = UsuarioDto.getUsVersion();
         //this.medicoList = UsuarioDto.get
     }
     public Long getUsId() {
@@ -264,6 +274,14 @@ public class Usuario implements Serializable {
 
     public void setUsNombreUsuario(String usNombreUsuario) {
         this.usNombreUsuario = usNombreUsuario;
+    }
+
+    public Long getUsVersion() {
+        return usVersion;
+    }
+
+    public void setUsVersion(Long usVersion) {
+        this.usVersion = usVersion;
     }
 
     

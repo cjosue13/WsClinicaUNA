@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class UsuarioDto {
     private Long ID;
     private String nombre,pApellido,estado,sApellido, cedula, correo,nombreUsuario ,contrasennaTemp, contrasenna, tipoUsuario,idioma;
-    
+    private Long usVersion;
     public UsuarioDto() {     
     }
 
@@ -35,6 +35,7 @@ public class UsuarioDto {
         this.pApellido = usuario.getUsPapellido();
         this.sApellido = usuario.getUsSapellido();
         this.tipoUsuario = usuario.getUsTipousuario();
+        this.usVersion = usuario.getUsVersion();
         
     }
 
@@ -133,4 +134,14 @@ public class UsuarioDto {
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
+
+    public Long getUsVersion() {
+        return usVersion;
+    }
+
+    public void setUsVersion(Long usVersion) {
+        this.usVersion = usVersion;
+    }
+
+    
 }

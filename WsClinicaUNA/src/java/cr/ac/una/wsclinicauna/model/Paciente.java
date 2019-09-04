@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Paciente.findByPacGenero", query = "SELECT p FROM Paciente p WHERE p.pacGenero = :pacGenero")
     , @NamedQuery(name = "Paciente.findByPacFechanacimiento", query = "SELECT p FROM Paciente p WHERE p.pacFechanacimiento = :pacFechanacimiento", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
 public class Paciente implements Serializable {
+
+    @Basic(optional = false)
+    @Column(name = "PAC_VERSION")
+    private Long pacVersion;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -215,6 +220,14 @@ public class Paciente implements Serializable {
     @Override
     public String toString() {
         return "cr.ac.una.wsclinicauna.model.Paciente[ pacId=" + pacId + " ]";
+    }
+
+    public Long getPacVersion() {
+        return pacVersion;
+    }
+
+    public void setPacVersion(Long pacVersion) {
+        this.pacVersion = pacVersion;
     }
     
 }

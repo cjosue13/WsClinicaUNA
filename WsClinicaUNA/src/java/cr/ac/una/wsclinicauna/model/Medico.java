@@ -57,6 +57,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
 public class Medico implements Serializable {
 
+    @Column(name = "MED_ESPACIOSPORHORA")
+    private Integer medEspaciosporhora;
+    @Basic(optional = false)
+    @Column(name = "MED_VERSION")
+    private Long medVersion;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -85,9 +91,6 @@ public class Medico implements Serializable {
     @Column(name = "MED_FINJORNADA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date medFinjornada;
-    @Basic(optional = false)
-    @Column(name = "MED_ESPACIOSPORHORA")
-    private Integer medEspaciosporhora;
     @JoinTable(name = "CLN_TB_MEDICOS_PACIENTES", joinColumns = {
         @JoinColumn(name = "MED_ID", referencedColumnName = "MED_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")})
@@ -252,6 +255,15 @@ public class Medico implements Serializable {
     @Override
     public String toString() {
         return "cr.ac.una.wsclinicauna.model.Medico[ medId=" + medId + " ]";
+    }
+
+
+    public Long getMedVersion() {
+        return medVersion;
+    }
+
+    public void setMedVersion(Long medVersion) {
+        this.medVersion = medVersion;
     }
 
 }
