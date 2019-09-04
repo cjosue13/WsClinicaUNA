@@ -21,10 +21,10 @@ public class EspacioHoraDto {
     Long espVersion;
     AgendaDto agenda;
 
-    public EspacioHoraDto(Long espID, Long espVersion, AgendaDto agenda) {
-        this.espID = espID;
-        this.espVersion = espVersion;
-        this.agenda = agenda;
+    public EspacioHoraDto(EspacioHora espacioh) {
+        this.espID = espacioh.getEspVersion();
+        this.espVersion = espacioh.getEspVersion();
+        this.agenda = new AgendaDto(espacioh.getPkClnAgenda());
     }
 
     public Long getEspID() {

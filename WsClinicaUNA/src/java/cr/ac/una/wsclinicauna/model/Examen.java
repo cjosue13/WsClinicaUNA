@@ -44,7 +44,7 @@ public class Examen implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "PK_CLN_EXAMEN")
-    private String pkClnExamen;
+    private Long pkClnExamen;
     @Basic(optional = false)
     @Column(name = "EXM_NOMBRE_EXAMEN")
     private String exmNombreExamen;
@@ -57,18 +57,18 @@ public class Examen implements Serializable {
     private String exmAnotaciones;
     @Basic(optional = false)
     @Column(name = "EXM_VERSION")
-    private BigInteger exmVersion;
+    private Long exmVersion;
     @OneToMany(mappedBy = "pkClnExamen", fetch = FetchType.LAZY)
     private List<ControlPaciente> controlPacienteList;
 
     public Examen() {
     }
 
-    public Examen(String pkClnExamen) {
+    public Examen(Long pkClnExamen) {
         this.pkClnExamen = pkClnExamen;
     }
 
-    public Examen(String pkClnExamen, String exmNombreExamen, Date exmFecha, String exmAnotaciones, BigInteger exmVersion) {
+    public Examen(Long pkClnExamen, String exmNombreExamen, Date exmFecha, String exmAnotaciones, Long exmVersion) {
         this.pkClnExamen = pkClnExamen;
         this.exmNombreExamen = exmNombreExamen;
         this.exmFecha = exmFecha;
@@ -76,11 +76,11 @@ public class Examen implements Serializable {
         this.exmVersion = exmVersion;
     }
 
-    public String getPkClnExamen() {
+    public Long getPkClnExamen() {
         return pkClnExamen;
     }
 
-    public void setPkClnExamen(String pkClnExamen) {
+    public void setPkClnExamen(Long pkClnExamen) {
         this.pkClnExamen = pkClnExamen;
     }
 
@@ -108,11 +108,11 @@ public class Examen implements Serializable {
         this.exmAnotaciones = exmAnotaciones;
     }
 
-    public BigInteger getExmVersion() {
+    public Long getExmVersion() {
         return exmVersion;
     }
 
-    public void setExmVersion(BigInteger exmVersion) {
+    public void setExmVersion(Long exmVersion) {
         this.exmVersion = exmVersion;
     }
 

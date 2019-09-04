@@ -42,10 +42,10 @@ public class Agenda implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "PK_CLN_AGENDA")
-    private BigDecimal pkClnAgenda;
+    private Long pkClnAgenda;
     @Basic(optional = false)
     @Column(name = "AGE_VERSION")
-    private BigInteger ageVersion;
+    private Long ageVersion;
     @OneToMany(mappedBy = "pkClnAgenda", fetch = FetchType.LAZY)
     private List<EspacioHora> espacioHoraList;
     @JoinColumn(name = "MED_ID", referencedColumnName = "MED_ID")
@@ -55,28 +55,28 @@ public class Agenda implements Serializable {
     public Agenda() {
     }
 
-    public Agenda(BigDecimal pkClnAgenda) {
+    public Agenda(Long pkClnAgenda) {
         this.pkClnAgenda = pkClnAgenda;
     }
 
-    public Agenda(BigDecimal pkClnAgenda, BigInteger ageVersion) {
+    public Agenda(Long pkClnAgenda, Long ageVersion) {
         this.pkClnAgenda = pkClnAgenda;
         this.ageVersion = ageVersion;
     }
 
-    public BigDecimal getPkClnAgenda() {
+    public Long getPkClnAgenda() {
         return pkClnAgenda;
     }
 
-    public void setPkClnAgenda(BigDecimal pkClnAgenda) {
+    public void setPkClnAgenda(Long pkClnAgenda) {
         this.pkClnAgenda = pkClnAgenda;
     }
 
-    public BigInteger getAgeVersion() {
+    public Long getAgeVersion() {
         return ageVersion;
     }
 
-    public void setAgeVersion(BigInteger ageVersion) {
+    public void setAgeVersion(Long ageVersion) {
         this.ageVersion = ageVersion;
     }
 

@@ -67,22 +67,22 @@ public class ControlPaciente implements Serializable {
     private Date cntControl;
     @Basic(optional = false)
     @Column(name = "CNT_PRESION")
-    private BigInteger cntPresion;
+    private Long cntPresion;
     @Basic(optional = false)
     @Column(name = "CNT_FRECUENCIA_CARDIACA")
-    private BigInteger cntFrecuenciaCardiaca;
+    private Long cntFrecuenciaCardiaca;
     @Basic(optional = false)
     @Column(name = "CNT_PESO")
-    private BigInteger cntPeso;
+    private Long cntPeso;
     @Basic(optional = false)
     @Column(name = "CNT_TALLA")
-    private BigInteger cntTalla;
+    private Long cntTalla;
     @Basic(optional = false)
     @Column(name = "CNT_TEMPERATURA")
-    private BigInteger cntTemperatura;
+    private Long cntTemperatura;
     @Basic(optional = false)
     @Column(name = "CNT_IMC")
-    private BigInteger cntImc;
+    private Long cntImc;
     @Basic(optional = false)
     @Column(name = "CNT_ANOTACION_ENFERMERIA")
     private String cntAnotacionEnfermeria;
@@ -103,7 +103,7 @@ public class ControlPaciente implements Serializable {
     private String cntTratamiento;
     @Basic(optional = false)
     @Column(name = "CNT_VERSION")
-    private BigInteger cntVersion;
+    private Long cntVersion;
     @JoinColumn(name = "PK_CLN_EXAMEN", referencedColumnName = "PK_CLN_EXAMEN")
     @ManyToOne(fetch = FetchType.LAZY)
     private Examen pkClnExamen;
@@ -118,7 +118,7 @@ public class ControlPaciente implements Serializable {
         this.pkClnControlPaciente = pkClnControlPaciente;
     }
 
-    public ControlPaciente(BigDecimal pkClnControlPaciente, Date cntFecha, Date cntControl, BigInteger cntPresion, BigInteger cntFrecuenciaCardiaca, BigInteger cntPeso, BigInteger cntTalla, BigInteger cntTemperatura, BigInteger cntImc, String cntAnotacionEnfermeria, String cntRazonConsulta, String cntPlanAtencion, String cntObservaciones, String cntExamenFisico, String cntTratamiento, BigInteger cntVersion) {
+    public ControlPaciente(BigDecimal pkClnControlPaciente, Date cntFecha, Date cntControl, Long cntPresion, Long cntFrecuenciaCardiaca, Long cntPeso, Long cntTalla, Long cntTemperatura, Long cntImc, String cntAnotacionEnfermeria, String cntRazonConsulta, String cntPlanAtencion, String cntObservaciones, String cntExamenFisico, String cntTratamiento, Long cntVersion) {
         this.pkClnControlPaciente = pkClnControlPaciente;
         this.cntFecha = cntFecha;
         this.cntControl = cntControl;
@@ -161,51 +161,51 @@ public class ControlPaciente implements Serializable {
         this.cntControl = cntControl;
     }
 
-    public BigInteger getCntPresion() {
+    public Long getCntPresion() {
         return cntPresion;
     }
 
-    public void setCntPresion(BigInteger cntPresion) {
+    public void setCntPresion(Long cntPresion) {
         this.cntPresion = cntPresion;
     }
 
-    public BigInteger getCntFrecuenciaCardiaca() {
+    public Long getCntFrecuenciaCardiaca() {
         return cntFrecuenciaCardiaca;
     }
 
-    public void setCntFrecuenciaCardiaca(BigInteger cntFrecuenciaCardiaca) {
+    public void setCntFrecuenciaCardiaca(Long cntFrecuenciaCardiaca) {
         this.cntFrecuenciaCardiaca = cntFrecuenciaCardiaca;
     }
 
-    public BigInteger getCntPeso() {
+    public Long getCntPeso() {
         return cntPeso;
     }
 
-    public void setCntPeso(BigInteger cntPeso) {
+    public void setCntPeso(Long cntPeso) {
         this.cntPeso = cntPeso;
     }
 
-    public BigInteger getCntTalla() {
+    public Long getCntTalla() {
         return cntTalla;
     }
 
-    public void setCntTalla(BigInteger cntTalla) {
+    public void setCntTalla(Long cntTalla) {
         this.cntTalla = cntTalla;
     }
 
-    public BigInteger getCntTemperatura() {
+    public Long getCntTemperatura() {
         return cntTemperatura;
     }
 
-    public void setCntTemperatura(BigInteger cntTemperatura) {
+    public void setCntTemperatura(Long cntTemperatura) {
         this.cntTemperatura = cntTemperatura;
     }
 
-    public BigInteger getCntImc() {
+    public Long getCntImc() {
         return cntImc;
     }
 
-    public void setCntImc(BigInteger cntImc) {
+    public void setCntImc(Long cntImc) {
         this.cntImc = cntImc;
     }
 
@@ -257,11 +257,11 @@ public class ControlPaciente implements Serializable {
         this.cntTratamiento = cntTratamiento;
     }
 
-    public BigInteger getCntVersion() {
+    public Long getCntVersion() {
         return cntVersion;
     }
 
-    public void setCntVersion(BigInteger cntVersion) {
+    public void setCntVersion(Long cntVersion) {
         this.cntVersion = cntVersion;
     }
 

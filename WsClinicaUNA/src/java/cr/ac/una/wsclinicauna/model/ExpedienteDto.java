@@ -27,16 +27,16 @@ public class ExpedienteDto {
     String antecedentesFamiliares;
     PacienteDto paciente;
 
-    public ExpedienteDto(Long expID, Long expVersion, String antecedentesPatologicos, String hospitalizaciones, String operaciones, String alergias, String tratamientos, String antecedentesFamiliares, PacienteDto paciente) {
-        this.expID = expID;
-        this.expVersion = expVersion;
-        this.antecedentesPatologicos = antecedentesPatologicos;
-        this.hospitalizaciones = hospitalizaciones;
-        this.operaciones = operaciones;
-        this.alergias = alergias;
-        this.tratamientos = tratamientos;
-        this.antecedentesFamiliares = antecedentesFamiliares;
-        this.paciente = paciente;
+    public ExpedienteDto(Expediente expediente) {
+        this.expID = expediente.getPlClnExpediente();
+        this.expVersion = expediente.getExpVersion();
+        this.antecedentesPatologicos = expediente.getExpAntecedentePatologicos();
+        this.hospitalizaciones = expediente.getExpHospitalizaciones();
+        this.operaciones = expediente.getExpOperaciones();
+        this.alergias = expediente.getExpAlergias();
+        this.tratamientos = expediente.getExpTratamientos();
+        this.antecedentesFamiliares = expediente.getExpAntecedentesFamiliares();
+        this.paciente = new PacienteDto(expediente.getPacId());
     }
 
     public Long getExpID() {

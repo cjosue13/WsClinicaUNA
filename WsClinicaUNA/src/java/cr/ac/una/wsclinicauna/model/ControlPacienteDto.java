@@ -7,6 +7,8 @@ package cr.ac.una.wsclinicauna.model;
 
 import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,6 +42,37 @@ public class ControlPacienteDto {
     PacienteDto paciente;
     ExamenDto examen;
 
+    
+    public ControlPacienteDto(ControlPaciente control) {
+        //this.ctrPacID = control.getPacId();
+        this.ctrPacVersion = control.getCntVersion();
+        this.fecha = control.getCntFecha().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        
+        LocalDateTime localDateTime = control.getCntControl().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+        
+        this.hora = localDateTime.toLocalTime().toString();
+        
+        this.presion = control.getCntPresion();
+        this.frecuenciaCardiaca = control.getCntFrecuenciaCardiaca();
+        this.peso = control.getCntPeso();
+        this.talla = control.getCntTalla();
+        this.temperatura = control.getCntTemperatura();
+        this.imc = control.getCntImc();
+        this.anotacionEnfermeria = control.getCntAnotacionEnfermeria();
+        this.razonConsulta = control.getCntRazonConsulta();
+        this.PlanAtencion = control.getCntPlanAtencion();
+        this.Observaciones = control.getCntObservaciones();
+        this.examenFisico = control.getCntExamenFisico();
+        this.tratamiento = control.getCntTratamiento();
+        this.paciente = new PacienteDto(control.getPacId());
+        this.examen = new ExamenDto(control.getPkClnExamen());
+    }
+    
+    
     public Long getCtrPacID() {
         return ctrPacID;
     }
@@ -184,26 +217,7 @@ public class ControlPacienteDto {
         this.examen = examen;
     }
 
-    public ControlPacienteDto(Long ctrPacID, Long ctrPacVersion, LocalDate fecha, String hora, float presion, float frecuenciaCardiaca, float peso, float talla, float temperatura, float imc, String anotacionEnfermeria, String razonConsulta, String PlanAtencion, String Observaciones, String examenFisico, String tratamiento, PacienteDto paciente, ExamenDto examen) {
-        this.ctrPacID = ctrPacID;
-        this.ctrPacVersion = ctrPacVersion;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.presion = presion;
-        this.frecuenciaCardiaca = frecuenciaCardiaca;
-        this.peso = peso;
-        this.talla = talla;
-        this.temperatura = temperatura;
-        this.imc = imc;
-        this.anotacionEnfermeria = anotacionEnfermeria;
-        this.razonConsulta = razonConsulta;
-        this.PlanAtencion = PlanAtencion;
-        this.Observaciones = Observaciones;
-        this.examenFisico = examenFisico;
-        this.tratamiento = tratamiento;
-        this.paciente = paciente;
-        this.examen = examen;
-    }
+    
     
     
     

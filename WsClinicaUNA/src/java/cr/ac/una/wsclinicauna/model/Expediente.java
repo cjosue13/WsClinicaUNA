@@ -45,7 +45,7 @@ public class Expediente implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "PL_CLN_EXPEDIENTE")
-    private BigDecimal plClnExpediente;
+    private Long plClnExpediente;
     @Basic(optional = false)
     @Column(name = "EXP_ANTECEDENTE_PATOLOGICOS")
     private String expAntecedentePatologicos;
@@ -66,7 +66,7 @@ public class Expediente implements Serializable {
     private String expAntecedentesFamiliares;
     @Basic(optional = false)
     @Column(name = "EXP_VERSION")
-    private BigInteger expVersion;
+    private Long expVersion;
     @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Paciente pacId;
@@ -74,11 +74,11 @@ public class Expediente implements Serializable {
     public Expediente() {
     }
 
-    public Expediente(BigDecimal plClnExpediente) {
+    public Expediente(Long plClnExpediente) {
         this.plClnExpediente = plClnExpediente;
     }
 
-    public Expediente(BigDecimal plClnExpediente, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos, String expAntecedentesFamiliares, BigInteger expVersion) {
+    public Expediente(Long plClnExpediente, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos, String expAntecedentesFamiliares, Long expVersion) {
         this.plClnExpediente = plClnExpediente;
         this.expAntecedentePatologicos = expAntecedentePatologicos;
         this.expHospitalizaciones = expHospitalizaciones;
@@ -89,11 +89,11 @@ public class Expediente implements Serializable {
         this.expVersion = expVersion;
     }
 
-    public BigDecimal getPlClnExpediente() {
+    public Long getPlClnExpediente() {
         return plClnExpediente;
     }
 
-    public void setPlClnExpediente(BigDecimal plClnExpediente) {
+    public void setPlClnExpediente(Long plClnExpediente) {
         this.plClnExpediente = plClnExpediente;
     }
 
@@ -145,11 +145,11 @@ public class Expediente implements Serializable {
         this.expAntecedentesFamiliares = expAntecedentesFamiliares;
     }
 
-    public BigInteger getExpVersion() {
+    public Long getExpVersion() {
         return expVersion;
     }
 
-    public void setExpVersion(BigInteger expVersion) {
+    public void setExpVersion(Long expVersion) {
         this.expVersion = expVersion;
     }
 

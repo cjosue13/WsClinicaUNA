@@ -42,10 +42,10 @@ public class EspacioHora implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "PK_CLN_ESPACIO_HORA")
-    private BigDecimal pkClnEspacioHora;
+    private Long pkClnEspacioHora;
     @Basic(optional = false)
     @Column(name = "ESP_VERSION")
-    private BigInteger espVersion;
+    private Long espVersion;
     @OneToMany(mappedBy = "pkClnEspacioHora", fetch = FetchType.LAZY)
     private List<Cita> citaList;
     @JoinColumn(name = "PK_CLN_AGENDA", referencedColumnName = "PK_CLN_AGENDA")
@@ -55,28 +55,28 @@ public class EspacioHora implements Serializable {
     public EspacioHora() {
     }
 
-    public EspacioHora(BigDecimal pkClnEspacioHora) {
+    public EspacioHora(Long pkClnEspacioHora) {
         this.pkClnEspacioHora = pkClnEspacioHora;
     }
 
-    public EspacioHora(BigDecimal pkClnEspacioHora, BigInteger espVersion) {
+    public EspacioHora(Long pkClnEspacioHora, Long espVersion) {
         this.pkClnEspacioHora = pkClnEspacioHora;
         this.espVersion = espVersion;
     }
 
-    public BigDecimal getPkClnEspacioHora() {
+    public Long getPkClnEspacioHora() {
         return pkClnEspacioHora;
     }
 
-    public void setPkClnEspacioHora(BigDecimal pkClnEspacioHora) {
+    public void setPkClnEspacioHora(Long pkClnEspacioHora) {
         this.pkClnEspacioHora = pkClnEspacioHora;
     }
 
-    public BigInteger getEspVersion() {
+    public Long getEspVersion() {
         return espVersion;
     }
 
-    public void setEspVersion(BigInteger espVersion) {
+    public void setEspVersion(Long espVersion) {
         this.espVersion = espVersion;
     }
 

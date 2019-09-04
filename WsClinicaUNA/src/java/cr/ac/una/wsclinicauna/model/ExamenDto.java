@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.model;
 
 import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,12 +28,14 @@ public class ExamenDto {
     String anotaciones;
     Long exmVersion;
 
-    public ExamenDto(Long exmID, String nombreExamen, LocalDate fecha, String anotaciones, Long exmVersion) {
-        this.exmID = exmID;
-        this.nombreExamen = nombreExamen;
-        this.fecha = fecha;
-        this.anotaciones = anotaciones;
-        this.exmVersion = exmVersion;
+    public ExamenDto(Examen examen) {
+        this.exmID = examen.getPkClnExamen();
+        this.nombreExamen = examen.getExmNombreExamen();
+        this.fecha = examen.getExmFecha().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        this.anotaciones = examen.getExmAnotaciones();
+        this.exmVersion = examen.getExmVersion();
     }
 
     public Long getExmID() {

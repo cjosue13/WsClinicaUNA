@@ -41,7 +41,7 @@ public class Cita implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "PK_CLN_CITA")
-    private BigDecimal pkClnCita;
+    private Long pkClnCita;
     @Basic(optional = false)
     @Column(name = "CT_ESTADO")
     private String ctEstado;
@@ -49,7 +49,7 @@ public class Cita implements Serializable {
     private String ctMotivo;
     @Basic(optional = false)
     @Column(name = "CT_VERSION")
-    private BigInteger ctVersion;
+    private Long ctVersion;
     @JoinColumn(name = "PK_CLN_ESPACIO_HORA", referencedColumnName = "PK_CLN_ESPACIO_HORA")
     @ManyToOne(fetch = FetchType.LAZY)
     private EspacioHora pkClnEspacioHora;
@@ -60,21 +60,21 @@ public class Cita implements Serializable {
     public Cita() {
     }
 
-    public Cita(BigDecimal pkClnCita) {
+    public Cita(Long pkClnCita) {
         this.pkClnCita = pkClnCita;
     }
 
-    public Cita(BigDecimal pkClnCita, String ctEstado, BigInteger ctVersion) {
+    public Cita(Long pkClnCita, String ctEstado, Long ctVersion) {
         this.pkClnCita = pkClnCita;
         this.ctEstado = ctEstado;
         this.ctVersion = ctVersion;
     }
 
-    public BigDecimal getPkClnCita() {
+    public Long getPkClnCita() {
         return pkClnCita;
     }
 
-    public void setPkClnCita(BigDecimal pkClnCita) {
+    public void setPkClnCita(Long pkClnCita) {
         this.pkClnCita = pkClnCita;
     }
 
@@ -94,11 +94,11 @@ public class Cita implements Serializable {
         this.ctMotivo = ctMotivo;
     }
 
-    public BigInteger getCtVersion() {
+    public Long getCtVersion() {
         return ctVersion;
     }
 
-    public void setCtVersion(BigInteger ctVersion) {
+    public void setCtVersion(Long ctVersion) {
         this.ctVersion = ctVersion;
     }
 
