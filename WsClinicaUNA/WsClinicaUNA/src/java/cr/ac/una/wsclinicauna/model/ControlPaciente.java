@@ -8,6 +8,10 @@ package cr.ac.una.wsclinicauna.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -61,7 +65,7 @@ public class ControlPaciente implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "PK_CLN_CONTROL_PACIENTE")
-    private BigDecimal pkClnControlPaciente;
+    private Long pkClnControlPaciente;
     @Basic(optional = false)
     @Column(name = "CNT_FECHA")
     @Temporal(TemporalType.TIMESTAMP)
@@ -72,22 +76,22 @@ public class ControlPaciente implements Serializable {
     private Date cntControl;
     @Basic(optional = false)
     @Column(name = "CNT_PRESION")
-    private Long cntPresion;
+    private Double cntPresion;
     @Basic(optional = false)
     @Column(name = "CNT_FRECUENCIA_CARDIACA")
-    private Long cntFrecuenciaCardiaca;
+    private Double cntFrecuenciaCardiaca;
     @Basic(optional = false)
     @Column(name = "CNT_PESO")
-    private Long cntPeso;
+    private Double cntPeso;
     @Basic(optional = false)
     @Column(name = "CNT_TALLA")
-    private Long cntTalla;
+    private Double cntTalla;
     @Basic(optional = false)
     @Column(name = "CNT_TEMPERATURA")
-    private Long cntTemperatura;
+    private Double cntTemperatura;
     @Basic(optional = false)
     @Column(name = "CNT_IMC")
-    private Long cntImc;
+    private Double cntImc;
     @Basic(optional = false)
     @Column(name = "CNT_ANOTACION_ENFERMERIA")
     private String cntAnotacionEnfermeria;
@@ -119,11 +123,11 @@ public class ControlPaciente implements Serializable {
     public ControlPaciente() {
     }
 
-    public ControlPaciente(BigDecimal pkClnControlPaciente) {
+    public ControlPaciente(Long pkClnControlPaciente) {
         this.pkClnControlPaciente = pkClnControlPaciente;
     }
 
-    public ControlPaciente(BigDecimal pkClnControlPaciente, Date cntFecha, Date cntControl, Long cntPresion, Long cntFrecuenciaCardiaca, Long cntPeso, Long cntTalla, Long cntTemperatura, Long cntImc, String cntAnotacionEnfermeria, String cntRazonConsulta, String cntPlanAtencion, String cntObservaciones, String cntExamenFisico, String cntTratamiento, Long cntVersion) {
+    public ControlPaciente(Long pkClnControlPaciente, Date cntFecha, Date cntControl, Double cntPresion, Double cntFrecuenciaCardiaca, Double cntPeso, Double cntTalla, Double cntTemperatura, Double cntImc, String cntAnotacionEnfermeria, String cntRazonConsulta, String cntPlanAtencion, String cntObservaciones, String cntExamenFisico, String cntTratamiento, Long cntVersion) {
         this.pkClnControlPaciente = pkClnControlPaciente;
         this.cntFecha = cntFecha;
         this.cntControl = cntControl;
@@ -141,12 +145,39 @@ public class ControlPaciente implements Serializable {
         this.cntTratamiento = cntTratamiento;
         this.cntVersion = cntVersion;
     }
-
-    public BigDecimal getPkClnControlPaciente() {
+    
+    public void actualizarControlPaciente(ControlPacienteDto control) throws ParseException{
+    
+        this.cntVersion = control.getCtrPacVersion();
+        this.cntFecha = java.util.Date.from(control.getFecha().atStartOfDay()
+      .atZone(ZoneId.systemDefault())
+      .toInstant());
+ 
+        Date date1=new SimpleDateFormat("yyyy/MM/dd").parse(control.getHora());
+        this.cntHora = date1;
+        
+        this.cntPresion = control.getPresion();
+        this.cntFrecuenciaCardiaca = control.getFrecuenciaCardiaca();
+        this.cntPeso = control.getPeso();
+        this.cntTalla = control.getTalla();
+        this.cntTemperatura = control.getTemperatura();
+        this.cntImc = control.getImc();
+        this.cntAnotacionEnfermeria = control.getAnotacionEnfermeria();
+        this.cntRazonConsulta = control.getRazonConsulta();
+        this.cntPlanAtencion = control.getPlanAtencion();
+        this.cntObservaciones = control.getObservaciones();
+        this.cntExamenFisico = control.getExamenFisico();
+        this.cntTratamiento = control.getTratamiento();
+        this.pacId = new Paciente(control.getCtrPacID());
+        this.pkClnExamen = new Examen(control.getCtrPacID());
+    
+    }
+    
+    public Long getPkClnControlPaciente() {
         return pkClnControlPaciente;
     }
 
-    public void setPkClnControlPaciente(BigDecimal pkClnControlPaciente) {
+    public void setPkClnControlPaciente(Long pkClnControlPaciente) {
         this.pkClnControlPaciente = pkClnControlPaciente;
     }
 
@@ -166,51 +197,51 @@ public class ControlPaciente implements Serializable {
         this.cntControl = cntControl;
     }
 
-    public Long getCntPresion() {
+    public Double getCntPresion() {
         return cntPresion;
     }
 
-    public void setCntPresion(Long cntPresion) {
+    public void setCntPresion(Double cntPresion) {
         this.cntPresion = cntPresion;
     }
 
-    public Long getCntFrecuenciaCardiaca() {
+    public Double getCntFrecuenciaCardiaca() {
         return cntFrecuenciaCardiaca;
     }
 
-    public void setCntFrecuenciaCardiaca(Long cntFrecuenciaCardiaca) {
+    public void setCntFrecuenciaCardiaca(Double cntFrecuenciaCardiaca) {
         this.cntFrecuenciaCardiaca = cntFrecuenciaCardiaca;
     }
 
-    public Long getCntPeso() {
+    public Double getCntPeso() {
         return cntPeso;
     }
 
-    public void setCntPeso(Long cntPeso) {
+    public void setCntPeso(Double cntPeso) {
         this.cntPeso = cntPeso;
     }
 
-    public Long getCntTalla() {
+    public Double getCntTalla() {
         return cntTalla;
     }
 
-    public void setCntTalla(Long cntTalla) {
+    public void setCntTalla(Double cntTalla) {
         this.cntTalla = cntTalla;
     }
 
-    public Long getCntTemperatura() {
+    public Double getCntTemperatura() {
         return cntTemperatura;
     }
 
-    public void setCntTemperatura(Long cntTemperatura) {
+    public void setCntTemperatura(Double cntTemperatura) {
         this.cntTemperatura = cntTemperatura;
     }
 
-    public Long getCntImc() {
+    public Double getCntImc() {
         return cntImc;
     }
 
-    public void setCntImc(Long cntImc) {
+    public void setCntImc(Double cntImc) {
         this.cntImc = cntImc;
     }
 

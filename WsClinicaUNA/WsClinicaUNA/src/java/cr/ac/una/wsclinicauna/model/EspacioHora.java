@@ -64,6 +64,19 @@ public class EspacioHora implements Serializable {
         this.espVersion = espVersion;
     }
 
+    public EspacioHora(EspacioHoraDto espacioHoraDto) {
+        this.pkClnEspacioHora = espacioHoraDto.getEspID();
+        actualizarEspacioHora(espacioHoraDto);
+    }
+    
+    public void actualizarEspacioHora(EspacioHoraDto espacioh){
+    
+        this.pkClnEspacioHora = espacioh.getEspVersion();
+        this.espVersion = espacioh.getEspVersion();
+        this.pkClnAgenda = new Agenda(espacioh.getAgenda());
+        
+    }
+    
     public Long getPkClnEspacioHora() {
         return pkClnEspacioHora;
     }

@@ -27,12 +27,12 @@ public class ControlPacienteDto {
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     LocalDate fecha;
     String hora;
-    float presion;
-    float frecuenciaCardiaca;
-    float peso;
-    float talla;
-    float temperatura;
-    float imc;
+    Double presion;
+    Double frecuenciaCardiaca;
+    Double peso;
+    Double talla;
+    Double temperatura;
+    Double imc;
     String anotacionEnfermeria;
     String razonConsulta;
     String PlanAtencion;
@@ -105,51 +105,51 @@ public class ControlPacienteDto {
         this.hora = hora;
     }
 
-    public float getPresion() {
+    public Double getPresion() {
         return presion;
     }
 
-    public void setPresion(float presion) {
+    public void setPresion(Double presion) {
         this.presion = presion;
     }
 
-    public float getFrecuenciaCardiaca() {
+    public Double getFrecuenciaCardiaca() {
         return frecuenciaCardiaca;
     }
 
-    public void setFrecuenciaCardiaca(float frecuenciaCardiaca) {
+    public void setFrecuenciaCardiaca(Double frecuenciaCardiaca) {
         this.frecuenciaCardiaca = frecuenciaCardiaca;
     }
 
-    public float getPeso() {
+    public Double getPeso() {
         return peso;
     }
 
-    public void setPeso(float peso) {
+    public void setPeso(Double peso) {
         this.peso = peso;
     }
 
-    public float getTalla() {
+    public Double getTalla() {
         return talla;
     }
 
-    public void setTalla(float talla) {
+    public void setTalla(Double talla) {
         this.talla = talla;
     }
 
-    public float getTemperatura() {
+    public Double getTemperatura() {
         return temperatura;
     }
 
-    public void setTemperatura(float temperatura) {
+    public void setTemperatura(Double temperatura) {
         this.temperatura = temperatura;
     }
 
-    public float getImc() {
+    public Double getImc() {
         return imc;
     }
 
-    public void setImc(float imc) {
+    public void setImc(Double imc) {
         this.imc = imc;
     }
 
