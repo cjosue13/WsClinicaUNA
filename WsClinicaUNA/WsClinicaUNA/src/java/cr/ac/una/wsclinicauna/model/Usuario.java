@@ -284,6 +284,7 @@ public class Usuario implements Serializable {
         this.usVersion = usVersion;
     }
 
+
  
 
     
