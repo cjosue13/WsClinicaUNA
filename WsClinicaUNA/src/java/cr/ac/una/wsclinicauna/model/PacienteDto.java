@@ -31,6 +31,7 @@ public class PacienteDto {
     private String genero;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate fechaNacimiento;
+    private Long pacVersion;
 
     public PacienteDto() {
     }
@@ -47,6 +48,15 @@ public class PacienteDto {
                 .toLocalDate();
         this.genero = Paciente.getPacGenero();
         System.out.println(this.fechaNacimiento.toString());
+        this.pacVersion = Paciente.getPacVersion();
+    }
+
+    public Long getPacVersion() {
+        return pacVersion;
+    }
+
+    public void setPacVersion(Long pacVersion) {
+        this.pacVersion = pacVersion;
     }
 
     public Long getID() {

@@ -30,6 +30,7 @@ public class MedicoDto {
     private String InicioJornada;
     private String FinJornada;
     private UsuarioDto us;
+    private Long medVersion;
 
     public MedicoDto() {
     }
@@ -54,6 +55,15 @@ public class MedicoDto {
         }
 
         this.us = new UsuarioDto(medico.getUsId());
+        this.medVersion = medico.getMedVersion();
+    }
+
+    public Long getMedVersion() {
+        return medVersion;
+    }
+
+    public void setMedVersion(Long medVersion) {
+        this.medVersion = medVersion;
     }
 
     public UsuarioDto getUs() {
