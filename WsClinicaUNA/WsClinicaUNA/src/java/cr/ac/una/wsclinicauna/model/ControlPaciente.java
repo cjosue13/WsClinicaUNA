@@ -51,6 +51,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ControlPaciente.findByCntVersion", query = "SELECT c FROM ControlPaciente c WHERE c.cntVersion = :cntVersion" , hints = @QueryHint(name = "eclipselink.refresh", value = "true" ) )})
 public class ControlPaciente implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "CNT_HORA")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date cntHora;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -304,6 +309,14 @@ public class ControlPaciente implements Serializable {
     @Override
     public String toString() {
         return "cr.ac.una.wsclinicauna.model.ControlPaciente[ pkClnControlPaciente=" + pkClnControlPaciente + " ]";
+    }
+
+    public Date getCntHora() {
+        return cntHora;
+    }
+
+    public void setCntHora(Date cntHora) {
+        this.cntHora = cntHora;
     }
     
 }

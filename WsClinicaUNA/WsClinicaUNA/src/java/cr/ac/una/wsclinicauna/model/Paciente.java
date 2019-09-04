@@ -265,5 +265,7 @@ public class Paciente implements Serializable {
     public void setExpedienteList(List<Expediente> expedienteList) {
         this.expedienteList = expedienteList;
     }
+
+   
     
 }
