@@ -18,7 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,7 +47,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ControlPaciente.findByCntObservaciones", query = "SELECT c FROM ControlPaciente c WHERE c.cntObservaciones = :cntObservaciones")
     , @NamedQuery(name = "ControlPaciente.findByCntExamenFisico", query = "SELECT c FROM ControlPaciente c WHERE c.cntExamenFisico = :cntExamenFisico")
     , @NamedQuery(name = "ControlPaciente.findByCntTratamiento", query = "SELECT c FROM ControlPaciente c WHERE c.cntTratamiento = :cntTratamiento")
-    , @NamedQuery(name = "ControlPaciente.findByCntVersion", query = "SELECT c FROM ControlPaciente c WHERE c.cntVersion = :cntVersion" , hints = @QueryHint(name = "eclipselink.refresh", value = "true" ) )})
+    , @NamedQuery(name = "ControlPaciente.findByCntVersion", query = "SELECT c FROM ControlPaciente c WHERE c.cntVersion = :cntVersion")})
 public class ControlPaciente implements Serializable {
 
     private static final long serialVersionUID = 1L;

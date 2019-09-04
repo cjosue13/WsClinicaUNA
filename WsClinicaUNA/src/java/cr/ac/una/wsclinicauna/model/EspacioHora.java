@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "EspacioHora.findAll", query = "SELECT e FROM EspacioHora e")
     , @NamedQuery(name = "EspacioHora.findByPkClnEspacioHora", query = "SELECT e FROM EspacioHora e WHERE e.pkClnEspacioHora = :pkClnEspacioHora")
-    , @NamedQuery(name = "EspacioHora.findByEspVersion", query = "SELECT e FROM EspacioHora e WHERE e.espVersion = :espVersion", hints = @QueryHint(name = "eclipselink.refresh", value = "true" ))})
+    , @NamedQuery(name = "EspacioHora.findByEspVersion", query = "SELECT e FROM EspacioHora e WHERE e.espVersion = :espVersion")})
 public class EspacioHora implements Serializable {
 
     private static final long serialVersionUID = 1L;
