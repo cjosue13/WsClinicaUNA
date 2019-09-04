@@ -55,7 +55,6 @@ public class UsuarioService {
         }
     }
 
-    
     public Respuesta getUsuarios() {
         try {
             Query qryUsuario = em.createNamedQuery("Usuario.findAll", Usuario.class);
@@ -74,7 +73,7 @@ public class UsuarioService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getUsuario " + ex.getMessage());
         }
     }
-    
+
     public Respuesta guardarUsuario(UsuarioDto UsuarioDto) {
         try {
             Usuario Usuario;
@@ -87,12 +86,12 @@ public class UsuarioService {
 
                 Usuario.actualizarUsuario(UsuarioDto);
                 Usuario = em.merge(Usuario);
-
+                
             } else {
                 Usuario = new Usuario(UsuarioDto);
                 em.persist(Usuario);
             }
-            
+
             em.flush();
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(Usuario));
@@ -101,6 +100,7 @@ public class UsuarioService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Usuario.", "guardarUsuario " + ex.getMessage());
         }
     }
+
     public Respuesta eliminarUsuario(Long id) {
         try {
             //Empleado empleado;
@@ -108,19 +108,38 @@ public class UsuarioService {
             if (id != null && id > 0) {
                 usuario = em.find(Usuario.class, id);
                 if (usuario == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO,"No se encontró el usuario a eliminar.", "EliminarUsuario NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el usuario a eliminar.", "EliminarUsuario NoResultException");
                 }
                 em.remove(usuario);
             } else {
-                return new Respuesta(false,CodigoRespuesta.ERROR_CLIENTE, "Debe cargar el usuario a eliminar.", "EliminarUsuario NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_CLIENTE, "Debe cargar el usuario a eliminar.", "EliminarUsuario NoResultException");
             }
-            return new Respuesta(true,CodigoRespuesta.CORRECTO, "", "");
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_PERMISOS,"No se puede eliminar el usuario porque tiene relaciones con otros registros.", "EliminarUsuario " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_PERMISOS, "No se puede eliminar el usuario porque tiene relaciones con otros registros.", "EliminarUsuario " + ex.getMessage());
             }
             Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO,"Ocurrio un error al eliminar el usuario.", "EliminarUsuario " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el usuario.", "EliminarUsuario " + ex.getMessage());
+        }
+    }
+
+    public Respuesta activarUsuario(String nombreUsuario) {
+        try {
+            Query qryUsuario = em.createNamedQuery("Usuario.findByUsuNombreUsuario", Usuario.class);
+            qryUsuario.setParameter("usUsuario", nombreUsuario);
+            Usuario usuario = (Usuario) qryUsuario.getSingleResult();
+            usuario.setUsEstado("A");
+            usuario = em.merge(usuario);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(usuario));
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con las credenciales ingresadas.", "validarUsuario NoResultException");
+        } catch (NonUniqueResultException ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "validarUsuario NonUniqueResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "validarUsuario " + ex.getMessage());
         }
     }
 

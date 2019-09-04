@@ -89,6 +89,23 @@ public class UsuarioController {
         }
     }
     
+    @GET
+    @Path("/activar/{usuario}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response guardarUsuario(@PathParam("usuario") String usuario) {
+        try {
+            Respuesta respuesta = usuarioService.activarUsuario(usuario);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            return Response.ok("Usuario activado exitosamente").build();
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error activando al usuario").build();
+        }
+    }
+    
     @DELETE
     @Path("/eliminar/{id}")
     @Produces(MediaType.APPLICATION_JSON)
