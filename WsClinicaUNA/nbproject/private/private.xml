@@ -3,24 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/MedicoDto.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/Paciente.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/controller/MedicoController.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/Medico.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/controller/UsuarioController.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/util/CodigoRespuesta.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/service/UsuarioService.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/UsuarioDto.java</file>
-            <file>file:/C:/Users/Carlos%20Olivares/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/Usuario.java</file>
-=======
-            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/controller/MedicoController.java</file>
             <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/Medico.java</file>
-            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/service/MedicoService.java</file>
-            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/controller/PacienteController.java</file>
-            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/service/PacienteService.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/CitaDto.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/ControlPaciente.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/Paciente.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/EspacioHoraDto.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/ExamenDto.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/ControlPacienteDto.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/controller/MedicoController.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/controller/UsuarioController.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/AgendaDto.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/Agenda.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/UsuarioDto.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/Expediente.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/PacienteDto.java</file>
             <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/MedicoDto.java</file>
->>>>>>> parent of 164329b... a
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/EspacioHora.java</file>
+            <file>file:/C:/Users/ANNIA%20GONZALEZ/Documents/GitHub/WsClinicaUNA/WsClinicaUNA/src/java/cr/ac/una/wsclinicauna/model/ExpedienteDto.java</file>
         </group>
     </open-files>
 </project-private>
