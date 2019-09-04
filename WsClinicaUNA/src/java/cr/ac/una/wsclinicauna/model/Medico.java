@@ -30,6 +30,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -62,6 +63,8 @@ public class Medico implements Serializable {
     @Basic(optional = false)
     @Column(name = "MED_VERSION")
     private Long medVersion;
+    @OneToMany(mappedBy = "medId", fetch = FetchType.LAZY)
+    private List<Agenda> agendaList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -264,6 +267,17 @@ public class Medico implements Serializable {
 
     public void setMedVersion(Long medVersion) {
         this.medVersion = medVersion;
+    }
+
+ 
+
+    @XmlTransient
+    public List<Agenda> getAgendaList() {
+        return agendaList;
+    }
+
+    public void setAgendaList(List<Agenda> agendaList) {
+        this.agendaList = agendaList;
     }
 
 }

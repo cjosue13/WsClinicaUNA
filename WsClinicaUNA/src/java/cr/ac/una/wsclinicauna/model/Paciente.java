@@ -22,6 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -52,6 +53,12 @@ public class Paciente implements Serializable {
     @Basic(optional = false)
     @Column(name = "PAC_VERSION")
     private Long pacVersion;
+    @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
+    private List<Cita> citaList;
+    @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
+    private List<ControlPaciente> controlPacienteList;
+    @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
+    private List<Expediente> expedienteList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -228,6 +235,35 @@ public class Paciente implements Serializable {
 
     public void setPacVersion(Long pacVersion) {
         this.pacVersion = pacVersion;
+    }
+
+    
+
+    @XmlTransient
+    public List<Cita> getCitaList() {
+        return citaList;
+    }
+
+    public void setCitaList(List<Cita> citaList) {
+        this.citaList = citaList;
+    }
+
+    @XmlTransient
+    public List<ControlPaciente> getControlPacienteList() {
+        return controlPacienteList;
+    }
+
+    public void setControlPacienteList(List<ControlPaciente> controlPacienteList) {
+        this.controlPacienteList = controlPacienteList;
+    }
+
+    @XmlTransient
+    public List<Expediente> getExpedienteList() {
+        return expedienteList;
+    }
+
+    public void setExpedienteList(List<Expediente> expedienteList) {
+        this.expedienteList = expedienteList;
     }
     
 }
