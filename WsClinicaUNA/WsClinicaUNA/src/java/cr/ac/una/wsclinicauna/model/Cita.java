@@ -70,6 +70,21 @@ public class Cita implements Serializable {
         this.ctVersion = ctVersion;
     }
 
+    public void actualizarCita(CitaDto cita){
+    
+        this.pkClnCita = cita.getID();
+        this.ctVersion = cita.getCtVersion();
+        this.pacId = new Paciente(cita.getPaciente());
+        this.pkClnEspacioHora = new EspacioHora(cita.getEspacioHora());
+        this.ctMotivo = cita.getMotivo();
+        this.ctEstado = cita.getEstado();
+        
+    }
+    public Cita(CitaDto citaDto) {
+        this.pkClnCita = citaDto.getID();
+        actualizarCita(citaDto);
+    }
+    
     public Long getPkClnCita() {
         return pkClnCita;
     }

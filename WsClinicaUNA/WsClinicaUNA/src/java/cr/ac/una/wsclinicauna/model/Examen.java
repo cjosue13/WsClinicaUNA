@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -76,6 +77,21 @@ public class Examen implements Serializable {
         this.exmVersion = exmVersion;
     }
 
+    public void actualizarExamen(ExamenDto examen){
+        this.pkClnExamen = examen.getExmID();
+        this.exmVersion = examen.getExmVersion();
+        this.exmNombreExamen = examen.getNombreExamen();
+        this.exmFecha = java.util.Date.from(examen.getFecha().atStartOfDay()
+      .atZone(ZoneId.systemDefault())
+      .toInstant());
+        this.exmAnotaciones = examen.getAnotaciones();
+    }
+    
+    public Examen(ExamenDto examenDto) {
+        this.pkClnExamen = examenDto.getExmID();
+        actualizarExamen(examenDto);
+    }
+    
     public Long getPkClnExamen() {
         return pkClnExamen;
     }

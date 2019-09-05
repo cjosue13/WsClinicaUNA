@@ -63,7 +63,18 @@ public class Agenda implements Serializable {
         this.pkClnAgenda = pkClnAgenda;
         this.ageVersion = ageVersion;
     }
-
+    
+    public void actualizarAgenda(AgendaDto agenda){
+        this.pkClnAgenda = agenda.getID();
+        this.medId = new Medico(agenda.getMedicoDto());
+        this.ageVersion = agenda.getAgenVersion();
+    }
+    
+    public Agenda(AgendaDto agendaDto) {
+        this.pkClnAgenda = agendaDto.getID();
+        actualizarAgenda(agendaDto);
+    }
+    
     public Long getPkClnAgenda() {
         return pkClnAgenda;
     }

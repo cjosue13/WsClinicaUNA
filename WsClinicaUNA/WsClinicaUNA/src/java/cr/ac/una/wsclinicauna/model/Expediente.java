@@ -8,6 +8,7 @@ package cr.ac.una.wsclinicauna.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.ZoneId;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -89,6 +90,24 @@ public class Expediente implements Serializable {
         this.expVersion = expVersion;
     }
 
+    public void actualizarExpediente(ExpedienteDto expediente){
+        this.expAlergias = expediente.getAlergias();
+        this.expAntecedentePatologicos = expediente.getAntecedentesPatologicos();
+        this.expAntecedentesFamiliares = expediente.getAntecedentesFamiliares();
+        this.expHospitalizaciones = expediente.getHospitalizaciones();
+        this.expOperaciones = expediente.getOperaciones();
+        this.expTratamientos = expediente.getTratamientos();
+        this.expVersion = expediente.getExpVersion();
+        this.pacId = new Paciente(expediente.getPaciente());
+        this.plClnExpediente = expediente.getExpID();
+    }
+    
+    public Expediente(ExpedienteDto expedienteDto) {
+        this.plClnExpediente = expedienteDto.getExpID();
+        actualizarExpediente(expedienteDto);
+    }
+    
+    
     public Long getPlClnExpediente() {
         return plClnExpediente;
     }
