@@ -122,6 +122,22 @@ public class UsuarioController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el Usuario").build();
         }
     }
-    
+    @GET
+    @Path("/recuperarContrasenna/{correo}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response recuperarContrasenna(@PathParam("correo") String correo) {
+        try {
+            Respuesta respuesta = usuarioService.recuperarContrasenna(correo);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            return Response.ok((UsuarioDto) respuesta.getResultado("Usuario")).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();
+        }
+    }
 
 }

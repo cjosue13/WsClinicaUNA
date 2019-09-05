@@ -9,6 +9,7 @@ import cr.ac.una.wsclinicauna.model.Usuario;
 import cr.ac.una.wsclinicauna.model.UsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import cr.ac.una.wsclinicauna.util.generadorContrasennas;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,6 +131,25 @@ public class UsuarioService {
             qryUsuario.setParameter("usUsuario", nombreUsuario);
             Usuario usuario = (Usuario) qryUsuario.getSingleResult();
             usuario.setUsEstado("A");
+            usuario = em.merge(usuario);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(usuario));
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con las credenciales ingresadas.", "validarUsuario NoResultException");
+        } catch (NonUniqueResultException ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "validarUsuario NonUniqueResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "validarUsuario " + ex.getMessage());
+        }
+    }
+
+    public Respuesta recuperarContrasenna(String correo) {
+        try {
+            Query qryUsuario = em.createNamedQuery("Usuario.findByUsCorreo", Usuario.class);
+            qryUsuario.setParameter("usCorreo", correo);
+            Usuario usuario = (Usuario) qryUsuario.getSingleResult();
+            usuario.setUsContrasenatemp(generadorContrasennas.getInstance().getPassword());
             usuario = em.merge(usuario);
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(usuario));
         } catch (NoResultException ex) {
