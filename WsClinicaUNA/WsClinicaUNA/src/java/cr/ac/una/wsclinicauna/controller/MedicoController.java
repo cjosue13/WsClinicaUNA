@@ -40,8 +40,6 @@ public class MedicoController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarMedico(MedicoDto Medico) {
-        
-            System.out.println(Medico.toString());
         try {
             Respuesta respuesta = medicoService.guardarMedico(Medico);
             if (!respuesta.getEstado()) {

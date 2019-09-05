@@ -74,7 +74,6 @@ public class MedicoService {
 
             } else {
                 Medico = new Medico(MedicoDto);
-                System.out.println("Medico "+ Medico.toString());
                 em.persist(Medico);
             }
             
