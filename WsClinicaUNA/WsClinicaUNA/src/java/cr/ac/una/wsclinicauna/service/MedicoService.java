@@ -74,9 +74,11 @@ public class MedicoService {
 
             } else {
                 Medico = new Medico(MedicoDto);
+                System.out.println("Medico "+ Medico.toString());
                 em.persist(Medico);
             }
-
+            
+            
             em.flush();
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medico", new MedicoDto(Medico));

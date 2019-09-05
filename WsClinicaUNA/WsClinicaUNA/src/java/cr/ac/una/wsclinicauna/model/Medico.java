@@ -131,8 +131,6 @@ public class Medico implements Serializable {
         this.medCodigo = MedicoDto.getCodigo();
         this.medEspaciosporhora = MedicoDto.getEspacios();
         this.medEstado = MedicoDto.getEstado();
-
-        //SimpleDateFormat formato = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         if (MedicoDto.getInicioJornada() != null && MedicoDto.getFinJornada() != null) {
             LocalDateTime inicioJornada = LocalDateTime.parse(MedicoDto.getInicioJornada(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
             LocalDateTime finJornada = LocalDateTime.parse(MedicoDto.getFinJornada(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
@@ -140,18 +138,11 @@ public class Medico implements Serializable {
 
             this.medFinjornada = Date.from(finJornada.atZone(ZoneId.systemDefault()).toInstant());
         }
-
-        /*this.medFinjornada = java.util.Date
-      .from(MedicoDto.getInicioJornada().atZone(ZoneId.systemDefault())
-      .toInstant());*/
         this.medFolio = MedicoDto.getFolio();
         this.medId = MedicoDto.getID();
-        /*this.medIniciojornada = java.util.Date
-      .from(MedicoDto.getFinJornada().atZone(ZoneId.systemDefault())
-      .toInstant());*/
         this.pacienteList = new ArrayList<>();
-        //this.usId = MedicoDto.getID();
         this.usId = new Usuario(MedicoDto.getUs());
+        this.medVersion = MedicoDto.getMedVersion();
     }
 
     public Long getMedId() {
@@ -257,8 +248,10 @@ public class Medico implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.wsclinicauna.model.Medico[ medId=" + medId + " ]";
+        return "Medico{" + "medEspaciosporhora=" + medEspaciosporhora + ", medVersion=" + medVersion + ", agendaList=" + agendaList + ", medId=" + medId + ", medCodigo=" + medCodigo + ", medFolio=" + medFolio + ", medCarne=" + medCarne + ", medEstado=" + medEstado + ", medIniciojornada=" + medIniciojornada + ", medFinjornada=" + medFinjornada + ", pacienteList=" + pacienteList + ", usId=" + usId + '}';
     }
+
+    
 
 
     public Long getMedVersion() {
