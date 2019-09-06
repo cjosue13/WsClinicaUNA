@@ -28,6 +28,9 @@ public class ExamenDto {
     String anotaciones;
     Long exmVersion;
 
+    public ExamenDto(){
+    }
+    
     public ExamenDto(Examen examen) {
         this.exmID = examen.getPkClnExamen();
         this.nombreExamen = examen.getExmNombreExamen();

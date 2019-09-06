@@ -30,6 +30,9 @@ public class AgendaDto {
     MedicoDto medicoDto;
     Long agenVersion;
 
+    public AgendaDto(){
+    }
+    
     public AgendaDto(Agenda agenda) {
         this.ageID = agenda.getPkClnAgenda();
         this.medicoDto = new MedicoDto(agenda.getMedId());

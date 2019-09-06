@@ -21,6 +21,9 @@ public class EspacioHoraDto {
     Long espVersion;
     AgendaDto agenda;
 
+    public EspacioHoraDto(){
+    }
+    
     public EspacioHoraDto(EspacioHora espacioh) {
         this.espID = espacioh.getEspVersion();
         this.espVersion = espacioh.getEspVersion();

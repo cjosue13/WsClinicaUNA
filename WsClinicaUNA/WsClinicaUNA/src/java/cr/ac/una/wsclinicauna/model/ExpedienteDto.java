@@ -27,6 +27,9 @@ public class ExpedienteDto {
     String antecedentesFamiliares;
     PacienteDto paciente;
 
+    public ExpedienteDto(){
+    }
+    
     public ExpedienteDto(Expediente expediente) {
         this.expID = expediente.getPlClnExpediente();
         this.expVersion = expediente.getExpVersion();

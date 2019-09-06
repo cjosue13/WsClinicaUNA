@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -126,6 +128,11 @@ public class ControlPaciente implements Serializable {
     public ControlPaciente(Long pkClnControlPaciente) {
         this.pkClnControlPaciente = pkClnControlPaciente;
     }
+    
+    public ControlPaciente(ControlPacienteDto ControlPacienteDto) {
+        this.pkClnControlPaciente = ControlPacienteDto.getCtrPacID();
+        actualizarControlPaciente(ControlPacienteDto);
+    }
 
     public ControlPaciente(Long pkClnControlPaciente, Date cntFecha, Date cntControl, Double cntPresion, Double cntFrecuenciaCardiaca, Double cntPeso, Double cntTalla, Double cntTemperatura, Double cntImc, String cntAnotacionEnfermeria, String cntRazonConsulta, String cntPlanAtencion, String cntObservaciones, String cntExamenFisico, String cntTratamiento, Long cntVersion) {
         this.pkClnControlPaciente = pkClnControlPaciente;
@@ -146,15 +153,21 @@ public class ControlPaciente implements Serializable {
         this.cntVersion = cntVersion;
     }
     
-    public void actualizarControlPaciente(ControlPacienteDto control) throws ParseException{
+    public void actualizarControlPaciente(ControlPacienteDto control){
     
         this.cntVersion = control.getCtrPacVersion();
         this.cntFecha = java.util.Date.from(control.getFecha().atStartOfDay()
       .atZone(ZoneId.systemDefault())
       .toInstant());
  
-        Date date1=new SimpleDateFormat("yyyy/MM/dd").parse(control.getHora());
-        this.cntHora = date1;
+        Date date1;
+        try {
+            date1 = new SimpleDateFormat("yyyy/MM/dd").parse(control.getHora());
+            this.cntHora = date1;
+        } catch (ParseException ex) {
+            Logger.getLogger(ControlPaciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
         this.cntPresion = control.getPresion();
         this.cntFrecuenciaCardiaca = control.getFrecuenciaCardiaca();

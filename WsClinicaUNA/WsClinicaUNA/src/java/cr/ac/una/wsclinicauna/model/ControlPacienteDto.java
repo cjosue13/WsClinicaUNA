@@ -42,6 +42,8 @@ public class ControlPacienteDto {
     PacienteDto paciente;
     ExamenDto examen;
 
+    public ControlPacienteDto(){
+    }
     
     public ControlPacienteDto(ControlPaciente control) {
         //this.ctrPacID = control.getPacId();

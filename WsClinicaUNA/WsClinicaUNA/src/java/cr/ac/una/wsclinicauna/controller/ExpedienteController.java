@@ -5,10 +5,8 @@
  */
 package cr.ac.una.wsclinicauna.controller;
 
-import cr.ac.una.wsclinicauna.model.PacienteDto;
-import cr.ac.una.wsclinicauna.model.UsuarioDto;
-import cr.ac.una.wsclinicauna.service.PacienteService;
-import cr.ac.una.wsclinicauna.service.UsuarioService;
+import cr.ac.una.wsclinicauna.model.ExpedienteDto;
+import cr.ac.una.wsclinicauna.service.ExpedienteService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.util.ArrayList;
@@ -31,46 +29,46 @@ import javax.ws.rs.core.Response;
  *
  * @author Jose Pablo Bermudez
  */
-@Path("/PacienteController")
-public class PacienteController {
+@Path("/ExpedienteController")
+public class ExpedienteController {
 
     @EJB
-    PacienteService pacienteService;
+    ExpedienteService ExpedienteService;
 
     @POST
     @Path("/guardar")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response guardarPaciente(PacienteDto Paciente) {
+    public Response guardarExpediente(ExpedienteDto Expediente) {
         try {
-            Respuesta respuesta = pacienteService.guardarPaciente(Paciente);
+            Respuesta respuesta = ExpedienteService.guardarExpediente(Expediente);
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            return Response.ok((PacienteDto) respuesta.getResultado("Paciente")).build();
+            return Response.ok((ExpedienteDto) respuesta.getResultado("Expediente")).build();
         } catch (Exception ex) {
-            Logger.getLogger(PacienteController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el Paciente").build();
+            Logger.getLogger(ExpedienteController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el Expediente").build();
         }
     }
     
     @GET
-    @Path("/pacientes")
+    @Path("/Expedientes")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getPacientes() {
+    public Response getExpedientes() {
         try {
-            Respuesta respuesta = pacienteService.getPacientes();
+            Respuesta respuesta = ExpedienteService.getExpedientes();
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            ArrayList<PacienteDto> pacientesDto = (ArrayList<PacienteDto>) respuesta.getResultado("Pacientes");
+            ArrayList<ExpedienteDto> ExpedientesDto = (ArrayList<ExpedienteDto>) respuesta.getResultado("Expedientes");
             
-            return Response.ok(new GenericEntity<List<PacienteDto>>(pacientesDto){}).build();
+            return Response.ok(new GenericEntity<List<ExpedienteDto>>(ExpedientesDto){}).build();
 
         } catch (Exception ex) {
-            Logger.getLogger(PacienteController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el paciente").build();
+            Logger.getLogger(ExpedienteController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Expediente").build();
         }
     }
     
@@ -78,17 +76,17 @@ public class PacienteController {
     @Path("/eliminar/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response EliminarPaciente(@PathParam("id") Long ID) {
+    public Response EliminarExpediente(@PathParam("id") Long ID) {
         try {
-            Respuesta respuesta = pacienteService.eliminarPaciente(ID);
+            Respuesta respuesta = ExpedienteService.eliminarExpediente(ID);
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            return Response.ok((PacienteDto) respuesta.getResultado("Paciente")).build();
+            return Response.ok((ExpedienteDto) respuesta.getResultado("Expediente")).build();
         } catch (Exception ex) {
-            Logger.getLogger(PacienteController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el Paciente").build();
+            Logger.getLogger(ExpedienteController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el Expediente").build();
         }
     }
-    
 }
+

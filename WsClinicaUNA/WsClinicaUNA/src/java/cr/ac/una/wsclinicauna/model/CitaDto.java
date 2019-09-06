@@ -24,6 +24,9 @@ public class CitaDto {
     String motivo;
     String estado;
 
+    public CitaDto(){
+    }
+    
     public CitaDto(Cita cita) {
         this.CtID = cita.getPkClnCita();
         this.CtVersion = cita.getCtVersion();

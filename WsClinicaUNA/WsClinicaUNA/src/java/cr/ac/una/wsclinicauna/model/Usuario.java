@@ -122,10 +122,6 @@ public class Usuario implements Serializable {
         this.usContrasena = usContrasena;
     }
 
-    
-
-  
-
     public Usuario(UsuarioDto UsuarioDto) {
         this.usId = UsuarioDto.getID();
         actualizarUsuario(UsuarioDto);
