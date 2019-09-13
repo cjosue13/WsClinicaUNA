@@ -90,12 +90,12 @@ public class UsuarioController {
     }
     
     @GET
-    @Path("/activar/{usuario}")
+    @Path("/activar/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response guardarUsuario(@PathParam("usuario") String usuario) {
+    public Response guardarUsuario(@PathParam("codigo") String codigo) {
         try {
-            Respuesta respuesta = usuarioService.activarUsuario(usuario);
+            Respuesta respuesta = usuarioService.activarUsuario(codigo);
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }

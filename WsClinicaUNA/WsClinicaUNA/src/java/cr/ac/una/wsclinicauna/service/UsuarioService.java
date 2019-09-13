@@ -90,6 +90,8 @@ public class UsuarioService {
                 
             } else {
                 Usuario = new Usuario(UsuarioDto);
+                //Crea una contrasena temporal para luego activar el usuario
+                Usuario.setUsContrasenatemp(generadorContrasennas.getInstance().getPassword());
                 em.persist(Usuario);
             }
 
@@ -125,12 +127,14 @@ public class UsuarioService {
         }
     }
 
-    public Respuesta activarUsuario(String nombreUsuario) {
+    public Respuesta activarUsuario(String codigo) {
         try {
-            Query qryUsuario = em.createNamedQuery("Usuario.findByUsuNombreUsuario", Usuario.class);
-            qryUsuario.setParameter("usUsuario", nombreUsuario);
+            Query qryUsuario = em.createNamedQuery("Usuario.findByUsContrasenatemp", Usuario.class);
+            qryUsuario.setParameter("usContrasenatemp", codigo);
             Usuario usuario = (Usuario) qryUsuario.getSingleResult();
+          
             usuario.setUsEstado("A");
+            usuario.setUsContrasenatemp(null);
             usuario = em.merge(usuario);
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(usuario));
         } catch (NoResultException ex) {
