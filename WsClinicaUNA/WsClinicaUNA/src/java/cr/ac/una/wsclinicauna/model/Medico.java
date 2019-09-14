@@ -6,10 +6,6 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -47,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CLN_TB_MEDICOS", schema = "ClinicaUNA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m")
+    @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m",hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Medico.findByMedId", query = "SELECT m FROM Medico m WHERE m.medId = :medId")
     , @NamedQuery(name = "Medico.findByMedCodigo", query = "SELECT m FROM Medico m WHERE m.medCodigo = :medCodigo")
     , @NamedQuery(name = "Medico.findByMedFolio", query = "SELECT m FROM Medico m WHERE m.medFolio = :medFolio")

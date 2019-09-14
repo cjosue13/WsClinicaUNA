@@ -6,7 +6,6 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CLN_TB_USUARIOS",schema = "ClinicaUNA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u",hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Usuario.findByUsId", query = "SELECT u FROM Usuario u WHERE u.usId = :usId")
     , @NamedQuery(name = "Usuario.findByUsNombre", query = "SELECT u FROM Usuario u WHERE u.usNombre = :usNombre")
     , @NamedQuery(name = "Usuario.findByUsPapellido", query = "SELECT u FROM Usuario u WHERE u.usPapellido = :usPapellido")
