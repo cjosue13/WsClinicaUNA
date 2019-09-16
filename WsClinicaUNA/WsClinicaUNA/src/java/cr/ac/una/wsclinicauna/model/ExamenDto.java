@@ -32,7 +32,7 @@ public class ExamenDto {
     }
     
     public ExamenDto(Examen examen) {
-        this.exmID = examen.getPkClnExamen();
+        this.exmID = examen.getExmId();
         this.nombreExamen = examen.getExmNombreExamen();
         this.fecha = examen.getExmFecha().toInstant()
                 .atZone(ZoneId.systemDefault())

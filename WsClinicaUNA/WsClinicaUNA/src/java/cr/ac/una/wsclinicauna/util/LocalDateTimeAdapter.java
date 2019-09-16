@@ -28,6 +28,7 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
             if (dateString == null) {
                 return null;
             }
+            
             Instant instant = Instant.parse(dateString);
             LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
             return dateTime;

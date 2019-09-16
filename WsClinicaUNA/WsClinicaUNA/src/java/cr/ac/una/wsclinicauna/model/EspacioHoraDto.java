@@ -24,10 +24,10 @@ public class EspacioHoraDto {
     public EspacioHoraDto(){
     }
     
-    public EspacioHoraDto(EspacioHora espacioh) {
+    public EspacioHoraDto(Espacio espacioh) {
         this.espID = espacioh.getEspVersion();
         this.espVersion = espacioh.getEspVersion();
-        this.agenda = new AgendaDto(espacioh.getPkClnAgenda());
+        this.agenda = new AgendaDto(espacioh.getEspAgenda());
     }
 
     public Long getEspID() {

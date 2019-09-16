@@ -39,7 +39,7 @@ public class ExpedienteDto {
         this.alergias = expediente.getExpAlergias();
         this.tratamientos = expediente.getExpTratamientos();
         this.antecedentesFamiliares = expediente.getExpAntecedentesFamiliares();
-        this.paciente = new PacienteDto(expediente.getPacId());
+        this.paciente = new PacienteDto(expediente.getExpPaciente());
     }
 
     public Long getExpID() {

@@ -45,14 +45,14 @@ public class ControlPacienteDto {
     public ControlPacienteDto(){
     }
     
-    public ControlPacienteDto(ControlPaciente control) {
+    public ControlPacienteDto(Control control) {
         //this.ctrPacID = control.getPacId();
         this.ctrPacVersion = control.getCntVersion();
         this.fecha = control.getCntFecha().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
         
-        LocalDateTime localDateTime = control.getCntControl().toInstant()
+        LocalDateTime localDateTime = control.getCntFecha().toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
         
@@ -70,8 +70,6 @@ public class ControlPacienteDto {
         this.Observaciones = control.getCntObservaciones();
         this.examenFisico = control.getCntExamenFisico();
         this.tratamiento = control.getCntTratamiento();
-        this.paciente = new PacienteDto(control.getPacId());
-        this.examen = new ExamenDto(control.getPkClnExamen());
     }
     
     

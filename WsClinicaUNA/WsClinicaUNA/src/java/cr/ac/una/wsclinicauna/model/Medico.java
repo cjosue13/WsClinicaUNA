@@ -16,18 +16,14 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -40,10 +36,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_TB_MEDICOS", schema = "ClinicaUNA")
+@Table(name = "CLN_MEDICOS", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m",hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m")
     , @NamedQuery(name = "Medico.findByMedId", query = "SELECT m FROM Medico m WHERE m.medId = :medId")
     , @NamedQuery(name = "Medico.findByMedCodigo", query = "SELECT m FROM Medico m WHERE m.medCodigo = :medCodigo")
     , @NamedQuery(name = "Medico.findByMedFolio", query = "SELECT m FROM Medico m WHERE m.medFolio = :medFolio")
@@ -51,22 +47,16 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Medico.findByMedEstado", query = "SELECT m FROM Medico m WHERE m.medEstado = :medEstado")
     , @NamedQuery(name = "Medico.findByMedIniciojornada", query = "SELECT m FROM Medico m WHERE m.medIniciojornada = :medIniciojornada")
     , @NamedQuery(name = "Medico.findByMedFinjornada", query = "SELECT m FROM Medico m WHERE m.medFinjornada = :medFinjornada")
-    , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
+    , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora")
+    , @NamedQuery(name = "Medico.findByMedVersion", query = "SELECT m FROM Medico m WHERE m.medVersion = :medVersion")})
 public class Medico implements Serializable {
-
-    @Column(name = "MED_ESPACIOSPORHORA")
-    private Integer medEspaciosporhora;
-    @Basic(optional = false)
-    @Column(name = "MED_VERSION")
-    private Long medVersion;
-    @OneToMany(mappedBy = "medId", fetch = FetchType.LAZY)
-    private List<Agenda> agendaList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @SequenceGenerator(name = "MED_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_MEDICOS", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MED_ID_GENERATOR")
+
     @Basic(optional = false)
     @Column(name = "MED_ID")
     private Long medId;
@@ -90,14 +80,17 @@ public class Medico implements Serializable {
     @Column(name = "MED_FINJORNADA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date medFinjornada;
-    @JoinTable(name = "CLN_TB_MEDICOS_PACIENTES", joinColumns = {
-        @JoinColumn(name = "MED_ID", referencedColumnName = "MED_ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")})
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Paciente> pacienteList;
-    @JoinColumn(name = "US_ID", referencedColumnName = "US_ID")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Usuario usId;
+    @Basic(optional = false)
+    @Column(name = "MED_ESPACIOSPORHORA")
+    private Integer medEspaciosporhora;
+    @Basic(optional = false)
+    @Column(name = "MED_VERSION")
+    private Long medVersion;
+    @JoinColumn(name = "MED_USUARIO", referencedColumnName = "US_ID")
+    @ManyToOne(optional = false)
+    private Usuario medUsuario;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ageMedico")
+    private List<Agenda> agendaList;
 
     public Medico() {
     }
@@ -106,7 +99,7 @@ public class Medico implements Serializable {
         this.medId = medId;
     }
 
-    public Medico(Long medId, String medCodigo, String medFolio, String medCarne, String medEstado, Date medIniciojornada, Date medFinjornada, Integer medEspaciosporhora) {
+    public Medico(Long medId, String medCodigo, String medFolio, String medCarne, String medEstado, Date medIniciojornada, Date medFinjornada, Integer medEspaciosporhora, Long medVersion, Usuario medUsuario, List<Agenda> agendaList) {
         this.medId = medId;
         this.medCodigo = medCodigo;
         this.medFolio = medFolio;
@@ -115,6 +108,9 @@ public class Medico implements Serializable {
         this.medIniciojornada = medIniciojornada;
         this.medFinjornada = medFinjornada;
         this.medEspaciosporhora = medEspaciosporhora;
+        this.medVersion = medVersion;
+        this.medUsuario = medUsuario;
+        this.agendaList = agendaList;
     }
 
     public Medico(MedicoDto MedicoDto) {
@@ -131,13 +127,11 @@ public class Medico implements Serializable {
             LocalDateTime inicioJornada = LocalDateTime.parse(MedicoDto.getInicioJornada(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
             LocalDateTime finJornada = LocalDateTime.parse(MedicoDto.getFinJornada(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
             this.medIniciojornada = Date.from(inicioJornada.atZone(ZoneId.systemDefault()).toInstant());
-
             this.medFinjornada = Date.from(finJornada.atZone(ZoneId.systemDefault()).toInstant());
         }
+
         this.medFolio = MedicoDto.getFolio();
-        this.medId = MedicoDto.getID();
-        this.pacienteList = new ArrayList<>();
-        this.usId = new Usuario(MedicoDto.getUs());
+        this.medUsuario = new Usuario(MedicoDto.getUs());
         this.medVersion = MedicoDto.getMedVersion();
     }
 
@@ -205,21 +199,29 @@ public class Medico implements Serializable {
         this.medEspaciosporhora = medEspaciosporhora;
     }
 
+    public Long getMedVersion() {
+        return medVersion;
+    }
+
+    public void setMedVersion(Long medVersion) {
+        this.medVersion = medVersion;
+    }
+
+    public Usuario getMedUsuario() {
+        return medUsuario;
+    }
+
+    public void setMedUsuario(Usuario medUsuario) {
+        this.medUsuario = medUsuario;
+    }
+
     @XmlTransient
-    public List<Paciente> getPacienteList() {
-        return pacienteList;
+    public List<Agenda> getAgendaList() {
+        return agendaList;
     }
 
-    public void setPacienteList(List<Paciente> pacienteList) {
-        this.pacienteList = pacienteList;
-    }
-
-    public Usuario getUsId() {
-        return usId;
-    }
-
-    public void setUsId(Usuario usId) {
-        this.usId = usId;
+    public void setAgendaList(List<Agenda> agendaList) {
+        this.agendaList = agendaList;
     }
 
     @Override
@@ -244,30 +246,7 @@ public class Medico implements Serializable {
 
     @Override
     public String toString() {
-        return "Medico{" + "medEspaciosporhora=" + medEspaciosporhora + ", medVersion=" + medVersion + ", agendaList=" + agendaList + ", medId=" + medId + ", medCodigo=" + medCodigo + ", medFolio=" + medFolio + ", medCarne=" + medCarne + ", medEstado=" + medEstado + ", medIniciojornada=" + medIniciojornada + ", medFinjornada=" + medFinjornada + ", pacienteList=" + pacienteList + ", usId=" + usId + '}';
+        return "model.Medico[ medId=" + medId + " ]";
     }
-
-    
-
-
-    public Long getMedVersion() {
-        return medVersion;
-    }
-
-    public void setMedVersion(Long medVersion) {
-        this.medVersion = medVersion;
-    }
-
- 
-
-    @XmlTransient
-    public List<Agenda> getAgendaList() {
-        return agendaList;
-    }
-
-    public void setAgendaList(List<Agenda> agendaList) {
-        this.agendaList = agendaList;
-    }
-
 
 }

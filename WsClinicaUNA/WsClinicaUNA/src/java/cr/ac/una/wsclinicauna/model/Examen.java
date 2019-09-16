@@ -6,46 +6,48 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.QueryHint;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_EXAMEN")
+@Table(name = "CLN_EXAMENES", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Examen.findAll", query = "SELECT e FROM Examen e")
-    , @NamedQuery(name = "Examen.findByPkClnExamen", query = "SELECT e FROM Examen e WHERE e.pkClnExamen = :pkClnExamen")
+    , @NamedQuery(name = "Examen.findByExmId", query = "SELECT e FROM Examen e WHERE e.exmId = :exmId")
     , @NamedQuery(name = "Examen.findByExmNombreExamen", query = "SELECT e FROM Examen e WHERE e.exmNombreExamen = :exmNombreExamen")
     , @NamedQuery(name = "Examen.findByExmFecha", query = "SELECT e FROM Examen e WHERE e.exmFecha = :exmFecha")
     , @NamedQuery(name = "Examen.findByExmAnotaciones", query = "SELECT e FROM Examen e WHERE e.exmAnotaciones = :exmAnotaciones")
-    , @NamedQuery(name = "Examen.findByExmVersion", query = "SELECT e FROM Examen e WHERE e.exmVersion = :exmVersion", hints = @QueryHint(name = "eclipselink.refresh", value = "true" ))})
+    , @NamedQuery(name = "Examen.findByExmVersion", query = "SELECT e FROM Examen e WHERE e.exmVersion = :exmVersion")})
 public class Examen implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "EXM_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_EXAMENES", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXM_ID_GENERATOR")
     @Basic(optional = false)
-    @Column(name = "PK_CLN_EXAMEN")
-    private Long pkClnExamen;
+    @Column(name = "EXM_ID")
+    private Long exmId;
     @Basic(optional = false)
     @Column(name = "EXM_NOMBRE_EXAMEN")
     private String exmNombreExamen;
@@ -59,26 +61,25 @@ public class Examen implements Serializable {
     @Basic(optional = false)
     @Column(name = "EXM_VERSION")
     private Long exmVersion;
-    @OneToMany(mappedBy = "pkClnExamen", fetch = FetchType.LAZY)
-    private List<ControlPaciente> controlPacienteList;
+    @JoinColumn(name = "EXM_EXPEDIENTE", referencedColumnName = "PL_CLN_EXPEDIENTE")
+    @ManyToOne(optional = false)
+    private Expediente exmExpediente;
 
     public Examen() {
     }
 
-    public Examen(Long pkClnExamen) {
-        this.pkClnExamen = pkClnExamen;
+    public Examen(Long exmId) {
+        this.exmId = exmId;
     }
 
-    public Examen(Long pkClnExamen, String exmNombreExamen, Date exmFecha, String exmAnotaciones, Long exmVersion) {
-        this.pkClnExamen = pkClnExamen;
+    public Examen(Long exmId, String exmNombreExamen, Date exmFecha, String exmAnotaciones, Long exmVersion) {
+        this.exmId = exmId;
         this.exmNombreExamen = exmNombreExamen;
         this.exmFecha = exmFecha;
         this.exmAnotaciones = exmAnotaciones;
         this.exmVersion = exmVersion;
     }
-
     public void actualizarExamen(ExamenDto examen){
-        this.pkClnExamen = examen.getExmID();
         this.exmVersion = examen.getExmVersion();
         this.exmNombreExamen = examen.getNombreExamen();
         this.exmFecha = java.util.Date.from(examen.getFecha().atStartOfDay()
@@ -88,16 +89,15 @@ public class Examen implements Serializable {
     }
     
     public Examen(ExamenDto examenDto) {
-        this.pkClnExamen = examenDto.getExmID();
+        this.exmId = examenDto.getExmID();
         actualizarExamen(examenDto);
     }
-    
-    public Long getPkClnExamen() {
-        return pkClnExamen;
+    public Long getExmId() {
+        return exmId;
     }
 
-    public void setPkClnExamen(Long pkClnExamen) {
-        this.pkClnExamen = pkClnExamen;
+    public void setExmId(Long exmId) {
+        this.exmId = exmId;
     }
 
     public String getExmNombreExamen() {
@@ -132,19 +132,18 @@ public class Examen implements Serializable {
         this.exmVersion = exmVersion;
     }
 
-    @XmlTransient
-    public List<ControlPaciente> getControlPacienteList() {
-        return controlPacienteList;
+    public Expediente getExmExpediente() {
+        return exmExpediente;
     }
 
-    public void setControlPacienteList(List<ControlPaciente> controlPacienteList) {
-        this.controlPacienteList = controlPacienteList;
+    public void setExmExpediente(Expediente exmExpediente) {
+        this.exmExpediente = exmExpediente;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (pkClnExamen != null ? pkClnExamen.hashCode() : 0);
+        hash += (exmId != null ? exmId.hashCode() : 0);
         return hash;
     }
 
@@ -155,7 +154,7 @@ public class Examen implements Serializable {
             return false;
         }
         Examen other = (Examen) object;
-        if ((this.pkClnExamen == null && other.pkClnExamen != null) || (this.pkClnExamen != null && !this.pkClnExamen.equals(other.pkClnExamen))) {
+        if ((this.exmId == null && other.exmId != null) || (this.exmId != null && !this.exmId.equals(other.exmId))) {
             return false;
         }
         return true;
@@ -163,7 +162,7 @@ public class Examen implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.wsclinicauna.model.Examen[ pkClnExamen=" + pkClnExamen + " ]";
+        return "model.Examen[ exmId=" + exmId + " ]";
     }
     
 }

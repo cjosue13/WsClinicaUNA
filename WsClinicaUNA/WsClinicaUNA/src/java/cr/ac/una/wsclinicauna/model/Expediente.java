@@ -6,28 +6,30 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.ZoneId;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.QueryHint;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_EXPEDIENTE")
+@Table(name = "CLN_EXPEDIENTES", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Expediente.findAll", query = "SELECT e FROM Expediente e")
@@ -38,12 +40,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Expediente.findByExpAlergias", query = "SELECT e FROM Expediente e WHERE e.expAlergias = :expAlergias")
     , @NamedQuery(name = "Expediente.findByExpTratamientos", query = "SELECT e FROM Expediente e WHERE e.expTratamientos = :expTratamientos")
     , @NamedQuery(name = "Expediente.findByExpAntecedentesFamiliares", query = "SELECT e FROM Expediente e WHERE e.expAntecedentesFamiliares = :expAntecedentesFamiliares")
-    , @NamedQuery(name = "Expediente.findByExpVersion", query = "SELECT e FROM Expediente e WHERE e.expVersion = :expVersion" , hints = @QueryHint(name = "eclipselink.refresh", value = "true" ))})
+    , @NamedQuery(name = "Expediente.findByExpVersion", query = "SELECT e FROM Expediente e WHERE e.expVersion = :expVersion")})
 public class Expediente implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id
+     @Id
+    @SequenceGenerator(name = "EXP_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_EXPEDIENTES", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXP_ID_GENERATOR")  
     @Basic(optional = false)
     @Column(name = "PL_CLN_EXPEDIENTE")
     private Long plClnExpediente;
@@ -68,13 +72,31 @@ public class Expediente implements Serializable {
     @Basic(optional = false)
     @Column(name = "EXP_VERSION")
     private Long expVersion;
-    @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Paciente pacId;
+    @OneToMany(mappedBy = "cntExpediente")
+    private List<Control> controlList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "exmExpediente")
+    private List<Examen> examenList;
+    @JoinColumn(name = "EXP_PACIENTE", referencedColumnName = "PAC_ID")
+    @ManyToOne(optional = false)
+    private Paciente expPaciente;
 
     public Expediente() {
     }
-
+    public void actualizarExpediente(ExpedienteDto expediente){
+        this.expAlergias = expediente.getAlergias();
+        this.expAntecedentePatologicos = expediente.getAntecedentesPatologicos();
+        this.expAntecedentesFamiliares = expediente.getAntecedentesFamiliares();
+        this.expHospitalizaciones = expediente.getHospitalizaciones();
+        this.expOperaciones = expediente.getOperaciones();
+        this.expTratamientos = expediente.getTratamientos();
+        this.expVersion = expediente.getExpVersion();
+        this.expPaciente = new Paciente(expediente.getPaciente());
+    }
+    
+    public Expediente(ExpedienteDto expedienteDto) {
+        this.plClnExpediente = expedienteDto.getExpID();
+        actualizarExpediente(expedienteDto);
+    }
     public Expediente(Long plClnExpediente) {
         this.plClnExpediente = plClnExpediente;
     }
@@ -90,24 +112,6 @@ public class Expediente implements Serializable {
         this.expVersion = expVersion;
     }
 
-    public void actualizarExpediente(ExpedienteDto expediente){
-        this.expAlergias = expediente.getAlergias();
-        this.expAntecedentePatologicos = expediente.getAntecedentesPatologicos();
-        this.expAntecedentesFamiliares = expediente.getAntecedentesFamiliares();
-        this.expHospitalizaciones = expediente.getHospitalizaciones();
-        this.expOperaciones = expediente.getOperaciones();
-        this.expTratamientos = expediente.getTratamientos();
-        this.expVersion = expediente.getExpVersion();
-        this.pacId = new Paciente(expediente.getPaciente());
-        this.plClnExpediente = expediente.getExpID();
-    }
-    
-    public Expediente(ExpedienteDto expedienteDto) {
-        this.plClnExpediente = expedienteDto.getExpID();
-        actualizarExpediente(expedienteDto);
-    }
-    
-    
     public Long getPlClnExpediente() {
         return plClnExpediente;
     }
@@ -172,12 +176,30 @@ public class Expediente implements Serializable {
         this.expVersion = expVersion;
     }
 
-    public Paciente getPacId() {
-        return pacId;
+    @XmlTransient
+    public List<Control> getControlList() {
+        return controlList;
     }
 
-    public void setPacId(Paciente pacId) {
-        this.pacId = pacId;
+    public void setControlList(List<Control> controlList) {
+        this.controlList = controlList;
+    }
+
+    @XmlTransient
+    public List<Examen> getExamenList() {
+        return examenList;
+    }
+
+    public void setExamenList(List<Examen> examenList) {
+        this.examenList = examenList;
+    }
+
+    public Paciente getExpPaciente() {
+        return expPaciente;
+    }
+
+    public void setExpPaciente(Paciente expPaciente) {
+        this.expPaciente = expPaciente;
     }
 
     @Override
@@ -202,7 +224,7 @@ public class Expediente implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.wsclinicauna.model.Expediente[ plClnExpediente=" + plClnExpediente + " ]";
+        return "model.Expediente[ plClnExpediente=" + plClnExpediente + " ]";
     }
     
 }

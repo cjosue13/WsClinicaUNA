@@ -6,24 +6,19 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_PACIENTES",schema = "ClinicaUNA")
+@Table(name = "CLN_PACIENTES", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Paciente.findAll", query = "SELECT p FROM Paciente p")
@@ -47,22 +42,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Paciente.findByPacCedula", query = "SELECT p FROM Paciente p WHERE p.pacCedula = :pacCedula")
     , @NamedQuery(name = "Paciente.findByPacCorreo", query = "SELECT p FROM Paciente p WHERE p.pacCorreo = :pacCorreo")
     , @NamedQuery(name = "Paciente.findByPacGenero", query = "SELECT p FROM Paciente p WHERE p.pacGenero = :pacGenero")
-    , @NamedQuery(name = "Paciente.findByPacFechanacimiento", query = "SELECT p FROM Paciente p WHERE p.pacFechanacimiento = :pacFechanacimiento", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
+    , @NamedQuery(name = "Paciente.findByPacFechanacimiento", query = "SELECT p FROM Paciente p WHERE p.pacFechanacimiento = :pacFechanacimiento")
+    , @NamedQuery(name = "Paciente.findByPacVersion", query = "SELECT p FROM Paciente p WHERE p.pacVersion = :pacVersion")})
 public class Paciente implements Serializable {
-
-    @Basic(optional = false)
-    @Column(name = "PAC_VERSION")
-    private Long pacVersion;
-    @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
-    private List<Cita> citaList;
-    @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
-    private List<ControlPaciente> controlPacienteList;
-    @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
-    private List<Expediente> expedienteList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id
+     @Id
     @SequenceGenerator(name = "PAC_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_PACIENTES", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PAC_ID_GENERATOR")
     @Basic(optional = false)
@@ -90,8 +76,13 @@ public class Paciente implements Serializable {
     @Column(name = "PAC_FECHANACIMIENTO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date pacFechanacimiento;
-    @ManyToMany(mappedBy = "pacienteList", fetch = FetchType.LAZY)
-    private List<Medico> medicoList;
+    @Basic(optional = false)
+    @Column(name = "PAC_VERSION")
+    private Long pacVersion;
+    @OneToMany(mappedBy = "ctPaciente")
+    private List<Cita> citaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "expPaciente")
+    private List<Expediente> expedienteList;
 
     public Paciente() {
     }
@@ -100,12 +91,7 @@ public class Paciente implements Serializable {
         this.pacId = pacId;
     }
 
-    public Paciente(PacienteDto PacienteDto) {
-        this.pacId = PacienteDto.getID();
-        actualizarPaciente(PacienteDto);
-    }
-    
-    public Paciente(Long pacId, String pacNombre, String pacPapellido, String pacSapellido, String pacCedula, String pacCorreo, String pacGenero, Date pacFechanacimiento) {
+    public Paciente(Long pacId, String pacNombre, String pacPapellido, String pacSapellido, String pacCedula, String pacCorreo, String pacGenero, Date pacFechanacimiento, Long pacVersion) {
         this.pacId = pacId;
         this.pacNombre = pacNombre;
         this.pacPapellido = pacPapellido;
@@ -114,23 +100,28 @@ public class Paciente implements Serializable {
         this.pacCorreo = pacCorreo;
         this.pacGenero = pacGenero;
         this.pacFechanacimiento = pacFechanacimiento;
+        this.pacVersion = pacVersion;
     }
-
+     public Paciente(PacienteDto PacienteDto) {
+        this.pacId = PacienteDto.getID();
+        actualizarPaciente(PacienteDto);
+    }
+    
     public void actualizarPaciente(PacienteDto PacienteDto) {
         this.pacCedula = PacienteDto.getCedula();
-        this.pacCorreo =  PacienteDto.getCorreo();
+        this.pacCorreo = PacienteDto.getCorreo();
         this.pacFechanacimiento = Date.from(PacienteDto.getFechaNacimiento().atStartOfDay()
-      .atZone(ZoneId.systemDefault())
-      .toInstant());
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
         this.pacGenero = PacienteDto.getGenero();
-        this.pacId = PacienteDto.getID();
         this.pacNombre = PacienteDto.getNombre();
         this.pacPapellido = PacienteDto.getpApellido();
         this.pacSapellido = PacienteDto.getsApellido();
+        this.pacVersion = PacienteDto.getPacVersion();
         //this.medicoList = new ArrayList<>();
         //this.usId = MedicoDto.getID();
     }
-    
+
     public Long getPacId() {
         return pacId;
     }
@@ -195,13 +186,30 @@ public class Paciente implements Serializable {
         this.pacFechanacimiento = pacFechanacimiento;
     }
 
-    @XmlTransient
-    public List<Medico> getMedicoList() {
-        return medicoList;
+    public Long getPacVersion() {
+        return pacVersion;
     }
 
-    public void setMedicoList(List<Medico> medicoList) {
-        this.medicoList = medicoList;
+    public void setPacVersion(Long pacVersion) {
+        this.pacVersion = pacVersion;
+    }
+
+    @XmlTransient
+    public List<Cita> getCitaList() {
+        return citaList;
+    }
+
+    public void setCitaList(List<Cita> citaList) {
+        this.citaList = citaList;
+    }
+
+    @XmlTransient
+    public List<Expediente> getExpedienteList() {
+        return expedienteList;
+    }
+
+    public void setExpedienteList(List<Expediente> expedienteList) {
+        this.expedienteList = expedienteList;
     }
 
     @Override
@@ -226,46 +234,7 @@ public class Paciente implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.wsclinicauna.model.Paciente[ pacId=" + pacId + " ]";
+        return "model.Paciente[ pacId=" + pacId + " ]";
     }
-
-    public Long getPacVersion() {
-        return pacVersion;
-    }
-
-    public void setPacVersion(Long pacVersion) {
-        this.pacVersion = pacVersion;
-    }
-
-    
-
-    @XmlTransient
-    public List<Cita> getCitaList() {
-        return citaList;
-    }
-
-    public void setCitaList(List<Cita> citaList) {
-        this.citaList = citaList;
-    }
-
-    @XmlTransient
-    public List<ControlPaciente> getControlPacienteList() {
-        return controlPacienteList;
-    }
-
-    public void setControlPacienteList(List<ControlPaciente> controlPacienteList) {
-        this.controlPacienteList = controlPacienteList;
-    }
-
-    @XmlTransient
-    public List<Expediente> getExpedienteList() {
-        return expedienteList;
-    }
-
-    public void setExpedienteList(List<Expediente> expedienteList) {
-        this.expedienteList = expedienteList;
-    }
-
-   
     
 }

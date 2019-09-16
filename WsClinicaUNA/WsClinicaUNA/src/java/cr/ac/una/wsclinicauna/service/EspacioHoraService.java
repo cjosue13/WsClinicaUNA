@@ -5,7 +5,7 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
-import cr.ac.una.wsclinicauna.model.EspacioHora;
+import cr.ac.una.wsclinicauna.model.Espacio;
 import cr.ac.una.wsclinicauna.model.EspacioHoraDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -37,10 +37,10 @@ public class EspacioHoraService {
     
     public Respuesta getEspacioHoras() {
         try {
-            Query qryEspacioHoras = em.createNamedQuery("EspacioHora.findAll", EspacioHora.class);
-            List<EspacioHora> EspacioHoras = qryEspacioHoras.getResultList();
+            Query qryEspacioHoras = em.createNamedQuery("EspacioHora.findAll", Espacio.class);
+            List<Espacio> EspacioHoras = qryEspacioHoras.getResultList();
             List<EspacioHoraDto> EspacioHorasDto = new ArrayList<>();
-            for (EspacioHora EspacioHoras1 : EspacioHoras) {
+            for (Espacio EspacioHoras1 : EspacioHoras) {
                 EspacioHorasDto.add(new EspacioHoraDto(EspacioHoras1));
             }
 
@@ -56,9 +56,9 @@ public class EspacioHoraService {
     
     public Respuesta guardarEspacioHora(EspacioHoraDto EspacioHoraDto) {
         try {
-            EspacioHora EspacioHora;
+            Espacio EspacioHora;
             if (EspacioHoraDto.getEspID()!= null && EspacioHoraDto.getEspID()> 0) {
-                EspacioHora = em.find(EspacioHora.class, EspacioHoraDto.getEspID());
+                EspacioHora = em.find(Espacio.class, EspacioHoraDto.getEspID());
 
                 if (EspacioHora == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el EspacioHora a modificar.", "guardarEspacioHora NoResultException");
@@ -68,7 +68,7 @@ public class EspacioHoraService {
                 EspacioHora = em.merge(EspacioHora);
 
             } else {
-                EspacioHora = new EspacioHora(EspacioHoraDto);
+                EspacioHora = new Espacio(EspacioHoraDto);
                 em.persist(EspacioHora);
             }
 
@@ -84,9 +84,9 @@ public class EspacioHoraService {
     public Respuesta eliminarEspacioHora(Long id) {
         try {
             //Empleado empleado;
-            EspacioHora EspacioHora;
+            Espacio EspacioHora;
             if (id != null && id > 0) {
-                EspacioHora = em.find(EspacioHora.class, id);
+                EspacioHora = em.find(Espacio.class, id);
                 if (EspacioHora == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO,"No se encontró el empleado a eliminar.", "EliminarEspacioHora NoResultException");
                 }

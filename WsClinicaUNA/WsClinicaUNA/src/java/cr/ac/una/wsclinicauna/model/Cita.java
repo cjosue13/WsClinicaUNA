@@ -6,42 +6,49 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.QueryHint;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_CITAS")
+@Table(name = "CLN_CITAS", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Cita.findAll", query = "SELECT c FROM Cita c")
-    , @NamedQuery(name = "Cita.findByPkClnCita", query = "SELECT c FROM Cita c WHERE c.pkClnCita = :pkClnCita")
+    , @NamedQuery(name = "Cita.findByCtId", query = "SELECT c FROM Cita c WHERE c.ctId = :ctId")
     , @NamedQuery(name = "Cita.findByCtEstado", query = "SELECT c FROM Cita c WHERE c.ctEstado = :ctEstado")
     , @NamedQuery(name = "Cita.findByCtMotivo", query = "SELECT c FROM Cita c WHERE c.ctMotivo = :ctMotivo")
-    , @NamedQuery(name = "Cita.findByCtVersion", query = "SELECT c FROM Cita c WHERE c.ctVersion = :ctVersion" , hints = @QueryHint(name = "eclipselink.refresh", value = "true" ) )})
+    , @NamedQuery(name = "Cita.findByCtVersion", query = "SELECT c FROM Cita c WHERE c.ctVersion = :ctVersion")})
 public class Cita implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Id
+    @SequenceGenerator(name = "CT_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_CITAS", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CT_ID_GENERATOR")
+
     @Basic(optional = false)
-    @Column(name = "PK_CLN_CITA")
-    private Long pkClnCita;
+    @Column(name = "CT_ID")
+    private Long ctId;
     @Basic(optional = false)
     @Column(name = "CT_ESTADO")
     private String ctEstado;
@@ -50,47 +57,47 @@ public class Cita implements Serializable {
     @Basic(optional = false)
     @Column(name = "CT_VERSION")
     private Long ctVersion;
-    @JoinColumn(name = "PK_CLN_ESPACIO_HORA", referencedColumnName = "PK_CLN_ESPACIO_HORA")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private EspacioHora pkClnEspacioHora;
-    @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Paciente pacId;
+    @JoinColumn(name = "CT_PACIENTE", referencedColumnName = "PAC_ID")
+    @ManyToOne
+    private Paciente ctPaciente;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctxespCita")
+    private List<CitasPorEspacio> citasPorEspacioList;
 
     public Cita() {
     }
 
-    public Cita(Long pkClnCita) {
-        this.pkClnCita = pkClnCita;
+    public Cita(Long ctId) {
+        this.ctId = ctId;
     }
 
-    public Cita(Long pkClnCita, String ctEstado, Long ctVersion) {
-        this.pkClnCita = pkClnCita;
+    public Cita(Long ctId, String ctEstado, Long ctVersion) {
+        this.ctId = ctId;
         this.ctEstado = ctEstado;
         this.ctVersion = ctVersion;
     }
 
-    public void actualizarCita(CitaDto cita){
-    
-        this.pkClnCita = cita.getID();
+    public void actualizarCita(CitaDto cita) {
+
+        //this.pkClnCita = cita.getID();
         this.ctVersion = cita.getCtVersion();
-        this.pacId = new Paciente(cita.getPaciente());
-        this.pkClnEspacioHora = new EspacioHora(cita.getEspacioHora());
+        this.ctPaciente = new Paciente(cita.getPaciente());
+        //this.pkClnEspacioHora = new EspacioHora(cita.getEspacioHora());
         this.ctMotivo = cita.getMotivo();
         this.ctEstado = cita.getEstado();
-        
-    }
-    public Cita(CitaDto citaDto) {
-        this.pkClnCita = citaDto.getID();
-        actualizarCita(citaDto);
-    }
-    
-    public Long getPkClnCita() {
-        return pkClnCita;
+
     }
 
-    public void setPkClnCita(Long pkClnCita) {
-        this.pkClnCita = pkClnCita;
+    public Cita(CitaDto citaDto) {
+        this.ctId = citaDto.getID();
+        actualizarCita(citaDto);
+    }
+
+    public Long getCtId() {
+        return ctId;
+    }
+
+    public void setCtId(Long ctId) {
+        this.ctId = ctId;
     }
 
     public String getCtEstado() {
@@ -117,26 +124,27 @@ public class Cita implements Serializable {
         this.ctVersion = ctVersion;
     }
 
-    public EspacioHora getPkClnEspacioHora() {
-        return pkClnEspacioHora;
+    public Paciente getCtPaciente() {
+        return ctPaciente;
     }
 
-    public void setPkClnEspacioHora(EspacioHora pkClnEspacioHora) {
-        this.pkClnEspacioHora = pkClnEspacioHora;
+    public void setCtPaciente(Paciente ctPaciente) {
+        this.ctPaciente = ctPaciente;
     }
 
-    public Paciente getPacId() {
-        return pacId;
+    @XmlTransient
+    public List<CitasPorEspacio> getCitasPorEspacioList() {
+        return citasPorEspacioList;
     }
 
-    public void setPacId(Paciente pacId) {
-        this.pacId = pacId;
+    public void setCitasPorEspacioList(List<CitasPorEspacio> citasPorEspacioList) {
+        this.citasPorEspacioList = citasPorEspacioList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (pkClnCita != null ? pkClnCita.hashCode() : 0);
+        hash += (ctId != null ? ctId.hashCode() : 0);
         return hash;
     }
 
@@ -147,7 +155,7 @@ public class Cita implements Serializable {
             return false;
         }
         Cita other = (Cita) object;
-        if ((this.pkClnCita == null && other.pkClnCita != null) || (this.pkClnCita != null && !this.pkClnCita.equals(other.pkClnCita))) {
+        if ((this.ctId == null && other.ctId != null) || (this.ctId != null && !this.ctId.equals(other.ctId))) {
             return false;
         }
         return true;
@@ -155,7 +163,7 @@ public class Cita implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.wsclinicauna.model.Cita[ pkClnCita=" + pkClnCita + " ]";
+        return "model.Cita[ ctId=" + ctId + " ]";
     }
-    
+
 }

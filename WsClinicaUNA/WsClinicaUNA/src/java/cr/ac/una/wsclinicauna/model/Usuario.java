@@ -11,7 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_TB_USUARIOS",schema = "ClinicaUNA")
+@Table(name = "CLN_USUARIOS", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u",hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
     , @NamedQuery(name = "Usuario.findByUsId", query = "SELECT u FROM Usuario u WHERE u.usId = :usId")
     , @NamedQuery(name = "Usuario.findByUsNombre", query = "SELECT u FROM Usuario u WHERE u.usNombre = :usNombre")
     , @NamedQuery(name = "Usuario.findByUsPapellido", query = "SELECT u FROM Usuario u WHERE u.usPapellido = :usPapellido")
@@ -42,21 +41,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByUsTipousuario", query = "SELECT u FROM Usuario u WHERE u.usTipousuario = :usTipousuario")
     , @NamedQuery(name = "Usuario.findByUsIdioma", query = "SELECT u FROM Usuario u WHERE u.usIdioma = :usIdioma")
     , @NamedQuery(name = "Usuario.findByUsEstado", query = "SELECT u FROM Usuario u WHERE u.usEstado = :usEstado")
-    , @NamedQuery(name = "Usuario.findByUsContrasenatemp", query = "SELECT u FROM Usuario u WHERE u.usContrasenatemp = :usContrasenatemp")
+    , @NamedQuery(name = "Usuario.findByUsNombreUsuario", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usNombreUsuario")
     , @NamedQuery(name = "Usuario.findByUsContrasena", query = "SELECT u FROM Usuario u WHERE u.usContrasena = :usContrasena")
-    , @NamedQuery(name = "Usuario.findByUsuClave", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario and (u.usContrasena = :usClave OR u.usContrasenatemp =:usClaveTemp)", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))    
-    , @NamedQuery(name = "Usuario.findByUsuNombreUsuario", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario")    
-        
+    , @NamedQuery(name = "Usuario.findByUsContrasenatemp", query = "SELECT u FROM Usuario u WHERE u.usContrasenatemp = :usContrasenatemp")
+    , @NamedQuery(name = "Usuario.findByUsVersion", query = "SELECT u FROM Usuario u WHERE u.usVersion = :usVersion")
+    , @NamedQuery(name = "Usuario.findByUsuClave", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario and (u.usContrasena = :usClave OR u.usContrasenatemp =:usClaveTemp)", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
 })
 public class Usuario implements Serializable {
-
-    @Basic(optional = false)
-    @Column(name = "US_VERSION")
-    private Long usVersion;
-
-    @Basic(optional = false)
-    @Column(name = "US_NOMBRE_USUARIO")
-    private String usNombreUsuario;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -91,11 +82,17 @@ public class Usuario implements Serializable {
     @Column(name = "US_ESTADO")
     private String usEstado;
     @Basic(optional = false)
-    @Column(name = "US_CONTRASENATEMP")
-    private String usContrasenatemp;
+    @Column(name = "US_NOMBRE_USUARIO")
+    private String usNombreUsuario;
+    @Basic(optional = false)
     @Column(name = "US_CONTRASENA")
     private String usContrasena;
-    @OneToMany(mappedBy = "usId", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @Column(name = "US_CONTRASENATEMP")
+    private String usContrasenatemp;
+    @Basic(optional = false)
+    @Column(name = "US_VERSION")
+    private Long usVersion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medUsuario")
     private List<Medico> medicoList;
 
     public Usuario() {
@@ -105,9 +102,7 @@ public class Usuario implements Serializable {
         this.usId = usId;
     }
 
-    public Usuario(Long usVersion, String usNombreUsuario, Long usId, String usNombre, String usPapellido, String usSapellido, String usCedula, String usCorreo, String usTipousuario, String usIdioma, String usEstado, String usContrasenatemp, String usContrasena) {
-        this.usVersion = usVersion;
-        this.usNombreUsuario = usNombreUsuario;
+    public Usuario(Long usId, String usNombre, String usPapellido, String usSapellido, String usCedula, String usCorreo, String usTipousuario, String usIdioma, String usEstado, String usNombreUsuario, String usContrasena, Long usVersion) {
         this.usId = usId;
         this.usNombre = usNombre;
         this.usPapellido = usPapellido;
@@ -117,10 +112,10 @@ public class Usuario implements Serializable {
         this.usTipousuario = usTipousuario;
         this.usIdioma = usIdioma;
         this.usEstado = usEstado;
-        this.usContrasenatemp = usContrasenatemp;
+        this.usNombreUsuario = usNombreUsuario;
         this.usContrasena = usContrasena;
+        this.usVersion = usVersion;
     }
-
     public Usuario(UsuarioDto UsuarioDto) {
         this.usId = UsuarioDto.getID();
         actualizarUsuario(UsuarioDto);
@@ -213,12 +208,12 @@ public class Usuario implements Serializable {
         this.usEstado = usEstado;
     }
 
-    public String getUsContrasenatemp() {
-        return usContrasenatemp;
+    public String getUsNombreUsuario() {
+        return usNombreUsuario;
     }
 
-    public void setUsContrasenatemp(String usContrasenatemp) {
-        this.usContrasenatemp = usContrasenatemp;
+    public void setUsNombreUsuario(String usNombreUsuario) {
+        this.usNombreUsuario = usNombreUsuario;
     }
 
     public String getUsContrasena() {
@@ -227,6 +222,22 @@ public class Usuario implements Serializable {
 
     public void setUsContrasena(String usContrasena) {
         this.usContrasena = usContrasena;
+    }
+
+    public String getUsContrasenatemp() {
+        return usContrasenatemp;
+    }
+
+    public void setUsContrasenatemp(String usContrasenatemp) {
+        this.usContrasenatemp = usContrasenatemp;
+    }
+
+    public Long getUsVersion() {
+        return usVersion;
+    }
+
+    public void setUsVersion(Long usVersion) {
+        this.usVersion = usVersion;
     }
 
     @XmlTransient
@@ -260,27 +271,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.wsclinicauna.model.Usuario[ usId=" + usId + " ]";
+        return "model.Usuario[ usId=" + usId + " ]";
     }
-
-    public String getUsNombreUsuario() {
-        return usNombreUsuario;
-    }
-
-    public void setUsNombreUsuario(String usNombreUsuario) {
-        this.usNombreUsuario = usNombreUsuario;
-    }
-
-    public Long getUsVersion() {
-        return usVersion;
-    }
-
-    public void setUsVersion(Long usVersion) {
-        this.usVersion = usVersion;
-    }
-
-
- 
-
     
 }

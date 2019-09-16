@@ -33,7 +33,6 @@ public class AgendaService {
     private static final Logger LOG = Logger.getLogger(AgendaService.class.getName());//imprime el error en payara
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    private EntityTransaction et;
     
     public Respuesta getAgendas() {
         try {

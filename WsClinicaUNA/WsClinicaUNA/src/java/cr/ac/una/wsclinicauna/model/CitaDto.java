@@ -20,7 +20,7 @@ public class CitaDto {
     Long CtID;
     Long CtVersion;
     PacienteDto paciente;
-    EspacioHoraDto espacioHora;
+//    EspacioHoraDto espacioHora;
     String motivo;
     String estado;
 
@@ -28,10 +28,10 @@ public class CitaDto {
     }
     
     public CitaDto(Cita cita) {
-        this.CtID = cita.getPkClnCita();
+        this.CtID = cita.getCtId();
         this.CtVersion = cita.getCtVersion();
-        this.paciente = new PacienteDto(cita.getPacId());
-        this.espacioHora = new EspacioHoraDto(cita.getPkClnEspacioHora());
+        this.paciente = new PacienteDto(cita.getCtPaciente());
+        //this.espacioHora = new EspacioHoraDto(cita.getPkClnEspacioHora());
         this.motivo = cita.getCtMotivo();
         this.estado = cita.getCtEstado();
     }
@@ -60,13 +60,13 @@ public class CitaDto {
         this.paciente = paciente;
     }
 
-    public EspacioHoraDto getEspacioHora() {
+   /* public EspacioHoraDto getEspacioHora() {
         return espacioHora;
     }
 
     public void setEspacioHora(EspacioHoraDto espacioHora) {
         this.espacioHora = espacioHora;
-    }
+    }*/
 
     public String getMotivo() {
         return motivo;

@@ -1,17 +1,11 @@
 package cr.ac.una.wsclinicauna.model;
 
-import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
-import cr.ac.una.wsclinicauna.util.LocalDateTimeAdapter;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
@@ -54,7 +48,7 @@ public class MedicoDto {
             this.FinJornada = localDateTime2.toLocalTime().toString();
         }
 
-        this.us = new UsuarioDto(medico.getUsId());
+        this.us = new UsuarioDto(medico.getMedUsuario());
         this.medVersion = medico.getMedVersion();
     }
 
