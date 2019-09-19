@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -39,8 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CLN_MEDICOS", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m")
-    , @NamedQuery(name = "Medico.findByMedId", query = "SELECT m FROM Medico m WHERE m.medId = :medId")
+    @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Medico.findByMedId", query = "SELECT m FROM Medico m WHERE m.medId = :medId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Medico.findByMedCodigo", query = "SELECT m FROM Medico m WHERE m.medCodigo = :medCodigo")
     , @NamedQuery(name = "Medico.findByMedFolio", query = "SELECT m FROM Medico m WHERE m.medFolio = :medFolio")
     , @NamedQuery(name = "Medico.findByMedCarne", query = "SELECT m FROM Medico m WHERE m.medCarne = :medCarne")

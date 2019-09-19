@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CLN_USUARIOS", catalog = "", schema = "CLINICAUNA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
-    , @NamedQuery(name = "Usuario.findByUsId", query = "SELECT u FROM Usuario u WHERE u.usId = :usId")
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Usuario.findByUsId", query = "SELECT u FROM Usuario u WHERE u.usId = :usId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Usuario.findByUsNombre", query = "SELECT u FROM Usuario u WHERE u.usNombre = :usNombre")
     , @NamedQuery(name = "Usuario.findByUsPapellido", query = "SELECT u FROM Usuario u WHERE u.usPapellido = :usPapellido")
     , @NamedQuery(name = "Usuario.findByUsSapellido", query = "SELECT u FROM Usuario u WHERE u.usSapellido = :usSapellido")
@@ -42,8 +42,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByUsIdioma", query = "SELECT u FROM Usuario u WHERE u.usIdioma = :usIdioma")
     , @NamedQuery(name = "Usuario.findByUsEstado", query = "SELECT u FROM Usuario u WHERE u.usEstado = :usEstado")
     , @NamedQuery(name = "Usuario.findByUsNombreUsuario", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usNombreUsuario")
-    , @NamedQuery(name = "Usuario.findByUsContrasena", query = "SELECT u FROM Usuario u WHERE u.usContrasena = :usContrasena")
-    , @NamedQuery(name = "Usuario.findByUsContrasenatemp", query = "SELECT u FROM Usuario u WHERE u.usContrasenatemp = :usContrasenatemp")
+    , @NamedQuery(name = "Usuario.findByUsContrasena", query = "SELECT u FROM Usuario u WHERE u.usContrasena = :usContrasena", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Usuario.findByUsContrasenatemp", query = "SELECT u FROM Usuario u WHERE u.usContrasenatemp = :usContrasenatemp", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Usuario.findByUsVersion", query = "SELECT u FROM Usuario u WHERE u.usVersion = :usVersion")
     , @NamedQuery(name = "Usuario.findByUsuClave", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario and (u.usContrasena = :usClave OR u.usContrasenatemp =:usClaveTemp)", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
 })
