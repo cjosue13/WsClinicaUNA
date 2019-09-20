@@ -70,10 +70,13 @@ public class Cita implements Serializable {
         this.ctId = ctId;
     }
 
-    public Cita(Long ctId, String ctEstado, Long ctVersion) {
+    public Cita(Long ctId, String ctEstado, String ctMotivo, Long ctVersion, Paciente ctPaciente, List<CitasPorEspacio> citasPorEspacioList) {
         this.ctId = ctId;
         this.ctEstado = ctEstado;
+        this.ctMotivo = ctMotivo;
         this.ctVersion = ctVersion;
+        this.ctPaciente = ctPaciente;
+        this.citasPorEspacioList = citasPorEspacioList;
     }
 
     public void actualizarCita(CitaDto cita) {

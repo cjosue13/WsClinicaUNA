@@ -17,12 +17,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CitaDto {
     
-    Long CtID;
-    Long CtVersion;
-    PacienteDto paciente;
+    private Long CtID;
+    private Long CtVersion;
+    private PacienteDto paciente;
 //    EspacioHoraDto espacioHora;
-    String motivo;
-    String estado;
+    private String motivo;
+    private String estado;
 
     public CitaDto(){
     }
