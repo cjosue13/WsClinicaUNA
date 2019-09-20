@@ -81,10 +81,8 @@ public class Cita implements Serializable {
 
     public void actualizarCita(CitaDto cita) {
 
-        //this.pkClnCita = cita.getID();
         this.ctVersion = cita.getCtVersion();
         this.ctPaciente = new Paciente(cita.getPaciente());
-        //this.pkClnEspacioHora = new EspacioHora(cita.getEspacioHora());
         this.ctMotivo = cita.getMotivo();
         this.ctEstado = cita.getEstado();
 

@@ -40,6 +40,7 @@ public class CitaController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarCita(CitaDto Cita) {
+        System.out.println("entró a guardar en service");
         try {
             Respuesta respuesta = CitaService.guardarCita(Cita);
             if (!respuesta.getEstado()) {
