@@ -5,7 +5,7 @@
  */
 package cr.ac.una.wsclinicauna.controller;
 
-import cr.ac.una.wsclinicauna.model.EspacioHoraDto;
+import cr.ac.una.wsclinicauna.model.EspacioDto;
 import cr.ac.una.wsclinicauna.service.EspacioHoraService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -39,13 +39,13 @@ public class EspacioHoraController {
     @Path("/guardar")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response guardarEspacioHora(EspacioHoraDto EspacioHora) {
+    public Response guardarEspacioHora(EspacioDto EspacioHora) {
         try {
             Respuesta respuesta = EspacioHoraService.guardarEspacioHora(EspacioHora);
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            return Response.ok((EspacioHoraDto) respuesta.getResultado("EspacioHora")).build();
+            return Response.ok((EspacioDto) respuesta.getResultado("EspacioHora")).build();
         } catch (Exception ex) {
             Logger.getLogger(EspacioHoraController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el EspacioHora").build();
@@ -62,9 +62,9 @@ public class EspacioHoraController {
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            ArrayList<EspacioHoraDto> EspacioHorasDto = (ArrayList<EspacioHoraDto>) respuesta.getResultado("EspacioHoras");
+            ArrayList<EspacioDto> EspacioHorasDto = (ArrayList<EspacioDto>) respuesta.getResultado("EspacioHoras");
             
-            return Response.ok(new GenericEntity<List<EspacioHoraDto>>(EspacioHorasDto){}).build();
+            return Response.ok(new GenericEntity<List<EspacioDto>>(EspacioHorasDto){}).build();
 
         } catch (Exception ex) {
             Logger.getLogger(EspacioHoraController.class.getName()).log(Level.SEVERE, null, ex);
@@ -82,7 +82,7 @@ public class EspacioHoraController {
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            return Response.ok((EspacioHoraDto) respuesta.getResultado("EspacioHora")).build();
+            return Response.ok((EspacioDto) respuesta.getResultado("EspacioHora")).build();
         } catch (Exception ex) {
             Logger.getLogger(EspacioHoraController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el EspacioHora").build();

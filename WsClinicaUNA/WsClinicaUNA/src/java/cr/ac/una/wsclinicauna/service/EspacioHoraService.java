@@ -6,7 +6,7 @@
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.Espacio;
-import cr.ac.una.wsclinicauna.model.EspacioHoraDto;
+import cr.ac.una.wsclinicauna.model.EspacioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -39,9 +39,9 @@ public class EspacioHoraService {
         try {
             Query qryEspacioHoras = em.createNamedQuery("EspacioHora.findAll", Espacio.class);
             List<Espacio> EspacioHoras = qryEspacioHoras.getResultList();
-            List<EspacioHoraDto> EspacioHorasDto = new ArrayList<>();
+            List<EspacioDto> EspacioHorasDto = new ArrayList<>();
             for (Espacio EspacioHoras1 : EspacioHoras) {
-                EspacioHorasDto.add(new EspacioHoraDto(EspacioHoras1));
+                EspacioHorasDto.add(new EspacioDto(EspacioHoras1));
             }
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "EspacioHoras", EspacioHorasDto);
@@ -54,7 +54,7 @@ public class EspacioHoraService {
         }
     }
     
-    public Respuesta guardarEspacioHora(EspacioHoraDto EspacioHoraDto) {
+    public Respuesta guardarEspacioHora(EspacioDto EspacioHoraDto) {
         try {
             Espacio EspacioHora;
             if (EspacioHoraDto.getEspID()!= null && EspacioHoraDto.getEspID()> 0) {
@@ -74,7 +74,7 @@ public class EspacioHoraService {
 
             em.flush();
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "EspacioHora", new EspacioHoraDto(EspacioHora));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "EspacioHora", new EspacioDto(EspacioHora));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el EspacioHora.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el EspacioHora.", "guardarEspacioHora " + ex.getMessage());

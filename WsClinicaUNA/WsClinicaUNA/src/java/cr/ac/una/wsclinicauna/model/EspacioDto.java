@@ -5,6 +5,8 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,21 +15,47 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jose Pablo Bermudez
  */
-@XmlRootElement(name = "EspacioHoraDto")
+@XmlRootElement(name = "EspacioDto")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class EspacioHoraDto {
+public class EspacioDto {
     
     Long espID;
     Long espVersion;
     AgendaDto agenda;
+    String espHoraFin;
+    String espHoraInicio;
 
-    public EspacioHoraDto(){
+    public EspacioDto(){
     }
     
-    public EspacioHoraDto(Espacio espacioh) {
+    public EspacioDto(Espacio espacioh) {
         this.espID = espacioh.getEspVersion();
         this.espVersion = espacioh.getEspVersion();
         this.agenda = new AgendaDto(espacioh.getEspAgenda());
+        LocalDateTime localDateTime = espacioh.getEspHoraFin().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+        this.espHoraFin = localDateTime.toLocalTime().toString();
+        LocalDateTime localDateTime2 = espacioh.getEspHoraInicio().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+        this.espHoraInicio = localDateTime2.toLocalTime().toString();
+    }
+
+    public String getEspHoraFin() {
+        return espHoraFin;
+    }
+
+    public void setEspHoraFin(String espHoraFin) {
+        this.espHoraFin = espHoraFin;
+    }
+
+    public String getEspHoraInicio() {
+        return espHoraInicio;
+    }
+
+    public void setEspHoraInicio(String espHoraInicio) {
+        this.espHoraInicio = espHoraInicio;
     }
 
     public Long getEspID() {
