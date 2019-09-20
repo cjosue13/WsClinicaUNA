@@ -5,8 +5,8 @@
  */
 package cr.ac.una.wsclinicauna.controller;
 
-import cr.ac.una.wsclinicauna.model.ControlPacienteDto;
-import cr.ac.una.wsclinicauna.service.ControlPacienteService;
+import cr.ac.una.wsclinicauna.model.EspacioDto;
+import cr.ac.una.wsclinicauna.service.EspacioService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.util.ArrayList;
@@ -29,46 +29,46 @@ import javax.ws.rs.core.Response;
  *
  * @author Jose Pablo Bermudez
  */
-@Path("/ControlPacienteController")
-public class ControlPacienteController {
+@Path("/EspacioController")
+public class EspacioController {
 
     @EJB
-    ControlPacienteService ControlPacienteService;
+    EspacioService EspacioService;
 
     @POST
     @Path("/guardar")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response guardarControlPaciente(ControlPacienteDto ControlPaciente) {
+    public Response guardarEspacio(EspacioDto Espacio) {
         try {
-            Respuesta respuesta = ControlPacienteService.guardarControlPaciente(ControlPaciente);
+            Respuesta respuesta = EspacioService.guardarEspacio(Espacio);
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            return Response.ok((ControlPacienteDto) respuesta.getResultado("ControlPaciente")).build();
+            return Response.ok((EspacioDto) respuesta.getResultado("Espacio")).build();
         } catch (Exception ex) {
-            Logger.getLogger(ControlPacienteController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el ControlPaciente").build();
+            Logger.getLogger(EspacioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el Espacio").build();
         }
     }
     
     @GET
-    @Path("/ControlPacientes")
+    @Path("/Espacios")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getControlPacientes() {
+    public Response getEspacios() {
         try {
-            Respuesta respuesta = ControlPacienteService.getControlPacientes();
+            Respuesta respuesta = EspacioService.getEspacios();
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            ArrayList<ControlPacienteDto> ControlPacientesDto = (ArrayList<ControlPacienteDto>) respuesta.getResultado("ControlPacientes");
+            ArrayList<EspacioDto> EspaciosDto = (ArrayList<EspacioDto>) respuesta.getResultado("Espacios");
             
-            return Response.ok(new GenericEntity<List<ControlPacienteDto>>(ControlPacientesDto){}).build();
+            return Response.ok(new GenericEntity<List<EspacioDto>>(EspaciosDto){}).build();
 
         } catch (Exception ex) {
-            Logger.getLogger(ControlPacienteController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el ControlPaciente").build();
+            Logger.getLogger(EspacioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Espacio").build();
         }
     }
     
@@ -76,16 +76,16 @@ public class ControlPacienteController {
     @Path("/eliminar/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response EliminarControlPaciente(@PathParam("id") Long ID) {
+    public Response EliminarEspacio(@PathParam("id") Long ID) {
         try {
-            Respuesta respuesta = ControlPacienteService.eliminarControlPaciente(ID);
+            Respuesta respuesta = EspacioService.eliminarEspacio(ID);
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            return Response.ok((ControlPacienteDto) respuesta.getResultado("ControlPaciente")).build();
+            return Response.ok((EspacioDto) respuesta.getResultado("Espacio")).build();
         } catch (Exception ex) {
-            Logger.getLogger(ControlPacienteController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el ControlPaciente").build();
+            Logger.getLogger(EspacioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el Espacio").build();
         }
     }
     

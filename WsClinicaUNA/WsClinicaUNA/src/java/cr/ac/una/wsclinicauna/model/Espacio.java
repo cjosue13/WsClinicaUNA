@@ -82,10 +82,10 @@ public class Espacio implements Serializable {
     }
     public Espacio(EspacioDto espacioHoraDto) {
         this.espId = espacioHoraDto.getEspID();
-        actualizarEspacioHora(espacioHoraDto);
+        actualizarEspacio(espacioHoraDto);
     }
     
-    public void actualizarEspacioHora(EspacioDto espacioh){
+    public void actualizarEspacio(EspacioDto espacioh){
         //Arreglar 
         this.espVersion = espacioh.getEspVersion();
         //Agregar conversion de fecha 

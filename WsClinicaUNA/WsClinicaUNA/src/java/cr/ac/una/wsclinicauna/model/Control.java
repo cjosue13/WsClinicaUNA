@@ -142,12 +142,12 @@ public class Control implements Serializable {
         this.cntExpediente = cntExpediente;
     }
 
-    public Control(ControlPacienteDto control) {
+    public Control(ControlDto control) {
         this.cntId = control.getCtrPacID();
         this.actualizarControl(control);
     }
 
-    public void actualizarControl(ControlPacienteDto control) {
+    public void actualizarControl(ControlDto control) {
 
         this.cntVersion = control.getCtrPacVersion();
         this.cntFecha = java.util.Date.from(control.getFecha().atStartOfDay()

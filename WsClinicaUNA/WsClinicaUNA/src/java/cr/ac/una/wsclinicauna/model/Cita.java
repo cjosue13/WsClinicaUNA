@@ -36,6 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cita.findByCtId", query = "SELECT c FROM Cita c WHERE c.ctId = :ctId")
     , @NamedQuery(name = "Cita.findByCtEstado", query = "SELECT c FROM Cita c WHERE c.ctEstado = :ctEstado")
     , @NamedQuery(name = "Cita.findByCtMotivo", query = "SELECT c FROM Cita c WHERE c.ctMotivo = :ctMotivo")
+    , @NamedQuery(name = "Cita.findByCtTelefono", query = "SELECT c FROM Cita c WHERE c.ctTelefono = :ctTelefono")
+    , @NamedQuery(name = "Cita.findByCtCorreo", query = "SELECT c FROM Cita c WHERE c.ctCorreo = :ctCorreo")     
     , @NamedQuery(name = "Cita.findByCtVersion", query = "SELECT c FROM Cita c WHERE c.ctVersion = :ctVersion")})
 public class Cita implements Serializable {
 
@@ -57,6 +59,12 @@ public class Cita implements Serializable {
     @Basic(optional = false)
     @Column(name = "CT_VERSION")
     private Long ctVersion;
+    @Basic(optional = false)
+    @Column(name = "CT_TELEFONO")
+    private String ctTelefono;
+    @Basic(optional = false)
+    @Column(name = "CT_CORREO")
+    private String ctCorreo;
     @JoinColumn(name = "CT_PACIENTE", referencedColumnName = "PAC_ID")
     @ManyToOne
     private Paciente ctPaciente;
@@ -70,11 +78,13 @@ public class Cita implements Serializable {
         this.ctId = ctId;
     }
 
-    public Cita(Long ctId, String ctEstado, String ctMotivo, Long ctVersion, Paciente ctPaciente, List<CitasPorEspacio> citasPorEspacioList) {
+    public Cita(Long ctId, String ctEstado, String ctMotivo, Long ctVersion, String ctTelefono, String ctCorreo, Paciente ctPaciente, List<CitasPorEspacio> citasPorEspacioList) {
         this.ctId = ctId;
         this.ctEstado = ctEstado;
         this.ctMotivo = ctMotivo;
         this.ctVersion = ctVersion;
+        this.ctTelefono = ctTelefono;
+        this.ctCorreo = ctCorreo;
         this.ctPaciente = ctPaciente;
         this.citasPorEspacioList = citasPorEspacioList;
     }
@@ -85,7 +95,24 @@ public class Cita implements Serializable {
         this.ctPaciente = new Paciente(cita.getPaciente());
         this.ctMotivo = cita.getMotivo();
         this.ctEstado = cita.getEstado();
+        this.ctCorreo = cita.getCorreo();
+        this.ctTelefono = cita.getTelefono();
+    }
 
+    public String getCtTelefono() {
+        return ctTelefono;
+    }
+
+    public void setCtTelefono(String ctTelefono) {
+        this.ctTelefono = ctTelefono;
+    }
+
+    public String getCtCorreo() {
+        return ctCorreo;
+    }
+
+    public void setCtCorreo(String ctCorreo) {
+        this.ctCorreo = ctCorreo;
     }
 
     public Cita(CitaDto citaDto) {

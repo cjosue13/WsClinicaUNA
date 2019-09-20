@@ -18,9 +18,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author Jose Pablo Bermudez
  */
-@XmlRootElement(name = "ControlPacienteDto")
+@XmlRootElement(name = "ControlDto")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ControlPacienteDto {
+public class ControlDto {
     
     Long ctrPacID;
     Long ctrPacVersion;
@@ -42,10 +42,10 @@ public class ControlPacienteDto {
     PacienteDto paciente;
     ExamenDto examen;
 
-    public ControlPacienteDto(){
+    public ControlDto(){
     }
     
-    public ControlPacienteDto(Control control) {
+    public ControlDto(Control control) {
         //this.ctrPacID = control.getPacId();
         this.ctrPacVersion = control.getCntVersion();
         this.fecha = control.getCntFecha().toInstant()

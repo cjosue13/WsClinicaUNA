@@ -23,6 +23,8 @@ public class CitaDto {
 //    EspacioHoraDto espacioHora;
     private String motivo;
     private String estado;
+    private String telefono;
+    private String correo;
 
     public CitaDto(){
     }
@@ -34,6 +36,24 @@ public class CitaDto {
         //this.espacioHora = new EspacioHoraDto(cita.getPkClnEspacioHora());
         this.motivo = cita.getCtMotivo();
         this.estado = cita.getCtEstado();
+        this.telefono = cita.getCtTelefono();
+        this.correo = cita.getCtCorreo();
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
     
     public Long getID() {
