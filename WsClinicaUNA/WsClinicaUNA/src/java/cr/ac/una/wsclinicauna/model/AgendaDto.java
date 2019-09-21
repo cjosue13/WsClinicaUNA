@@ -6,9 +6,13 @@
 package cr.ac.una.wsclinicauna.model;
 
 
+import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
@@ -21,7 +25,9 @@ public class AgendaDto {
     Long ageID;
     MedicoDto medicoDto;
     Long agenVersion;
-
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate fecha;
+    
     public AgendaDto(){
     }
     
@@ -29,6 +35,17 @@ public class AgendaDto {
         this.ageID = agenda.getAgeId();
         this.medicoDto = new MedicoDto(agenda.getAgeMedico());
         this.agenVersion = agenda.getAgeVersion();
+        this.fecha = agenda.getAgeFecha().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 
     public Long getID() {

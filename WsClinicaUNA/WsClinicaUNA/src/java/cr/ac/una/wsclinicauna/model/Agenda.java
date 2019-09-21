@@ -68,11 +68,14 @@ public class Agenda implements Serializable {
         this.ageId = ageId;
     }
 
-    public Agenda(Long ageId, Date ageFecha, Long ageVersion) {
+    public Agenda(Long ageId, Date ageFecha, Long ageVersion, Medico ageMedico, List<Espacio> espacioList) {
         this.ageId = ageId;
         this.ageFecha = ageFecha;
         this.ageVersion = ageVersion;
+        this.ageMedico = ageMedico;
+        this.espacioList = espacioList;
     }
+
      public void actualizarAgenda(AgendaDto agenda){
         
         this.ageMedico = new Medico(agenda.getMedicoDto());
@@ -83,6 +86,7 @@ public class Agenda implements Serializable {
         this.ageId = agendaDto.getID();
         actualizarAgenda(agendaDto);
     }
+    
     public Long getAgeId() {
         return ageId;
     }
