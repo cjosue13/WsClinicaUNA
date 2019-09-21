@@ -1,19 +1,21 @@
 package cr.ac.una.wsclinicauna.model;
 
-import cr.ac.una.wsclinicauna.model.EspacioHora;
+import cr.ac.una.wsclinicauna.model.Espacio;
 import cr.ac.una.wsclinicauna.model.Medico;
+import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-09-04T16:47:47")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-09-21T14:44:04")
 @StaticMetamodel(Agenda.class)
 public class Agenda_ { 
 
-    public static volatile ListAttribute<Agenda, EspacioHora> espacioHoraList;
-    public static volatile SingularAttribute<Agenda, Medico> medId;
+    public static volatile SingularAttribute<Agenda, Medico> ageMedico;
+    public static volatile SingularAttribute<Agenda, Date> ageFecha;
     public static volatile SingularAttribute<Agenda, Long> ageVersion;
-    public static volatile SingularAttribute<Agenda, Long> pkClnAgenda;
+    public static volatile ListAttribute<Agenda, Espacio> espacioList;
+    public static volatile SingularAttribute<Agenda, Long> ageId;
 
 }
