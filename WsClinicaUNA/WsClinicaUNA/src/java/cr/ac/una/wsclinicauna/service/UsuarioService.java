@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.Usuario;
 import cr.ac.una.wsclinicauna.model.UsuarioDto;
+import cr.ac.una.wsclinicauna.util.CampoException;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import cr.ac.una.wsclinicauna.util.generadorContrasennas;
@@ -18,7 +19,6 @@ import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
@@ -100,6 +100,12 @@ public class UsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(Usuario));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Usuario.", ex);
+            if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class){
+                SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
+                return new Respuesta(false, CodigoRespuesta.ERROR_PERMISOS, "Ya existe un Usuario con el mismo campo de "
+                        + CampoException.getCampo(sqle.getMessage(), "", "")
+                        , "guardarUsuario " + sqle.getMessage());
+            }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Usuario.", "guardarUsuario " + ex.getMessage());
         }
     }
@@ -132,7 +138,6 @@ public class UsuarioService {
             Query qryUsuario = em.createNamedQuery("Usuario.findByUsContrasenatemp", Usuario.class);
             qryUsuario.setParameter("usContrasenatemp", codigo);
             Usuario usuario = (Usuario) qryUsuario.getSingleResult();
-          
             usuario.setUsEstado("A");
             usuario.setUsContrasenatemp(null);
             usuario = em.merge(usuario);
