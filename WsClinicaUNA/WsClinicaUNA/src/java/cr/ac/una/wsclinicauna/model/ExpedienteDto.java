@@ -24,7 +24,7 @@ public class ExpedienteDto {
     private String operaciones;
     private String alergias;
     private String tratamientos;
-    private String antecedentesFamiliares;
+    //private String antecedentesFamiliares;
     private PacienteDto paciente;
 
     public ExpedienteDto(){
@@ -38,7 +38,7 @@ public class ExpedienteDto {
         this.operaciones = expediente.getExpOperaciones();
         this.alergias = expediente.getExpAlergias();
         this.tratamientos = expediente.getExpTratamientos();
-        this.antecedentesFamiliares = expediente.getExpAntecedentesFamiliares();
+        //this.antecedentesFamiliares = expediente.getExpAntecedentesFamiliares();
         this.paciente = new PacienteDto(expediente.getExpPaciente());
     }
 
@@ -98,13 +98,13 @@ public class ExpedienteDto {
         this.tratamientos = tratamientos;
     }
 
-    public String getAntecedentesFamiliares() {
+    /*public String getAntecedentesFamiliares() {
         return antecedentesFamiliares;
     }
 
     public void setAntecedentesFamiliares(String antecedentesFamiliares) {
         this.antecedentesFamiliares = antecedentesFamiliares;
-    }
+    }*/
 
     public PacienteDto getPaciente() {
         return paciente;

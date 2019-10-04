@@ -78,9 +78,9 @@ public class Expediente implements Serializable {
     @Basic(optional = false)
     @Column(name = "EXP_VERSION")
     private Long expVersion;
-    @Basic(optional = false)
+    /*@Basic(optional = false)
     @Column(name = "EXP_ANTECEDENTES_FAMILIARES")
-    private String expAntecedentesFamiliares;
+    private String expAntecedentesFamiliares;*/
     @OneToMany(mappedBy = "cntExpediente")
     private List<Control> controlList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "exmExpediente")
@@ -95,7 +95,7 @@ public class Expediente implements Serializable {
     public void actualizarExpediente(ExpedienteDto expediente) {
         this.expAlergias = expediente.getAlergias();
         this.expAntecedentePatologicos = expediente.getAntecedentesPatologicos();
-        this.expAntecedentesFamiliares = expediente.getAntecedentesFamiliares();
+        //this.expAntecedentesFamiliares = expediente.getAntecedentesFamiliares();
         this.expHospitalizaciones = expediente.getHospitalizaciones();
         this.expOperaciones = expediente.getOperaciones();
         this.expTratamientos = expediente.getTratamientos();
@@ -112,14 +112,14 @@ public class Expediente implements Serializable {
         this.expId = plClnExpediente;
     }
 
-    public Expediente(Long plClnExpediente, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos, String expAntecedentesFamiliares, Long expVersion) {
+    public Expediente(Long plClnExpediente, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos,/* String expAntecedentesFamiliares,*/ Long expVersion) {
         this.expId = plClnExpediente;
         this.expAntecedentePatologicos = expAntecedentePatologicos;
         this.expHospitalizaciones = expHospitalizaciones;
         this.expOperaciones = expOperaciones;
         this.expAlergias = expAlergias;
         this.expTratamientos = expTratamientos;
-        this.expAntecedentesFamiliares = expAntecedentesFamiliares;
+        //this.expAntecedentesFamiliares = expAntecedentesFamiliares;
         this.expVersion = expVersion;
     }
 
@@ -170,7 +170,7 @@ public class Expediente implements Serializable {
     public void setExpTratamientos(String expTratamientos) {
         this.expTratamientos = expTratamientos;
     }
-
+/*
     public String getExpAntecedentesFamiliares() {
         return expAntecedentesFamiliares;
     }
@@ -178,7 +178,7 @@ public class Expediente implements Serializable {
     public void setExpAntecedentesFamiliares(String expAntecedentesFamiliares) {
         this.expAntecedentesFamiliares = expAntecedentesFamiliares;
     }
-
+*/
     public Long getExpVersion() {
         return expVersion;
     }
