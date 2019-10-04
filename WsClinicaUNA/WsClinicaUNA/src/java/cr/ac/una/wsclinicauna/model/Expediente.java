@@ -13,6 +13,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,9 +43,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Expediente.findByExpOperaciones", query = "SELECT e FROM Expediente e WHERE e.expOperaciones = :expOperaciones")
     , @NamedQuery(name = "Expediente.findByExpAlergias", query = "SELECT e FROM Expediente e WHERE e.expAlergias = :expAlergias")
     , @NamedQuery(name = "Expediente.findByExpTratamientos", query = "SELECT e FROM Expediente e WHERE e.expTratamientos = :expTratamientos")
-    , @NamedQuery(name = "Expediente.findByExpAntecedentesFamiliares", query = "SELECT e FROM Expediente e WHERE e.expAntecedentesFamiliares = :expAntecedentesFamiliares")
     , @NamedQuery(name = "Expediente.findByExpVersion", query = "SELECT e FROM Expediente e WHERE e.expVersion = :expVersion")})
 public class Expediente implements Serializable {
+
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "antExpediente", fetch = FetchType.LAZY)
+    private List<Antecedente> antecedenteList;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     
@@ -71,6 +76,9 @@ public class Expediente implements Serializable {
     @Column(name = "EXP_TRATAMIENTOS")
     private String expTratamientos;
     @Basic(optional = false)
+    @Column(name = "EXP_VERSION")
+    private Long expVersion;
+    @Basic(optional = false)
     @Column(name = "EXP_ANTECEDENTES_FAMILIARES")
     private String expAntecedentesFamiliares;
     @OneToMany(mappedBy = "cntExpediente")
@@ -78,11 +86,8 @@ public class Expediente implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "exmExpediente")
     private List<Examen> examenList;
     @JoinColumn(name = "EXP_PACIENTE", referencedColumnName = "PAC_ID")
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     private Paciente expPaciente;
-    @Basic(optional = false)
-    @Column(name = "EXP_VERSION")
-    private Long expVersion;
     
     public Expediente() {
     }
@@ -204,6 +209,15 @@ public class Expediente implements Serializable {
 
     public void setExpPaciente(Paciente expPaciente) {
         this.expPaciente = expPaciente;
+    }
+
+
+    public List<Antecedente> getAntecedenteList() {
+        return antecedenteList;
+    }
+
+    public void setAntecedenteList(List<Antecedente> antecedenteList) {
+        this.antecedenteList = antecedenteList;
     }
 
 

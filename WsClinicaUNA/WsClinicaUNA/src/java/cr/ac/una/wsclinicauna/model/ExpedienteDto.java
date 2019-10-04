@@ -17,15 +17,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExpedienteDto {
     
-    Long expID;
-    Long expVersion;
-    String antecedentesPatologicos;
-    String hospitalizaciones;
-    String operaciones;
-    String alergias;
-    String tratamientos;
-    String antecedentesFamiliares;
-    PacienteDto paciente;
+    private Long expID;
+    private Long expVersion;
+    private String antecedentesPatologicos;
+    private String hospitalizaciones;
+    private String operaciones;
+    private String alergias;
+    private String tratamientos;
+    private String antecedentesFamiliares;
+    private PacienteDto paciente;
 
     public ExpedienteDto(){
     }

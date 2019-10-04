@@ -20,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,8 +47,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Paciente.findByPacFechanacimiento", query = "SELECT p FROM Paciente p WHERE p.pacFechanacimiento = :pacFechanacimiento")
     , @NamedQuery(name = "Paciente.findByPacVersion", query = "SELECT p FROM Paciente p WHERE p.pacVersion = :pacVersion")})
 public class Paciente implements Serializable {
-
-    
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -79,13 +78,14 @@ public class Paciente implements Serializable {
     @Column(name = "PAC_FECHANACIMIENTO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date pacFechanacimiento;
-    @OneToMany(mappedBy = "ctPaciente")
-    private List<Cita> citaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "expPaciente")
-    private List<Expediente> expedienteList;
     @Basic(optional = false)
     @Column(name = "PAC_VERSION")
     private Long pacVersion;
+    @OneToMany(mappedBy = "ctPaciente")
+    private List<Cita> citaList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "expPaciente")
+    private List<Expediente> expedienteList;
+
     public Paciente() {
     }
 
@@ -238,6 +238,5 @@ public class Paciente implements Serializable {
         return "model.Paciente[ pacId=" + pacId + " ]";
     }
 
-
-
+    
 }
