@@ -27,7 +27,7 @@ public class ExamenDto {
     LocalDate fecha;
     String anotaciones;
     Long exmVersion;
-
+    ExpedienteDto expediente;
     public ExamenDto(){
     }
     
@@ -41,6 +41,14 @@ public class ExamenDto {
         this.exmVersion = examen.getExmVersion();
     }
 
+    public ExpedienteDto getExpediente() {
+        return expediente;
+    }
+
+    public void setExpediente(ExpedienteDto expediente) {
+        this.expediente = expediente;
+    }
+    
     public Long getExmID() {
         return exmID;
     }

@@ -5,6 +5,7 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,7 +27,10 @@ public class ExpedienteDto {
     private String tratamientos;
     //private String antecedentesFamiliares;
     private PacienteDto paciente;
-
+    private ArrayList<AntecedenteDto> antecedentes;
+    private ArrayList<ExamenDto> examenes;
+    private ArrayList<ControlDto> controles;
+    
     public ExpedienteDto(){
     }
     
@@ -38,8 +42,49 @@ public class ExpedienteDto {
         this.operaciones = expediente.getExpOperaciones();
         this.alergias = expediente.getExpAlergias();
         this.tratamientos = expediente.getExpTratamientos();
-        //this.antecedentesFamiliares = expediente.getExpAntecedentesFamiliares();
         this.paciente = new PacienteDto(expediente.getExpPaciente());
+        this.antecedentes = new ArrayList();
+        this.examenes = new ArrayList();
+        this.controles = new ArrayList();
+        if(!expediente.getAntecedenteList().isEmpty()){
+            for (Antecedente antecedente : expediente.getAntecedenteList()) {
+                antecedentes.add(new AntecedenteDto(antecedente));
+            }
+        }
+        if(!expediente.getControlList().isEmpty()){
+            for (Control control : expediente.getControlList()) {
+                controles.add(new ControlDto(control));
+            }
+        }
+        if(!expediente.getExamenList().isEmpty()){
+            for (Examen examen : expediente.getExamenList()) {
+                examenes.add(new ExamenDto(examen));
+            }
+        }
+    }
+
+    public ArrayList<AntecedenteDto> getAntecedentes() {
+        return antecedentes;
+    }
+
+    public void setAntecedentes(ArrayList<AntecedenteDto> antecedentes) {
+        this.antecedentes = antecedentes;
+    }
+
+    public ArrayList<ExamenDto> getExamenes() {
+        return examenes;
+    }
+
+    public void setExamenes(ArrayList<ExamenDto> examenes) {
+        this.examenes = examenes;
+    }
+
+    public ArrayList<ControlDto> getControles() {
+        return controles;
+    }
+
+    public void setControles(ArrayList<ControlDto> controles) {
+        this.controles = controles;
     }
 
     public Long getExpID() {
@@ -98,14 +143,6 @@ public class ExpedienteDto {
         this.tratamientos = tratamientos;
     }
 
-    /*public String getAntecedentesFamiliares() {
-        return antecedentesFamiliares;
-    }
-
-    public void setAntecedentesFamiliares(String antecedentesFamiliares) {
-        this.antecedentesFamiliares = antecedentesFamiliares;
-    }*/
-
     public PacienteDto getPaciente() {
         return paciente;
     }
@@ -113,8 +150,4 @@ public class ExpedienteDto {
     public void setPaciente(PacienteDto paciente) {
         this.paciente = paciente;
     }
-
-    
-    
-    
 }

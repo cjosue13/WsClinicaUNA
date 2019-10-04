@@ -55,8 +55,8 @@ public class ControlService {
     public Respuesta guardarControl(ControlDto ControlDto) {
         try {
             Control Control;
-            if (ControlDto.getCtrPacID()!= null && ControlDto.getCtrPacID()> 0) {
-                Control = em.find(Control.class, ControlDto.getCtrPacID());
+            if (ControlDto.getCntId()!= null && ControlDto.getCntId()> 0) {
+                Control = em.find(Control.class, ControlDto.getCntId());
 
                 if (Control == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Control a modificar.", "guardarControl NoResultException");

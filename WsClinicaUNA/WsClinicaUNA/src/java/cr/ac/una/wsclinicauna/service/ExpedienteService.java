@@ -41,6 +41,7 @@ public class ExpedienteService {
             List<Expediente> Expedientes = qryExpedientes.getResultList();
             List<ExpedienteDto> ExpedientesDto = new ArrayList<>();
             for (Expediente Expedientes1 : Expedientes) {
+                System.out.println("HI");
                 ExpedientesDto.add(new ExpedienteDto(Expedientes1));
             }
 

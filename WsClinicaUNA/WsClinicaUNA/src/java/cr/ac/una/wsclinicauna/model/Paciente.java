@@ -121,8 +121,6 @@ public class Paciente implements Serializable {
         this.pacPapellido = PacienteDto.getpApellido();
         this.pacSapellido = PacienteDto.getsApellido();
         this.pacVersion = PacienteDto.getPacVersion();
-        //this.medicoList = new ArrayList<>();
-        //this.usId = MedicoDto.getID();
     }
 
     public Long getPacId() {

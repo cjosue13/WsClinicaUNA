@@ -22,33 +22,33 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ControlDto {
     
-    Long ctrPacID;
-    Long ctrPacVersion;
+    
+    private Long cntId;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    LocalDate fecha;
-    String hora;
-    Double presion;
-    Double frecuenciaCardiaca;
-    Double peso;
-    Double talla;
-    Double temperatura;
-    Double imc;
-    String anotacionEnfermeria;
-    String razonConsulta;
-    String PlanAtencion;
-    String Observaciones;
-    String examenFisico;
-    String tratamiento;
-    PacienteDto paciente;
-    ExamenDto examen;
-
+    private LocalDate cntFecha;
+    private String cntHora;
+    private Double cntPresion;
+    private Double cntFrecuenciaCardiaca;
+    private Double cntPeso;
+    private Double cntTalla;
+    private Double cntTemperatura;
+    private Double cntImc;
+    private String cntAnotacionEnfermeria;
+    private String cntRazonConsulta;
+    private String cntPlanAtencion;
+    private String cntObservaciones;
+    private String cntExamenFisico;
+    private String cntTratamiento;
+    private Long cntVersion;
+    private ExpedienteDto cntExpediente;
+    
     public ControlDto(){
     }
     
     public ControlDto(Control control) {
-        //this.ctrPacID = control.getPacId();
-        this.ctrPacVersion = control.getCntVersion();
-        this.fecha = control.getCntFecha().toInstant()
+        this.cntId = control.getCntId();
+        this.cntVersion = control.getCntVersion();
+        this.cntFecha = control.getCntFecha().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
         
@@ -56,166 +56,160 @@ public class ControlDto {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
         
-        this.hora = localDateTime.toLocalTime().toString();
+        this.cntHora = localDateTime.toLocalTime().toString();
+        this.cntPresion = control.getCntPresion();
+        this.cntFrecuenciaCardiaca = control.getCntFrecuenciaCardiaca();
+        this.cntPeso = control.getCntPeso();
+        this.cntTalla = control.getCntTalla();
+        this.cntTemperatura = control.getCntTemperatura();
+        this.cntImc = control.getCntImc();
+        this.cntAnotacionEnfermeria = control.getCntAnotacionEnfermeria();
+        this.cntRazonConsulta = control.getCntRazonConsulta();
+        this.cntPlanAtencion = control.getCntPlanAtencion();
+        this.cntObservaciones = control.getCntObservaciones();
+        this.cntExamenFisico = control.getCntExamenFisico();
+        this.cntTratamiento = control.getCntTratamiento();
         
-        this.presion = control.getCntPresion();
-        this.frecuenciaCardiaca = control.getCntFrecuenciaCardiaca();
-        this.peso = control.getCntPeso();
-        this.talla = control.getCntTalla();
-        this.temperatura = control.getCntTemperatura();
-        this.imc = control.getCntImc();
-        this.anotacionEnfermeria = control.getCntAnotacionEnfermeria();
-        this.razonConsulta = control.getCntRazonConsulta();
-        this.PlanAtencion = control.getCntPlanAtencion();
-        this.Observaciones = control.getCntObservaciones();
-        this.examenFisico = control.getCntExamenFisico();
-        this.tratamiento = control.getCntTratamiento();
+    }
+
+    public Long getCntId() {
+        return cntId;
+    }
+
+    public void setCntId(Long cntId) {
+        this.cntId = cntId;
+    }
+
+    public LocalDate getCntFecha() {
+        return cntFecha;
+    }
+
+    public void setCntFecha(LocalDate cntFecha) {
+        this.cntFecha = cntFecha;
+    }
+
+    public String getCntHora() {
+        return cntHora;
+    }
+
+    public void setCntHora(String cntHora) {
+        this.cntHora = cntHora;
+    }
+
+    public Double getCntPresion() {
+        return cntPresion;
+    }
+
+    public void setCntPresion(Double cntPresion) {
+        this.cntPresion = cntPresion;
+    }
+
+    public Double getCntFrecuenciaCardiaca() {
+        return cntFrecuenciaCardiaca;
+    }
+
+    public void setCntFrecuenciaCardiaca(Double cntFrecuenciaCardiaca) {
+        this.cntFrecuenciaCardiaca = cntFrecuenciaCardiaca;
+    }
+
+    public Double getCntPeso() {
+        return cntPeso;
+    }
+
+    public void setCntPeso(Double cntPeso) {
+        this.cntPeso = cntPeso;
+    }
+
+    public Double getCntTalla() {
+        return cntTalla;
+    }
+
+    public void setCntTalla(Double cntTalla) {
+        this.cntTalla = cntTalla;
+    }
+
+    public Double getCntTemperatura() {
+        return cntTemperatura;
+    }
+
+    public void setCntTemperatura(Double cntTemperatura) {
+        this.cntTemperatura = cntTemperatura;
+    }
+
+    public Double getCntImc() {
+        return cntImc;
+    }
+
+    public void setCntImc(Double cntImc) {
+        this.cntImc = cntImc;
+    }
+
+    public String getCntAnotacionEnfermeria() {
+        return cntAnotacionEnfermeria;
+    }
+
+    public void setCntAnotacionEnfermeria(String cntAnotacionEnfermeria) {
+        this.cntAnotacionEnfermeria = cntAnotacionEnfermeria;
+    }
+
+    public String getCntRazonConsulta() {
+        return cntRazonConsulta;
+    }
+
+    public void setCntRazonConsulta(String cntRazonConsulta) {
+        this.cntRazonConsulta = cntRazonConsulta;
+    }
+
+    public String getCntPlanAtencion() {
+        return cntPlanAtencion;
+    }
+
+    public void setCntPlanAtencion(String cntPlanAtencion) {
+        this.cntPlanAtencion = cntPlanAtencion;
+    }
+
+    public String getCntObservaciones() {
+        return cntObservaciones;
+    }
+
+    public void setCntObservaciones(String cntObservaciones) {
+        this.cntObservaciones = cntObservaciones;
+    }
+
+    public String getCntExamenFisico() {
+        return cntExamenFisico;
+    }
+
+    public void setCntExamenFisico(String cntExamenFisico) {
+        this.cntExamenFisico = cntExamenFisico;
+    }
+
+    public String getCntTratamiento() {
+        return cntTratamiento;
+    }
+
+    public void setCntTratamiento(String cntTratamiento) {
+        this.cntTratamiento = cntTratamiento;
+    }
+
+    public Long getCntVersion() {
+        return cntVersion;
+    }
+
+    public void setCntVersion(Long cntVersion) {
+        this.cntVersion = cntVersion;
+    }
+
+    public ExpedienteDto getCntExpediente() {
+        return cntExpediente;
+    }
+
+    public void setCntExpediente(ExpedienteDto cntExpediente) {
+        this.cntExpediente = cntExpediente;
     }
     
     
-    public Long getCtrPacID() {
-        return ctrPacID;
-    }
-
-    public void setCtrPacID(Long ctrPacID) {
-        this.ctrPacID = ctrPacID;
-    }
-
-    public Long getCtrPacVersion() {
-        return ctrPacVersion;
-    }
-
-    public void setCtrPacVersion(Long ctrPacVersion) {
-        this.ctrPacVersion = ctrPacVersion;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
-
-    public Double getPresion() {
-        return presion;
-    }
-
-    public void setPresion(Double presion) {
-        this.presion = presion;
-    }
-
-    public Double getFrecuenciaCardiaca() {
-        return frecuenciaCardiaca;
-    }
-
-    public void setFrecuenciaCardiaca(Double frecuenciaCardiaca) {
-        this.frecuenciaCardiaca = frecuenciaCardiaca;
-    }
-
-    public Double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(Double peso) {
-        this.peso = peso;
-    }
-
-    public Double getTalla() {
-        return talla;
-    }
-
-    public void setTalla(Double talla) {
-        this.talla = talla;
-    }
-
-    public Double getTemperatura() {
-        return temperatura;
-    }
-
-    public void setTemperatura(Double temperatura) {
-        this.temperatura = temperatura;
-    }
-
-    public Double getImc() {
-        return imc;
-    }
-
-    public void setImc(Double imc) {
-        this.imc = imc;
-    }
-
-    public String getAnotacionEnfermeria() {
-        return anotacionEnfermeria;
-    }
-
-    public void setAnotacionEnfermeria(String anotacionEnfermeria) {
-        this.anotacionEnfermeria = anotacionEnfermeria;
-    }
-
-    public String getRazonConsulta() {
-        return razonConsulta;
-    }
-
-    public void setRazonConsulta(String razonConsulta) {
-        this.razonConsulta = razonConsulta;
-    }
-
-    public String getPlanAtencion() {
-        return PlanAtencion;
-    }
-
-    public void setPlanAtencion(String PlanAtencion) {
-        this.PlanAtencion = PlanAtencion;
-    }
-
-    public String getObservaciones() {
-        return Observaciones;
-    }
-
-    public void setObservaciones(String Observaciones) {
-        this.Observaciones = Observaciones;
-    }
-
-    public String getExamenFisico() {
-        return examenFisico;
-    }
-
-    public void setExamenFisico(String examenFisico) {
-        this.examenFisico = examenFisico;
-    }
-
-    public String getTratamiento() {
-        return tratamiento;
-    }
-
-    public void setTratamiento(String tratamiento) {
-        this.tratamiento = tratamiento;
-    }
-
-    public PacienteDto getPaciente() {
-        return paciente;
-    }
-
-    public void setPaciente(PacienteDto paciente) {
-        this.paciente = paciente;
-    }
-
-    public ExamenDto getExamen() {
-        return examen;
-    }
-
-    public void setExamen(ExamenDto examen) {
-        this.examen = examen;
-    }
+  
 
     
     

@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Expediente.findAll", query = "SELECT e FROM Expediente e")
     , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId")
-    , @NamedQuery(name = "Expediente.findByExpAntecedentePatologicos", query = "SELECT e FROM Expediente e WHERE e.expAntecedentePatologicos = :expAntecedentePatologicos")
+    //, @NamedQuery(name = "Expediente.findByExpAntecedentePatologicos", query = "SELECT e FROM Expediente e WHERE e.expAntecedentePatologicos = :expAntecedentePatologicos")
     , @NamedQuery(name = "Expediente.findByExpHospitalizaciones", query = "SELECT e FROM Expediente e WHERE e.expHospitalizaciones = :expHospitalizaciones")
     , @NamedQuery(name = "Expediente.findByExpOperaciones", query = "SELECT e FROM Expediente e WHERE e.expOperaciones = :expOperaciones")
     , @NamedQuery(name = "Expediente.findByExpAlergias", query = "SELECT e FROM Expediente e WHERE e.expAlergias = :expAlergias")
@@ -46,12 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Expediente.findByExpVersion", query = "SELECT e FROM Expediente e WHERE e.expVersion = :expVersion")})
 public class Expediente implements Serializable {
 
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "antExpediente", fetch = FetchType.LAZY)
-    private List<Antecedente> antecedenteList;
-
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -88,14 +83,15 @@ public class Expediente implements Serializable {
     @JoinColumn(name = "EXP_PACIENTE", referencedColumnName = "PAC_ID")
     @OneToOne(optional = false)
     private Paciente expPaciente;
-    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "antExpediente", fetch = FetchType.LAZY)
+    private List<Antecedente> antecedenteList;
+
     public Expediente() {
     }
 
     public void actualizarExpediente(ExpedienteDto expediente) {
         this.expAlergias = expediente.getAlergias();
         this.expAntecedentePatologicos = expediente.getAntecedentesPatologicos();
-        //this.expAntecedentesFamiliares = expediente.getAntecedentesFamiliares();
         this.expHospitalizaciones = expediente.getHospitalizaciones();
         this.expOperaciones = expediente.getOperaciones();
         this.expTratamientos = expediente.getTratamientos();
@@ -119,7 +115,6 @@ public class Expediente implements Serializable {
         this.expOperaciones = expOperaciones;
         this.expAlergias = expAlergias;
         this.expTratamientos = expTratamientos;
-        //this.expAntecedentesFamiliares = expAntecedentesFamiliares;
         this.expVersion = expVersion;
     }
 
@@ -170,7 +165,8 @@ public class Expediente implements Serializable {
     public void setExpTratamientos(String expTratamientos) {
         this.expTratamientos = expTratamientos;
     }
-/*
+
+    /*
     public String getExpAntecedentesFamiliares() {
         return expAntecedentesFamiliares;
     }
@@ -178,7 +174,7 @@ public class Expediente implements Serializable {
     public void setExpAntecedentesFamiliares(String expAntecedentesFamiliares) {
         this.expAntecedentesFamiliares = expAntecedentesFamiliares;
     }
-*/
+     */
     public Long getExpVersion() {
         return expVersion;
     }
@@ -211,7 +207,6 @@ public class Expediente implements Serializable {
         this.expPaciente = expPaciente;
     }
 
-
     public List<Antecedente> getAntecedenteList() {
         return antecedenteList;
     }
@@ -219,6 +214,5 @@ public class Expediente implements Serializable {
     public void setAntecedenteList(List<Antecedente> antecedenteList) {
         this.antecedenteList = antecedenteList;
     }
-
 
 }

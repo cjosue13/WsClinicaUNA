@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Carlos Olivares
  */
-@XmlRootElement(name = "ControlDto")
+@XmlRootElement(name = "AntecedenteDto")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AntecedenteDto {
     private Long antId;
@@ -27,7 +27,7 @@ public class AntecedenteDto {
     public AntecedenteDto(Antecedente antecedente) {
         this.antEnfermedad = antecedente.getAntEnfermedad();
         this.antParentezco = antecedente.getAntParentezco();
-        this.antExpediente = new ExpedienteDto(antecedente.getAntExpediente());
+       // this.antExpediente = new ExpedienteDto(antecedente.getAntExpediente());
         this.antId = antecedente.getAntId();
         this.antVersion = antecedente.getAntVersion();
     }

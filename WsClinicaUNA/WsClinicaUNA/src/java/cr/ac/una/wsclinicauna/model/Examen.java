@@ -61,7 +61,7 @@ public class Examen implements Serializable {
     @Basic(optional = false)
     @Column(name = "EXM_VERSION")
     private Long exmVersion;
-    @JoinColumn(name = "EXM_EXPEDIENTE", referencedColumnName = "PL_CLN_EXPEDIENTE")
+    @JoinColumn(name = "EXM_EXPEDIENTE", referencedColumnName = "EXP_ID")
     @ManyToOne(optional = false)
     private Expediente exmExpediente;
 
@@ -86,6 +86,7 @@ public class Examen implements Serializable {
       .atZone(ZoneId.systemDefault())
       .toInstant());
         this.exmAnotaciones = examen.getAnotaciones();
+        this.exmExpediente = new Expediente(examen.getExpediente());
     }
     
     public Examen(ExamenDto examenDto) {

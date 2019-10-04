@@ -111,7 +111,7 @@ public class Control implements Serializable {
     @Basic(optional = false)
     @Column(name = "CNT_VERSION")
     private Long cntVersion;
-    @JoinColumn(name = "CNT_EXPEDIENTE", referencedColumnName = "PL_CLN_EXPEDIENTE")
+    @JoinColumn(name = "CNT_EXPEDIENTE", referencedColumnName = "EXP_ID")
     @ManyToOne
     private Expediente cntExpediente;
 
@@ -143,38 +143,38 @@ public class Control implements Serializable {
     }
 
     public Control(ControlDto control) {
-        this.cntId = control.getCtrPacID();
+        this.cntId = control.getCntId();
         this.actualizarControl(control);
     }
 
     public void actualizarControl(ControlDto control) {
 
-        this.cntVersion = control.getCtrPacVersion();
-        this.cntFecha = java.util.Date.from(control.getFecha().atStartOfDay()
+        this.cntVersion = control.getCntVersion();
+        this.cntFecha = java.util.Date.from(control.getCntFecha().atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
 
         Date date1;
         try {
-            date1 = new SimpleDateFormat("yyyy/MM/dd").parse(control.getHora());
+            date1 = new SimpleDateFormat("yyyy/MM/dd").parse(control.getCntHora());
             this.cntHora = date1;
         } catch (ParseException ex) {
             Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        this.cntPresion = control.getPresion();
-        this.cntFrecuenciaCardiaca = control.getFrecuenciaCardiaca();
-        this.cntPeso = control.getPeso();
-        this.cntTalla = control.getTalla();
-        this.cntTemperatura = control.getTemperatura();
-        this.cntImc = control.getImc();
-        this.cntAnotacionEnfermeria = control.getAnotacionEnfermeria();
-        this.cntRazonConsulta = control.getRazonConsulta();
-        this.cntPlanAtencion = control.getPlanAtencion();
-        this.cntObservaciones = control.getObservaciones();
-        this.cntExamenFisico = control.getExamenFisico();
-        this.cntTratamiento = control.getTratamiento();
-
+        this.cntPresion = control.getCntPresion();
+        this.cntFrecuenciaCardiaca = control.getCntFrecuenciaCardiaca();
+        this.cntPeso = control.getCntPeso();
+        this.cntTalla = control.getCntTalla();
+        this.cntTemperatura = control.getCntTemperatura();
+        this.cntImc = control.getCntImc();
+        this.cntAnotacionEnfermeria = control.getCntAnotacionEnfermeria();
+        this.cntRazonConsulta = control.getCntRazonConsulta();
+        this.cntPlanAtencion = control.getCntPlanAtencion();
+        this.cntObservaciones = control.getCntObservaciones();
+        this.cntExamenFisico = control.getCntExamenFisico();
+        this.cntTratamiento = control.getCntTratamiento();
+        this.cntExpediente = new Expediente(control.getCntExpediente());
     }
 
     public Long getCntId() {
