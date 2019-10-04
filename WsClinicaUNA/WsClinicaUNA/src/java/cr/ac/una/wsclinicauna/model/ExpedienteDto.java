@@ -31,7 +31,7 @@ public class ExpedienteDto {
     }
     
     public ExpedienteDto(Expediente expediente) {
-        this.expID = expediente.getPlClnExpediente();
+        this.expID = expediente.getExpId();
         this.expVersion = expediente.getExpVersion();
         this.antecedentesPatologicos = expediente.getExpAntecedentePatologicos();
         this.hospitalizaciones = expediente.getExpHospitalizaciones();

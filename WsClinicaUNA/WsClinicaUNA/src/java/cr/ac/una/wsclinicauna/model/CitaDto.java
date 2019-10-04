@@ -5,6 +5,8 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,6 +27,7 @@ public class CitaDto {
     private String estado;
     private String telefono;
     private String correo;
+    private String hora;
 
     public CitaDto(){
     }
@@ -33,11 +36,16 @@ public class CitaDto {
         this.CtID = cita.getCtId();
         this.CtVersion = cita.getCtVersion();
         this.paciente = new PacienteDto(cita.getCtPaciente());
-        //this.espacioHora = new EspacioHoraDto(cita.getPkClnEspacioHora());
         this.motivo = cita.getCtMotivo();
         this.estado = cita.getCtEstado();
         this.telefono = cita.getCtTelefono();
         this.correo = cita.getCtCorreo();
+        if (cita.getCtHora() != null) {
+            LocalDateTime localDateTime = cita.getCtHora().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            this.hora = localDateTime.toLocalTime().toString();
+        }
     }
 
     public String getTelefono() {
@@ -103,4 +111,13 @@ public class CitaDto {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+    
 }

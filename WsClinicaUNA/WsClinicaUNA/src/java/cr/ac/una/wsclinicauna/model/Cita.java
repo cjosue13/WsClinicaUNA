@@ -6,6 +6,11 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,6 +26,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -47,7 +54,6 @@ public class Cita implements Serializable {
     @Id
     @SequenceGenerator(name = "CT_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_CITAS", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CT_ID_GENERATOR")
-
     @Basic(optional = false)
     @Column(name = "CT_ID")
     private Long ctId;
@@ -57,20 +63,24 @@ public class Cita implements Serializable {
     @Column(name = "CT_MOTIVO")
     private String ctMotivo;
     @Basic(optional = false)
-    @Column(name = "CT_VERSION")
-    private Long ctVersion;
-    @Basic(optional = false)
     @Column(name = "CT_TELEFONO")
     private String ctTelefono;
     @Basic(optional = false)
     @Column(name = "CT_CORREO")
     private String ctCorreo;
+    @Basic(optional = false)
+    @Column(name = "CT_HORA")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ctHora;
     @JoinColumn(name = "CT_PACIENTE", referencedColumnName = "PAC_ID")
     @ManyToOne
     private Paciente ctPaciente;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctxespCita")
     private List<CitasPorEspacio> citasPorEspacioList;
-
+    @Basic(optional = false)
+    @Column(name = "CT_VERSION")
+    private Long ctVersion;
+    
     public Cita() {
     }
 
@@ -97,6 +107,10 @@ public class Cita implements Serializable {
         this.ctEstado = cita.getEstado();
         this.ctCorreo = cita.getCorreo();
         this.ctTelefono = cita.getTelefono();
+        if (cita.getHora() != null) {
+            LocalDateTime inicioJornada = LocalDateTime.parse(cita.getHora(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+            this.ctHora = Date.from(inicioJornada.atZone(ZoneId.systemDefault()).toInstant());
+        }
     }
 
     public String getCtTelefono() {
@@ -192,6 +206,14 @@ public class Cita implements Serializable {
     @Override
     public String toString() {
         return "model.Cita[ ctId=" + ctId + " ]";
+    }
+
+    public Date getCtHora() {
+        return ctHora;
+    }
+
+    public void setCtHora(Date ctHora) {
+        this.ctHora = ctHora;
     }
 
 }

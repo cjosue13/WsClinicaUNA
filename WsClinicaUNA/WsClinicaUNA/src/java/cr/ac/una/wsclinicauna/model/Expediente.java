@@ -6,6 +6,8 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Expediente.findAll", query = "SELECT e FROM Expediente e")
-    , @NamedQuery(name = "Expediente.findByPlClnExpediente", query = "SELECT e FROM Expediente e WHERE e.plClnExpediente = :plClnExpediente")
+    , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId")
     , @NamedQuery(name = "Expediente.findByExpAntecedentePatologicos", query = "SELECT e FROM Expediente e WHERE e.expAntecedentePatologicos = :expAntecedentePatologicos")
     , @NamedQuery(name = "Expediente.findByExpHospitalizaciones", query = "SELECT e FROM Expediente e WHERE e.expHospitalizaciones = :expHospitalizaciones")
     , @NamedQuery(name = "Expediente.findByExpOperaciones", query = "SELECT e FROM Expediente e WHERE e.expOperaciones = :expOperaciones")
@@ -43,14 +45,16 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Expediente.findByExpVersion", query = "SELECT e FROM Expediente e WHERE e.expVersion = :expVersion")})
 public class Expediente implements Serializable {
 
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-     @Id
+    @Id
     @SequenceGenerator(name = "EXP_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_EXPEDIENTES", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXP_ID_GENERATOR")  
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXP_ID_GENERATOR")
     @Basic(optional = false)
-    @Column(name = "PL_CLN_EXPEDIENTE")
-    private Long plClnExpediente;
+    @Column(name = "EXP_ID")
+    private Long expId;
     @Basic(optional = false)
     @Column(name = "EXP_ANTECEDENTE_PATOLOGICOS")
     private String expAntecedentePatologicos;
@@ -69,9 +73,6 @@ public class Expediente implements Serializable {
     @Basic(optional = false)
     @Column(name = "EXP_ANTECEDENTES_FAMILIARES")
     private String expAntecedentesFamiliares;
-    @Basic(optional = false)
-    @Column(name = "EXP_VERSION")
-    private Long expVersion;
     @OneToMany(mappedBy = "cntExpediente")
     private List<Control> controlList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "exmExpediente")
@@ -79,10 +80,14 @@ public class Expediente implements Serializable {
     @JoinColumn(name = "EXP_PACIENTE", referencedColumnName = "PAC_ID")
     @ManyToOne(optional = false)
     private Paciente expPaciente;
-
+    @Basic(optional = false)
+    @Column(name = "EXP_VERSION")
+    private Long expVersion;
+    
     public Expediente() {
     }
-    public void actualizarExpediente(ExpedienteDto expediente){
+
+    public void actualizarExpediente(ExpedienteDto expediente) {
         this.expAlergias = expediente.getAlergias();
         this.expAntecedentePatologicos = expediente.getAntecedentesPatologicos();
         this.expAntecedentesFamiliares = expediente.getAntecedentesFamiliares();
@@ -92,17 +97,18 @@ public class Expediente implements Serializable {
         this.expVersion = expediente.getExpVersion();
         this.expPaciente = new Paciente(expediente.getPaciente());
     }
-    
+
     public Expediente(ExpedienteDto expedienteDto) {
-        this.plClnExpediente = expedienteDto.getExpID();
+        this.expId = expedienteDto.getExpID();
         actualizarExpediente(expedienteDto);
     }
+
     public Expediente(Long plClnExpediente) {
-        this.plClnExpediente = plClnExpediente;
+        this.expId = plClnExpediente;
     }
 
     public Expediente(Long plClnExpediente, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos, String expAntecedentesFamiliares, Long expVersion) {
-        this.plClnExpediente = plClnExpediente;
+        this.expId = plClnExpediente;
         this.expAntecedentePatologicos = expAntecedentePatologicos;
         this.expHospitalizaciones = expHospitalizaciones;
         this.expOperaciones = expOperaciones;
@@ -112,12 +118,12 @@ public class Expediente implements Serializable {
         this.expVersion = expVersion;
     }
 
-    public Long getPlClnExpediente() {
-        return plClnExpediente;
+    public Long getExpId() {
+        return expId;
     }
 
-    public void setPlClnExpediente(Long plClnExpediente) {
-        this.plClnExpediente = plClnExpediente;
+    public void setExpId(Long expId) {
+        this.expId = expId;
     }
 
     public String getExpAntecedentePatologicos() {
@@ -176,7 +182,6 @@ public class Expediente implements Serializable {
         this.expVersion = expVersion;
     }
 
-    @XmlTransient
     public List<Control> getControlList() {
         return controlList;
     }
@@ -185,7 +190,6 @@ public class Expediente implements Serializable {
         this.controlList = controlList;
     }
 
-    @XmlTransient
     public List<Examen> getExamenList() {
         return examenList;
     }
@@ -202,29 +206,5 @@ public class Expediente implements Serializable {
         this.expPaciente = expPaciente;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (plClnExpediente != null ? plClnExpediente.hashCode() : 0);
-        return hash;
-    }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Expediente)) {
-            return false;
-        }
-        Expediente other = (Expediente) object;
-        if ((this.plClnExpediente == null && other.plClnExpediente != null) || (this.plClnExpediente != null && !this.plClnExpediente.equals(other.plClnExpediente))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.Expediente[ plClnExpediente=" + plClnExpediente + " ]";
-    }
-    
 }

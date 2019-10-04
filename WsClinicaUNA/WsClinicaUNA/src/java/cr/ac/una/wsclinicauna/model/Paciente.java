@@ -6,6 +6,7 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -46,9 +47,11 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Paciente.findByPacVersion", query = "SELECT p FROM Paciente p WHERE p.pacVersion = :pacVersion")})
 public class Paciente implements Serializable {
 
+    
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-     @Id
+    @Id
     @SequenceGenerator(name = "PAC_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_PACIENTES", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PAC_ID_GENERATOR")
     @Basic(optional = false)
@@ -76,14 +79,13 @@ public class Paciente implements Serializable {
     @Column(name = "PAC_FECHANACIMIENTO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date pacFechanacimiento;
-    @Basic(optional = false)
-    @Column(name = "PAC_VERSION")
-    private Long pacVersion;
     @OneToMany(mappedBy = "ctPaciente")
     private List<Cita> citaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "expPaciente")
     private List<Expediente> expedienteList;
-
+    @Basic(optional = false)
+    @Column(name = "PAC_VERSION")
+    private Long pacVersion;
     public Paciente() {
     }
 
@@ -102,11 +104,12 @@ public class Paciente implements Serializable {
         this.pacFechanacimiento = pacFechanacimiento;
         this.pacVersion = pacVersion;
     }
-     public Paciente(PacienteDto PacienteDto) {
+
+    public Paciente(PacienteDto PacienteDto) {
         this.pacId = PacienteDto.getID();
         actualizarPaciente(PacienteDto);
     }
-    
+
     public void actualizarPaciente(PacienteDto PacienteDto) {
         this.pacCedula = PacienteDto.getCedula();
         this.pacCorreo = PacienteDto.getCorreo();
@@ -194,7 +197,6 @@ public class Paciente implements Serializable {
         this.pacVersion = pacVersion;
     }
 
-    @XmlTransient
     public List<Cita> getCitaList() {
         return citaList;
     }
@@ -203,7 +205,6 @@ public class Paciente implements Serializable {
         this.citaList = citaList;
     }
 
-    @XmlTransient
     public List<Expediente> getExpedienteList() {
         return expedienteList;
     }
@@ -236,5 +237,7 @@ public class Paciente implements Serializable {
     public String toString() {
         return "model.Paciente[ pacId=" + pacId + " ]";
     }
-    
+
+
+
 }
