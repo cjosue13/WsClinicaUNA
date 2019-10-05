@@ -27,9 +27,9 @@ public class ExpedienteDto {
     private String tratamientos;
     //private String antecedentesFamiliares;
     private PacienteDto paciente;
-    private ArrayList<AntecedenteDto> antecedentes;
+    /*private ArrayList<AntecedenteDto> antecedentes;
     private ArrayList<ExamenDto> examenes;
-    private ArrayList<ControlDto> controles;
+    private ArrayList<ControlDto> controles;*/
     
     public ExpedienteDto(){
     }
@@ -43,7 +43,7 @@ public class ExpedienteDto {
         this.alergias = expediente.getExpAlergias();
         this.tratamientos = expediente.getExpTratamientos();
         this.paciente = new PacienteDto(expediente.getExpPaciente());
-        this.antecedentes = new ArrayList();
+        /*this.antecedentes = new ArrayList();
         this.examenes = new ArrayList();
         this.controles = new ArrayList();
         if(!expediente.getAntecedenteList().isEmpty()){
@@ -85,6 +85,7 @@ public class ExpedienteDto {
 
     public void setControles(ArrayList<ControlDto> controles) {
         this.controles = controles;
+    }*/
     }
 
     public Long getExpID() {
