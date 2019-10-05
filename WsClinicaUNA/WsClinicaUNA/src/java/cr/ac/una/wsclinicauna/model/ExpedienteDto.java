@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose Pablo Bermudez
  */
 @XmlRootElement(name = "ExpedienteDto")
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class ExpedienteDto {
-    
+
     private Long expID;
     private Long expVersion;
     private String antecedentesPatologicos;
@@ -27,13 +27,13 @@ public class ExpedienteDto {
     private String tratamientos;
     //private String antecedentesFamiliares;
     private PacienteDto paciente;
-    /*private ArrayList<AntecedenteDto> antecedentes;
+    private ArrayList<AntecedenteDto> antecedentes;
     private ArrayList<ExamenDto> examenes;
-    private ArrayList<ControlDto> controles;*/
-    
-    public ExpedienteDto(){
+    private ArrayList<ControlDto> controles;
+
+    public ExpedienteDto() {
     }
-    
+
     public ExpedienteDto(Expediente expediente) {
         this.expID = expediente.getExpId();
         this.expVersion = expediente.getExpVersion();
@@ -43,20 +43,20 @@ public class ExpedienteDto {
         this.alergias = expediente.getExpAlergias();
         this.tratamientos = expediente.getExpTratamientos();
         this.paciente = new PacienteDto(expediente.getExpPaciente());
-        /*this.antecedentes = new ArrayList();
+        this.antecedentes = new ArrayList();
         this.examenes = new ArrayList();
         this.controles = new ArrayList();
-        if(!expediente.getAntecedenteList().isEmpty()){
+        if (!expediente.getAntecedenteList().isEmpty()) {
             for (Antecedente antecedente : expediente.getAntecedenteList()) {
                 antecedentes.add(new AntecedenteDto(antecedente));
             }
         }
-        if(!expediente.getControlList().isEmpty()){
+        if (!expediente.getControlList().isEmpty()) {
             for (Control control : expediente.getControlList()) {
                 controles.add(new ControlDto(control));
             }
         }
-        if(!expediente.getExamenList().isEmpty()){
+        if (!expediente.getExamenList().isEmpty()) {
             for (Examen examen : expediente.getExamenList()) {
                 examenes.add(new ExamenDto(examen));
             }
@@ -85,7 +85,6 @@ public class ExpedienteDto {
 
     public void setControles(ArrayList<ControlDto> controles) {
         this.controles = controles;
-    }*/
     }
 
     public Long getExpID() {
