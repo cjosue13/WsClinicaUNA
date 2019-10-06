@@ -82,7 +82,7 @@ public class UsuarioService {
                 Usuario = em.find(Usuario.class, UsuarioDto.getID());
 
                 if (Usuario == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Usuario a modificar.", "guardarUsuario NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el Usuario a modificar.", "guardarUsuario NoResultException");
                 }
 
                 Usuario.actualizarUsuario(UsuarioDto);

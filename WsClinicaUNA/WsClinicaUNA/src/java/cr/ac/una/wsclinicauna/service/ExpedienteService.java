@@ -62,7 +62,7 @@ public class ExpedienteService {
                 Expediente = em.find(Expediente.class, ExpedienteDto.getExpID());
 
                 if (Expediente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Expediente a modificar.", "guardarExpediente NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el Expediente a modificar.", "guardarExpediente NoResultException");
                 }
 
                 Expediente.actualizarExpediente(ExpedienteDto);

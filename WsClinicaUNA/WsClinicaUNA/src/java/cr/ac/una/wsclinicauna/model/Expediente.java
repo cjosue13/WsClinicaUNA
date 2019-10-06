@@ -89,6 +89,20 @@ public class Expediente implements Serializable {
     public Expediente() {
     }
 
+    public Expediente(Long expId, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos, Long expVersion, List<Control> controlList, List<Examen> examenList, Paciente expPaciente, List<Antecedente> antecedenteList) {
+        this.expId = expId;
+        this.expAntecedentePatologicos = expAntecedentePatologicos;
+        this.expHospitalizaciones = expHospitalizaciones;
+        this.expOperaciones = expOperaciones;
+        this.expAlergias = expAlergias;
+        this.expTratamientos = expTratamientos;
+        this.expVersion = expVersion;
+        this.controlList = controlList;
+        this.examenList = examenList;
+        this.expPaciente = expPaciente;
+        this.antecedenteList = antecedenteList;
+    }
+    
     public void actualizarExpediente(ExpedienteDto expediente) {
         this.expAlergias = expediente.getAlergias();
         this.expAntecedentePatologicos = expediente.getAntecedentesPatologicos();
