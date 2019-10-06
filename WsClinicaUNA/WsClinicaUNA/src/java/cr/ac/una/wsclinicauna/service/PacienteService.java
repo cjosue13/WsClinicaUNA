@@ -107,6 +107,4 @@ public class PacienteService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO,"Ocurrio un error al eliminar el Paciente.", "EliminarPaciente " + ex.getMessage());
         }
     }
-    
-    
 }

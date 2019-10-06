@@ -10,12 +10,16 @@ import cr.ac.una.wsclinicauna.model.AntecedenteDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -77,5 +81,22 @@ public class AntecedenteService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO,"Ocurrio un error al eliminar el Antecedente.", "EliminarAntecedente " + ex.getMessage());
         }
     }
-    
+    public Respuesta getAntecedentes() {
+        try {
+            Query qryantecedente = em.createNamedQuery("Antecedente.findAll", Antecedente.class);
+            List<Antecedente> antecedentes = qryantecedente.getResultList();
+            List<AntecedenteDto> antecedentesDto = new ArrayList<>();
+            for (Antecedente antecedentes1 : antecedentes) {
+                antecedentesDto.add(new AntecedenteDto(antecedentes1));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedentes", antecedentesDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen antecedentes con los criterios ingresados.", "getAntecedentes NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedentes " + ex.getMessage());
+        }
+    }
 }
