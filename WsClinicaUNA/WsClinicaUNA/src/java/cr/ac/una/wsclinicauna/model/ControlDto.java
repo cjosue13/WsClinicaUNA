@@ -69,7 +69,7 @@ public class ControlDto {
         this.cntObservaciones = control.getCntObservaciones();
         this.cntExamenFisico = control.getCntExamenFisico();
         this.cntTratamiento = control.getCntTratamiento();
-        
+        //this.cntExpediente = new ExpedienteDto(control.getCntExpediente());
     }
 
     public Long getCntId() {
@@ -207,12 +207,5 @@ public class ControlDto {
     public void setCntExpediente(ExpedienteDto cntExpediente) {
         this.cntExpediente = cntExpediente;
     }
-    
-    
-  
-
-    
-    
-    
     
 }

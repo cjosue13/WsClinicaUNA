@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,10 +34,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Examen.findAll", query = "SELECT e FROM Examen e")
-    , @NamedQuery(name = "Examen.findByExmId", query = "SELECT e FROM Examen e WHERE e.exmId = :exmId")
+    , @NamedQuery(name = "Examen.findByExmId", query = "SELECT e FROM Examen e WHERE e.exmId = :exmId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Examen.findByExmNombreExamen", query = "SELECT e FROM Examen e WHERE e.exmNombreExamen = :exmNombreExamen")
     , @NamedQuery(name = "Examen.findByExmFecha", query = "SELECT e FROM Examen e WHERE e.exmFecha = :exmFecha")
     , @NamedQuery(name = "Examen.findByExmAnotaciones", query = "SELECT e FROM Examen e WHERE e.exmAnotaciones = :exmAnotaciones")
+    , @NamedQuery(name = "Examen.findByExmExpediente", query = "SELECT e FROM Examen e WHERE e.exmExpediente = :exmExpediente")    
     , @NamedQuery(name = "Examen.findByExmVersion", query = "SELECT e FROM Examen e WHERE e.exmVersion = :exmVersion")})
 public class Examen implements Serializable {
 

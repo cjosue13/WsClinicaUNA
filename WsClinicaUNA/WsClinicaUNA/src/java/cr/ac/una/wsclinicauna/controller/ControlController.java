@@ -71,6 +71,25 @@ public class ControlController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Control").build();
         }
     }
+    @GET
+    @Path("/Controles/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getControles(@PathParam("id") Long ID) {
+        try {
+            Respuesta respuesta = ControlService.getControles(ID);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            ArrayList<ControlDto> ControlsDto = (ArrayList<ControlDto>) respuesta.getResultado("Controles");
+            
+            return Response.ok(new GenericEntity<List<ControlDto>>(ControlsDto){}).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(ControlController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Control").build();
+        }
+    }
     
     @DELETE
     @Path("/eliminar/{id}")

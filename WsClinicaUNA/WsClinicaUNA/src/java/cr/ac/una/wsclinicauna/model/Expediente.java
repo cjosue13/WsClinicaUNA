@@ -6,8 +6,6 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,15 +16,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,8 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Expediente.findAll", query = "SELECT e FROM Expediente e")
-    , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId")
-    //, @NamedQuery(name = "Expediente.findByExpAntecedentePatologicos", query = "SELECT e FROM Expediente e WHERE e.expAntecedentePatologicos = :expAntecedentePatologicos")
+    , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId",hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Expediente.findByExpHospitalizaciones", query = "SELECT e FROM Expediente e WHERE e.expHospitalizaciones = :expHospitalizaciones")
     , @NamedQuery(name = "Expediente.findByExpOperaciones", query = "SELECT e FROM Expediente e WHERE e.expOperaciones = :expOperaciones")
     , @NamedQuery(name = "Expediente.findByExpAlergias", query = "SELECT e FROM Expediente e WHERE e.expAlergias = :expAlergias")
@@ -73,13 +69,10 @@ public class Expediente implements Serializable {
     @Basic(optional = false)
     @Column(name = "EXP_VERSION")
     private Long expVersion;
-    /*@Basic(optional = false)
-    @Column(name = "EXP_ANTECEDENTES_FAMILIARES")
-    private String expAntecedentesFamiliares;*/
     @OneToMany(mappedBy = "cntExpediente")
-    private List<Control> controlList;
+    private List <Control> controlList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "exmExpediente")
-    private List<Examen> examenList;
+    private List <Examen> examenList;
     @JoinColumn(name = "EXP_PACIENTE", referencedColumnName = "PAC_ID")
     @OneToOne(optional = false)
     private Paciente expPaciente;
@@ -180,15 +173,6 @@ public class Expediente implements Serializable {
         this.expTratamientos = expTratamientos;
     }
 
-    /*
-    public String getExpAntecedentesFamiliares() {
-        return expAntecedentesFamiliares;
-    }
-
-    public void setExpAntecedentesFamiliares(String expAntecedentesFamiliares) {
-        this.expAntecedentesFamiliares = expAntecedentesFamiliares;
-    }
-     */
     public Long getExpVersion() {
         return expVersion;
     }

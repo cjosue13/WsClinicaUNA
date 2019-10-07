@@ -7,7 +7,6 @@ package cr.ac.una.wsclinicauna.model;
 
 import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -47,7 +46,6 @@ public class PacienteDto {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
         this.genero = Paciente.getPacGenero();
-        System.out.println(this.fechaNacimiento.toString());
         this.pacVersion = Paciente.getPacVersion();
     }
 

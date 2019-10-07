@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Antecedente.findByAntId", query = "SELECT a FROM Antecedente a WHERE a.antId = :antId")
     , @NamedQuery(name = "Antecedente.findByAntEnfermedad", query = "SELECT a FROM Antecedente a WHERE a.antEnfermedad = :antEnfermedad")
     , @NamedQuery(name = "Antecedente.findByAntParentezco", query = "SELECT a FROM Antecedente a WHERE a.antParentezco = :antParentezco")
+    , @NamedQuery(name = "Antecedente.findByAntExpediente", query = "SELECT a FROM Antecedente a WHERE a.antExpediente = :antExpediente")
     , @NamedQuery(name = "Antecedente.findByAntVersion", query = "SELECT a FROM Antecedente a WHERE a.antVersion = :antVersion")})
 public class Antecedente implements Serializable {
 
