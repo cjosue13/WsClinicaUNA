@@ -64,11 +64,12 @@ public class Antecedente implements Serializable {
         this.antId = antId;
     }
 
-    public Antecedente(Long antId, String antEnfermedad, String antParentezco, Long antVersion) {
+    public Antecedente(Long antId, String antEnfermedad, String antParentezco, Long antVersion, Expediente antExpediente) {
         this.antId = antId;
         this.antEnfermedad = antEnfermedad;
         this.antParentezco = antParentezco;
         this.antVersion = antVersion;
+        this.antExpediente = antExpediente;
     }
 
     public Antecedente(AntecedenteDto antecente) {

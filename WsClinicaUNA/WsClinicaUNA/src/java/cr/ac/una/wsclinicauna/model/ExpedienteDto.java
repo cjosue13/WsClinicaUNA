@@ -46,11 +46,11 @@ public class ExpedienteDto {
         this.antecedentes = new ArrayList();
         this.examenes = new ArrayList();
         this.controles = new ArrayList();
-        if (!expediente.getAntecedenteList().isEmpty()) {
+        /*if (!expediente.getAntecedenteList().isEmpty()) {
             for (Antecedente antecedente : expediente.getAntecedenteList()) {
                 antecedentes.add(new AntecedenteDto(antecedente));
             }
-        }
+        }*/
         if (!expediente.getControlList().isEmpty()) {
             for (Control control : expediente.getControlList()) {
                 controles.add(new ControlDto(control));
