@@ -27,7 +27,7 @@ public class AntecedenteDto {
     public AntecedenteDto(Antecedente antecedente) {
         this.antEnfermedad = antecedente.getAntEnfermedad();
         this.antParentezco = antecedente.getAntParentezco();
-        this.antExpediente = new ExpedienteDto(antecedente.getAntExpediente());
+        //this.antExpediente = new ExpedienteDto(antecedente.getAntExpediente(),false);
         //this.antExpediente = new ExpedienteDto(antecedente.getAntExpediente());
         this.antId = antecedente.getAntId();
         this.antVersion = antecedente.getAntVersion();
