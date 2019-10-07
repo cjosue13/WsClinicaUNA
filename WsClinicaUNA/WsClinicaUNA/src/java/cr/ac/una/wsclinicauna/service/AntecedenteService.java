@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.Antecedente;
 import cr.ac.una.wsclinicauna.model.AntecedenteDto;
+import cr.ac.una.wsclinicauna.model.Expediente;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -91,6 +92,25 @@ public class AntecedenteService {
             }
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedentes", antecedentesDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen antecedentes con los criterios ingresados.", "getAntecedentes NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedentes " + ex.getMessage());
+        }
+    }
+
+    public Respuesta getAntecedentes(Long ID) {
+        try {
+            Expediente exp = em.find(Expediente.class, ID);
+            ArrayList <AntecedenteDto> antecedentes = new ArrayList();
+            exp.getAntecedenteList().stream().forEach((t) -> {
+                antecedentes.add(new AntecedenteDto(t));
+                
+            });
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedentes", antecedentes);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen antecedentes con los criterios ingresados.", "getAntecedentes NoResultException");

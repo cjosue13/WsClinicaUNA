@@ -21,13 +21,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExamenDto {
     
-    Long exmID;
-    String nombreExamen;
+    private Long exmID;
+    private String nombreExamen;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    LocalDate fecha;
-    String anotaciones;
-    Long exmVersion;
-    ExpedienteDto expediente;
+    private LocalDate fecha;
+    private String anotaciones;
+    private Long exmVersion;
+    private ExpedienteDto expediente;
     public ExamenDto(){
     }
     
@@ -39,6 +39,7 @@ public class ExamenDto {
                 .toLocalDate();
         this.anotaciones = examen.getExmAnotaciones();
         this.exmVersion = examen.getExmVersion();
+        //this.expediente = new ExpedienteDto(examen.getExmExpediente());
     }
 
     public ExpedienteDto getExpediente() {

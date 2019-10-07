@@ -7,6 +7,8 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.Examen;
 import cr.ac.una.wsclinicauna.model.ExamenDto;
+import cr.ac.una.wsclinicauna.model.Expediente;
+import cr.ac.una.wsclinicauna.model.ExpedienteDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -38,13 +40,32 @@ public class ExamenService {
     public Respuesta getExamenes() {
         try {
             Query qryExamens = em.createNamedQuery("Examen.findAll", Examen.class);
-            List<Examen> Examens = qryExamens.getResultList();
+            List<Examen> examens = qryExamens.getResultList();
             List<ExamenDto> ExamensDto = new ArrayList<>();
-            for (Examen Examens1 : Examens) {
+            for (Examen Examens1 : examens) {
                 ExamensDto.add(new ExamenDto(Examens1));
             }
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Examenes", ExamensDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen Examenes con los criterios ingresados.", "getExamenes NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Examen.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Examen.", "getExamenes " + ex.getMessage());
+        }
+    }
+    
+    public Respuesta getExamenes(Long ID) {
+        try {
+            Expediente expediente = em.find(Expediente.class,ID);
+            ArrayList <ExamenDto> examenes = new ArrayList();
+            
+            expediente.getExamenList().stream().forEach((t) -> {
+                examenes.add(new ExamenDto(t));
+            });
+            
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Examenes", examenes);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen Examenes con los criterios ingresados.", "getExamenes NoResultException");

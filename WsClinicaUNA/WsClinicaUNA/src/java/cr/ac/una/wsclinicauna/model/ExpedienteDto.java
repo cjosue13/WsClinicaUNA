@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Jose Pablo Bermudez
  */
 @XmlRootElement(name = "ExpedienteDto")
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExpedienteDto {
 
     private Long expID;
@@ -25,7 +26,6 @@ public class ExpedienteDto {
     private String operaciones;
     private String alergias;
     private String tratamientos;
-    //private String antecedentesFamiliares;
     private PacienteDto paciente;
     private ArrayList<AntecedenteDto> antecedentes;
     private ArrayList<ExamenDto> examenes;
@@ -34,7 +34,7 @@ public class ExpedienteDto {
     public ExpedienteDto() {
     }
 
-    public ExpedienteDto(Expediente expediente) {
+    public ExpedienteDto(Expediente expediente, boolean nuevo) {
         this.expID = expediente.getExpId();
         this.expVersion = expediente.getExpVersion();
         this.antecedentesPatologicos = expediente.getExpAntecedentePatologicos();
@@ -54,16 +54,37 @@ public class ExpedienteDto {
         if (!expediente.getControlList().isEmpty()) {
             for (Control control : expediente.getControlList()) {
                 controles.add(new ControlDto(control));
+        if (nuevo) {
+            if (!expediente.getAntecedenteList().isEmpty()) {
+                for (Antecedente antecedente : expediente.getAntecedenteList()) {
+                    AntecedenteDto ant = new AntecedenteDto(antecedente);
+                    ant.setAntExpediente(new ExpedienteDto(expediente,false));
+                    this.getAntecedentes().add(ant);
+                }
+            }
+            if (!expediente.getControlList().isEmpty()) {
+                for (Control control : expediente.getControlList()) {
+                    ControlDto cnt = new ControlDto(control);
+                    cnt.setCntExpediente(new ExpedienteDto(expediente,false));
+                    this.getControles().add(cnt);
+                }
+            }
+            if (!expediente.getExamenList().isEmpty()) {
+                for (Examen examen : expediente.getExamenList()) {
+                    ExamenDto exm = new ExamenDto(examen);
+
+                    exm.setExpediente(new ExpedienteDto(expediente,false));
+                    this.getExamenes().add(exm);
+                }
             }
         }
-        if (!expediente.getExamenList().isEmpty()) {
-            for (Examen examen : expediente.getExamenList()) {
-                examenes.add(new ExamenDto(examen));
-            }
-        }
+
     }
 
     public ArrayList<AntecedenteDto> getAntecedentes() {
+        if (this.antecedentes == null) {
+            this.antecedentes = new ArrayList();
+        }
         return antecedentes;
     }
 
@@ -72,6 +93,9 @@ public class ExpedienteDto {
     }
 
     public ArrayList<ExamenDto> getExamenes() {
+        if (this.examenes == null) {
+            this.examenes = new ArrayList();
+        }
         return examenes;
     }
 
@@ -80,6 +104,9 @@ public class ExpedienteDto {
     }
 
     public ArrayList<ControlDto> getControles() {
+        if (this.controles == null) {
+            this.controles = new ArrayList();
+        }
         return controles;
     }
 

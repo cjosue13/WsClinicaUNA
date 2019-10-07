@@ -10,7 +10,6 @@ import cr.ac.una.wsclinicauna.service.ExpedienteService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -62,10 +61,9 @@ public class ExpedienteController {
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            ArrayList<ExpedienteDto> ExpedientesDto = (ArrayList<ExpedienteDto>) respuesta.getResultado("Expedientes");
             
-            return Response.ok(new GenericEntity<List<ExpedienteDto>>(ExpedientesDto){}).build();
-
+            ArrayList<ExpedienteDto> expedientes = (ArrayList<ExpedienteDto>) respuesta.getResultado("Expedientes");
+            return Response.ok(new GenericEntity<ArrayList<ExpedienteDto>>(expedientes){}).build();
         } catch (Exception ex) {
             Logger.getLogger(ExpedienteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Expediente").build();

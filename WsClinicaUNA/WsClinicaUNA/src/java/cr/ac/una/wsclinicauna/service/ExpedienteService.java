@@ -33,16 +33,15 @@ public class ExpedienteService {
     private static final Logger LOG = Logger.getLogger(ExpedienteService.class.getName());//imprime el error en payara
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    private EntityTransaction et;
     
     public Respuesta getExpedientes() {
         try {
             Query qryExpedientes = em.createNamedQuery("Expediente.findAll", Expediente.class);
             List<Expediente> Expedientes = qryExpedientes.getResultList();
             List<ExpedienteDto> ExpedientesDto = new ArrayList<>();
-            for (Expediente Expedientes1 : Expedientes) {
-                System.out.println("HI");
-                ExpedientesDto.add(new ExpedienteDto(Expedientes1));
+            
+            for (Expediente expediente : Expedientes) {
+                ExpedientesDto.add(new ExpedienteDto(expediente,true));
             }
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expedientes", ExpedientesDto);
@@ -75,7 +74,7 @@ public class ExpedienteService {
 
             em.flush();
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", new ExpedienteDto(Expediente));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", new ExpedienteDto(Expediente,true));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Expediente.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Expediente.", "guardarExpediente " + ex.getMessage());

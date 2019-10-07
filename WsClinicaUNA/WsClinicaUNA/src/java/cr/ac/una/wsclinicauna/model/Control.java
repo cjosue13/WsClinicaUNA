@@ -22,6 +22,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Control.findAll", query = "SELECT c FROM Control c")
-    , @NamedQuery(name = "Control.findByCntId", query = "SELECT c FROM Control c WHERE c.cntId = :cntId")
+    , @NamedQuery(name = "Control.findByCntId", query = "SELECT c FROM Control c WHERE c.cntId = :cntId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Control.findByCntFecha", query = "SELECT c FROM Control c WHERE c.cntFecha = :cntFecha")
     , @NamedQuery(name = "Control.findByCntHora", query = "SELECT c FROM Control c WHERE c.cntHora = :cntHora")
     , @NamedQuery(name = "Control.findByCntPresion", query = "SELECT c FROM Control c WHERE c.cntPresion = :cntPresion")
@@ -52,6 +53,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Control.findByCntObservaciones", query = "SELECT c FROM Control c WHERE c.cntObservaciones = :cntObservaciones")
     , @NamedQuery(name = "Control.findByCntExamenFisico", query = "SELECT c FROM Control c WHERE c.cntExamenFisico = :cntExamenFisico")
     , @NamedQuery(name = "Control.findByCntTratamiento", query = "SELECT c FROM Control c WHERE c.cntTratamiento = :cntTratamiento")
+    , @NamedQuery(name = "Control.findByCntExpediente", query = "SELECT c FROM Control c WHERE c.cntExpediente = :cntExpediente")    
     , @NamedQuery(name = "Control.findByCntVersion", query = "SELECT c FROM Control c WHERE c.cntVersion = :cntVersion")})
 public class Control implements Serializable {
 

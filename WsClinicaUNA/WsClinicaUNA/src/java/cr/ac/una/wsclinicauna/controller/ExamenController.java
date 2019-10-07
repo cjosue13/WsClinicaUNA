@@ -72,6 +72,29 @@ public class ExamenController {
         }
     }
     
+    @GET
+    @Path("/Examenes/{expId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getExamenes(@PathParam("expId")Long ID) {
+        try {
+            Respuesta respuesta = ExamenService.getExamenes(ID);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            ArrayList<ExamenDto> ExamenesDto = (ArrayList<ExamenDto>) respuesta.getResultado("Examenes");
+           /* ExamenesDto.stream().forEach(x->{
+                System.out.println(x.toString());
+            });*/
+            
+            return Response.ok(new GenericEntity<List<ExamenDto>>(ExamenesDto){}).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(ExamenController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Examen").build();
+        }
+    }
+    
     @DELETE
     @Path("/eliminar/{id}")
     @Produces(MediaType.APPLICATION_JSON)

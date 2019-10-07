@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.Control;
 import cr.ac.una.wsclinicauna.model.ControlDto;
+import cr.ac.una.wsclinicauna.model.Expediente;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -98,6 +99,25 @@ public class ControlService {
             }
             Logger.getLogger(ControlService.class.getName()).log(Level.SEVERE, "Ocurrio un error al guardar el .", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO,"Ocurrio un error al eliminar el Control.", "EliminarControl " + ex.getMessage());
+        }
+    }
+
+    public Respuesta getControles(Long ID) {
+        try {
+            Expediente exp = em.find(Expediente.class, ID);
+            ArrayList <ControlDto> controles = new ArrayList<>();
+            exp.getControlList().stream().forEach((t) -> {
+                controles.add(new ControlDto(t));
+            });
+            
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Controles", controles);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen Controls con los criterios ingresados.", "getControls NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Control.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Control.", "getControls " + ex.getMessage());
         }
     }
 }
