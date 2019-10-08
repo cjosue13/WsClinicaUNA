@@ -87,7 +87,7 @@ public class UsuarioService {
 
                 Usuario.actualizarUsuario(UsuarioDto);
                 Usuario = em.merge(Usuario);
-                
+
             } else {
                 Usuario = new Usuario(UsuarioDto);
                 //Crea una contrasena temporal para luego activar el usuario
@@ -132,7 +132,7 @@ public class UsuarioService {
             Query qryUsuario = em.createNamedQuery("Usuario.findByUsContrasenatemp", Usuario.class);
             qryUsuario.setParameter("usContrasenatemp", codigo);
             Usuario usuario = (Usuario) qryUsuario.getSingleResult();
-          
+
             usuario.setUsEstado("A");
             usuario.setUsContrasenatemp(null);
             usuario = em.merge(usuario);
@@ -153,8 +153,11 @@ public class UsuarioService {
             Query qryUsuario = em.createNamedQuery("Usuario.findByUsCorreo", Usuario.class);
             qryUsuario.setParameter("usCorreo", correo);
             Usuario usuario = (Usuario) qryUsuario.getSingleResult();
-            usuario.setUsContrasenatemp(generadorContrasennas.getInstance().getPassword());
-            usuario = em.merge(usuario);
+            if (!usuario.getUsEstado().equals("I")) {
+                usuario.setUsContrasenatemp(generadorContrasennas.getInstance().getPassword());
+                usuario = em.merge(usuario);
+            }
+
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(usuario));
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con las credenciales ingresadas.", "validarUsuario NoResultException");
