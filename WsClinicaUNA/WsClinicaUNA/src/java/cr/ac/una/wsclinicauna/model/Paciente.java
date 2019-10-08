@@ -21,12 +21,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -45,7 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Paciente.findByPacCorreo", query = "SELECT p FROM Paciente p WHERE p.pacCorreo = :pacCorreo")
     , @NamedQuery(name = "Paciente.findByPacGenero", query = "SELECT p FROM Paciente p WHERE p.pacGenero = :pacGenero")
     , @NamedQuery(name = "Paciente.findByPacFechanacimiento", query = "SELECT p FROM Paciente p WHERE p.pacFechanacimiento = :pacFechanacimiento")
-    , @NamedQuery(name = "Paciente.findByPacVersion", query = "SELECT p FROM Paciente p WHERE p.pacVersion = :pacVersion")})
+    , @NamedQuery(name = "Paciente.findByPacVersion", query = "SELECT p FROM Paciente p WHERE p.pacVersion = :pacVersion")
+    , @NamedQuery(name = "Paciente.findByPacCedulaNombrePapellido", query = "SELECT p FROM Paciente p WHERE UPPER(p.pacNombre) like :pacNombre and UPPER(p.pacCedula) like :pacCedula and UPPER(p.pacPapellido) like :pacPapellido", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
 public class Paciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -236,5 +237,4 @@ public class Paciente implements Serializable {
         return "model.Paciente[ pacId=" + pacId + " ]";
     }
 
-    
 }

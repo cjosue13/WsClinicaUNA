@@ -74,6 +74,26 @@ public class PacienteController {
         }
     }
     
+    @GET
+    @Path("/pacientes/{cedula}/{nombre}/{pApellido}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getPacientes(@PathParam("cedula")String cedula, @PathParam("nombre") String nombre,@PathParam("pApellido") String pApellido) {
+        try {
+            Respuesta respuesta = pacienteService.getPacientes(cedula,nombre,pApellido);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            ArrayList<PacienteDto> pacientesDto = (ArrayList<PacienteDto>) respuesta.getResultado("Pacientes");
+            return Response.ok(new GenericEntity<List<PacienteDto>>(pacientesDto){}).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(PacienteController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el paciente").build();
+        }
+    }
+    
+    
     @DELETE
     @Path("/eliminar/{id}")
     @Produces(MediaType.APPLICATION_JSON)

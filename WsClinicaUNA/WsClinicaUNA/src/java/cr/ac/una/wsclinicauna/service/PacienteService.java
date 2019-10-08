@@ -107,4 +107,27 @@ public class PacienteService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO,"Ocurrio un error al eliminar el Paciente.", "EliminarPaciente " + ex.getMessage());
         }
     }
+
+    public Respuesta getPacientes(String cedula, String nombre, String pApellido) {
+        try {
+            Query qryEmpleado = em.createNamedQuery("Paciente.findByPacCedulaNombrePapellido", Paciente.class);
+            qryEmpleado.setParameter("pacCedula", cedula);
+            qryEmpleado.setParameter("pacNombre", nombre);
+            qryEmpleado.setParameter("pacPapellido", pApellido);
+            
+            List<Paciente> pacientes = qryEmpleado.getResultList();
+            List<PacienteDto> pacientesDto = new ArrayList<>();
+            for (Paciente paciente : pacientes) {
+                pacientesDto.add(new PacienteDto(paciente)); 
+            }
+            
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Pacientes", pacientesDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen pacientes con los criterios ingresados.", "getPacientes NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el paciente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el paciente.", "getPacientes " + ex.getMessage());
+        }
+    }
 }
