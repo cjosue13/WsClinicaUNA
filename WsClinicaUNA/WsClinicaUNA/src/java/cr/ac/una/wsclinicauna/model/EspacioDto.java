@@ -5,8 +5,10 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,24 +21,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class EspacioDto {
     
-    Long espID;
-    Long espVersion;
-    AgendaDto agenda;
-    String espHoraFin;
-    String espHoraInicio;
+    private Long espId;
+    private String espHoraFin;
+    private String espHoraInicio;
+    private Long espVersion;
+    private List<CitaPorEspacioDto> citasPorEspacioList;
+    private AgendaDto espAgenda;
 
     public EspacioDto(){
     }
     
-    public EspacioDto(Espacio espacioh) {
-        this.espID = espacioh.getEspVersion();
-        this.espVersion = espacioh.getEspVersion();
-        this.agenda = new AgendaDto(espacioh.getEspAgenda());
-        LocalDateTime localDateTime = espacioh.getEspHoraFin().toInstant()
+    public EspacioDto(Espacio espacio) {
+        this.espId = espacio.getEspId();
+        this.espVersion = espacio.getEspVersion();
+        this.espAgenda = new AgendaDto(espacio.getEspAgenda());
+        LocalDateTime localDateTime = espacio.getEspHoraFin().toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
         this.espHoraFin = localDateTime.toLocalTime().toString();
-        LocalDateTime localDateTime2 = espacioh.getEspHoraInicio().toInstant()
+        LocalDateTime localDateTime2 = espacio.getEspHoraInicio().toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
         this.espHoraInicio = localDateTime2.toLocalTime().toString();
@@ -58,13 +61,6 @@ public class EspacioDto {
         this.espHoraInicio = espHoraInicio;
     }
 
-    public Long getEspID() {
-        return espID;
-    }
-
-    public void setEspID(Long espID) {
-        this.espID = espID;
-    }
 
     public Long getEspVersion() {
         return espVersion;
@@ -74,13 +70,28 @@ public class EspacioDto {
         this.espVersion = espVersion;
     }
 
-    public AgendaDto getAgenda() {
-        return agenda;
+    public Long getEspId() {
+        return espId;
     }
 
-    public void setAgenda(AgendaDto agenda) {
-        this.agenda = agenda;
+    public void setEspId(Long espId) {
+        this.espId = espId;
     }
-    
+
+    public List<CitaPorEspacioDto> getCitasPorEspacioList() {
+        return citasPorEspacioList;
+    }
+
+    public void setCitasPorEspacioList(List<CitaPorEspacioDto> citasPorEspacioList) {
+        this.citasPorEspacioList = citasPorEspacioList;
+    }
+
+    public AgendaDto getEspAgenda() {
+        return espAgenda;
+    }
+
+    public void setEspAgenda(AgendaDto espAgenda) {
+        this.espAgenda = espAgenda;
+    }
     
 }

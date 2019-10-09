@@ -9,11 +9,14 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -34,6 +37,8 @@ public class CitasPorEspacio implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "CXP_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_CITAS_POR_ESPACIOS", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CXP_ID_GENERATOR")
     @Basic(optional = false)
     @Column(name = "CTXESP_ID")
     private Long ctxespId;
@@ -51,6 +56,17 @@ public class CitasPorEspacio implements Serializable {
     private Espacio ctxespEspacio;
 
     public CitasPorEspacio() {
+    }
+    public CitasPorEspacio(CitaPorEspacioDto cxp) {
+        this.ctxespId = cxp.getCtxespId();
+        actualizar(cxp);
+    }
+    
+    public void actualizar(CitaPorEspacioDto cxp){
+        this.ctxespCita = new Cita(cxp.getCtxespCita());
+        this.ctxespEspacio = new Espacio(cxp.getCtxespEspacio());
+        this.ctxespTiempoCita = cxp.getCtxespTiempoCita();
+        this.ctxespVersion = cxp.getCtxespVersion();
     }
 
     public CitasPorEspacio(Long ctxespId) {

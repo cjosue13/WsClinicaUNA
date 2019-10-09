@@ -81,7 +81,7 @@ public class Espacio implements Serializable {
         this.espVersion = espVersion;
     }
     public Espacio(EspacioDto espacioHoraDto) {
-        this.espId = espacioHoraDto.getEspID();
+        this.espId = espacioHoraDto.getEspId();
         actualizarEspacio(espacioHoraDto);
     }
     
@@ -89,7 +89,7 @@ public class Espacio implements Serializable {
         //Arreglar 
         this.espVersion = espacioh.getEspVersion();
         //Agregar conversion de fecha 
-        this.espAgenda = new Agenda(espacioh.getAgenda());
+        this.espAgenda = new Agenda(espacioh.getEspAgenda());
         
     }
     public Long getEspId() {

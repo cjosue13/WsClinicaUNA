@@ -9,6 +9,7 @@ package cr.ac.una.wsclinicauna.model;
 import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,55 +23,62 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AgendaDto {
     
-    Long ageID;
-    MedicoDto medicoDto;
-    Long agenVersion;
+    private Long ageId;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    private LocalDate fecha;
+    private LocalDate ageFecha;
+    private Long ageVersion;
+    private MedicoDto ageMedico;
+    private List<EspacioDto> espacioList;
     
     public AgendaDto(){
     }
     
     public AgendaDto(Agenda agenda) {
-        this.ageID = agenda.getAgeId();
-        this.medicoDto = new MedicoDto(agenda.getAgeMedico());
-        this.agenVersion = agenda.getAgeVersion();
-        this.fecha = agenda.getAgeFecha().toInstant()
+        this.ageId = agenda.getAgeId();
+        this.ageMedico = new MedicoDto(agenda.getAgeMedico());
+        this.ageVersion = agenda.getAgeVersion();
+        this.ageFecha = agenda.getAgeFecha().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public Long getAgeId() {
+        return ageId;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public void setAgeId(Long ageId) {
+        this.ageId = ageId;
     }
 
-    public Long getID() {
-        return ageID;
+    public LocalDate getAgeFecha() {
+        return ageFecha;
     }
 
-    public void setID(Long ID) {
-        this.ageID = ID;
+    public void setAgeFecha(LocalDate ageFecha) {
+        this.ageFecha = ageFecha;
     }
 
-    public MedicoDto getMedicoDto() {
-        return medicoDto;
+    public Long getAgeVersion() {
+        return ageVersion;
     }
 
-    public void setMedicoDto(MedicoDto medicoDto) {
-        this.medicoDto = medicoDto;
+    public void setAgeVersion(Long ageVersion) {
+        this.ageVersion = ageVersion;
     }
 
-    public Long getAgenVersion() {
-        return agenVersion;
+    public MedicoDto getAgeMedico() {
+        return ageMedico;
     }
 
-    public void setAgenVersion(Long agenVersion) {
-        this.agenVersion = agenVersion;
+    public void setAgeMedico(MedicoDto ageMedico) {
+        this.ageMedico = ageMedico;
     }
-    
-    
+
+    public List<EspacioDto> getEspacioList() {
+        return espacioList;
+    }
+
+    public void setEspacioList(List<EspacioDto> espacioList) {
+        this.espacioList = espacioList;
+    }
 }

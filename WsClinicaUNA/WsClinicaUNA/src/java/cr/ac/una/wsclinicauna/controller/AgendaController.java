@@ -8,6 +8,7 @@ import cr.ac.una.wsclinicauna.model.AgendaDto;
 import cr.ac.una.wsclinicauna.service.AgendaService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -67,6 +68,27 @@ public class AgendaController {
         } catch (Exception ex) {
             Logger.getLogger(AgendaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Agenda").build();
+        }
+    }
+    
+    @GET
+    @Path("/agenda/{fecha}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAgenda(@PathParam("fecha")String fecha) {
+        try {
+            Respuesta respuesta = AgendaService.getAgenda(fecha);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+             if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            return Response.ok((AgendaDto) respuesta.getResultado("Agenda")).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(AgendaController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la Agenda").build();
         }
     }
     

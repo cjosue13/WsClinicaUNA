@@ -6,6 +6,9 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -76,17 +79,19 @@ public class Agenda implements Serializable {
         this.espacioList = espacioList;
     }
 
-     public void actualizarAgenda(AgendaDto agenda){
-        
-        this.ageMedico = new Medico(agenda.getMedicoDto());
-        this.ageVersion = agenda.getAgenVersion();
-    }
-    
     public Agenda(AgendaDto agendaDto) {
-        this.ageId = agendaDto.getID();
+        this.ageId = agendaDto.getAgeId();
         actualizarAgenda(agendaDto);
     }
-    
+
+    public void actualizarAgenda(AgendaDto agenda) {
+        this.ageMedico = new Medico(agenda.getAgeMedico());
+        this.ageFecha = Date.from(agenda.getAgeFecha().atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        this.ageVersion = agenda.getAgeVersion();
+    }
+
     public Long getAgeId() {
         return ageId;
     }
@@ -152,5 +157,5 @@ public class Agenda implements Serializable {
     public String toString() {
         return "model.Agenda[ ageId=" + ageId + " ]";
     }
-    
+
 }

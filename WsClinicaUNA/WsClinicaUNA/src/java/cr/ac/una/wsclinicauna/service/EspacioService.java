@@ -57,23 +57,18 @@ public class EspacioService {
     public Respuesta guardarEspacio(EspacioDto EspacioDto) {
         try {
             Espacio Espacio;
-            if (EspacioDto.getEspID()!= null && EspacioDto.getEspID()> 0) {
-                Espacio = em.find(Espacio.class, EspacioDto.getEspID());
-
+            if (EspacioDto.getEspId()!= null && EspacioDto.getEspId()> 0) {
+                Espacio = em.find(Espacio.class, EspacioDto.getEspId());
                 if (Espacio == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Espacio a modificar.", "guardarEspacio NoResultException");
                 }
-
                 Espacio.actualizarEspacio(EspacioDto);
                 Espacio = em.merge(Espacio);
-
             } else {
                 Espacio = new Espacio(EspacioDto);
                 em.persist(Espacio);
             }
-
             em.flush();
-
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Espacio", new EspacioDto(Espacio));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Espacio.", ex);
