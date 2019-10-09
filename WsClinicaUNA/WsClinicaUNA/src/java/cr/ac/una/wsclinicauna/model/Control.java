@@ -8,7 +8,9 @@ package cr.ac.una.wsclinicauna.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -152,18 +154,13 @@ public class Control implements Serializable {
     public void actualizarControl(ControlDto control) {
 
         this.cntVersion = control.getCntVersion();
-        this.cntFecha = java.util.Date.from(control.getCntFecha().atStartOfDay()
+        this.cntFecha = Date.from(control.getCntFecha().atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
-
-        Date date1;
-        try {
-            date1 = new SimpleDateFormat("yyyy/MM/dd").parse(control.getCntHora());
-            this.cntHora = date1;
-        } catch (ParseException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+        if (control.getCntHora()!= null) {
+            LocalDateTime hora = LocalDateTime.parse(control.getCntHora(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+            this.cntHora = Date.from(hora.atZone(ZoneId.systemDefault()).toInstant());
         }
-
         this.cntPresion = control.getCntPresion();
         this.cntFrecuenciaCardiaca = control.getCntFrecuenciaCardiaca();
         this.cntPeso = control.getCntPeso();

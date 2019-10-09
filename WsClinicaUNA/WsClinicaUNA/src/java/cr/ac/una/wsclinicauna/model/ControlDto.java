@@ -51,12 +51,12 @@ public class ControlDto {
         this.cntFecha = control.getCntFecha().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
-        
-        LocalDateTime localDateTime = control.getCntFecha().toInstant()
+        if (control.getCntHora()!= null) {
+            LocalDateTime localDateTime1 = control.getCntHora().toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
-        
-        this.cntHora = localDateTime.toLocalTime().toString();
+            this.cntHora = localDateTime1.toLocalTime().toString();
+        }
         this.cntPresion = control.getCntPresion();
         this.cntFrecuenciaCardiaca = control.getCntFrecuenciaCardiaca();
         this.cntPeso = control.getCntPeso();
