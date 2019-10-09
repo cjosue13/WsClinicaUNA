@@ -39,7 +39,7 @@ public class ExamenDto {
                 .toLocalDate();
         this.anotaciones = examen.getExmAnotaciones();
         this.exmVersion = examen.getExmVersion();
-        //this.expediente = new ExpedienteDto(examen.getExmExpediente());
+        this.expediente = new ExpedienteDto(examen.getExmExpediente(),false);
     }
 
     public ExpedienteDto getExpediente() {
