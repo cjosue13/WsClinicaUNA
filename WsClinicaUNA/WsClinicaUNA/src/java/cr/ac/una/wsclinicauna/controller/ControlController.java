@@ -53,7 +53,7 @@ public class ControlController {
     }
     
     @GET
-    @Path("/Controles")
+    @Path("/controles")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getControles() {
@@ -62,9 +62,9 @@ public class ControlController {
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            ArrayList<ControlDto> ControlsDto = (ArrayList<ControlDto>) respuesta.getResultado("Controls");
+            ArrayList<ControlDto> ControlesDto = (ArrayList<ControlDto>) respuesta.getResultado("controles");
             
-            return Response.ok(new GenericEntity<List<ControlDto>>(ControlsDto){}).build();
+            return Response.ok(new GenericEntity<List<ControlDto>>(ControlesDto){}).build();
 
         } catch (Exception ex) {
             Logger.getLogger(ControlController.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,7 +72,7 @@ public class ControlController {
         }
     }
     @GET
-    @Path("/Controles/{id}")
+    @Path("/Control/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getControles(@PathParam("id") Long ID) {

@@ -43,7 +43,7 @@ public class ControlService {
                 ControlesDto.add(new ControlDto(Controls1));
             }
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Controls", ControlesDto);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "controles", ControlesDto);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen Controls con los criterios ingresados.", "getControls NoResultException");
