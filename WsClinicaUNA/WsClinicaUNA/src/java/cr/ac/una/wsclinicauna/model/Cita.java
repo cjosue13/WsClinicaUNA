@@ -91,6 +91,7 @@ public class Cita implements Serializable {
         this.ctEstado = cita.getEstado();
         this.ctCorreo = cita.getCorreo();
         this.ctTelefono = cita.getTelefono();
+        this.ctCorreoenviado = cita.getCorreoEnviado();
     }
 
     public Cita(Long ctId) {

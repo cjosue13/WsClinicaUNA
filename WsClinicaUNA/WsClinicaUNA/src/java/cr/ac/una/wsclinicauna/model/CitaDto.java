@@ -26,6 +26,7 @@ public class CitaDto {
     private String estado;
     private String telefono;
     private String correo;
+    private String correoEnviado;
 
     public CitaDto(){
     }
@@ -38,6 +39,7 @@ public class CitaDto {
         this.estado = cita.getCtEstado();
         this.telefono = cita.getCtTelefono();
         this.correo = cita.getCtCorreo();
+        this.correoEnviado = cita.getCtCorreoenviado();
     }
 
     public String getTelefono() {
@@ -96,5 +98,13 @@ public class CitaDto {
         this.estado = estado;
     }
 
+    public String getCorreoEnviado() {
+        return correoEnviado;
+    }
+
+    public void setCorreoEnviado(String correoEnviado) {
+        this.correoEnviado = correoEnviado;
+    }
+    
     
 }
