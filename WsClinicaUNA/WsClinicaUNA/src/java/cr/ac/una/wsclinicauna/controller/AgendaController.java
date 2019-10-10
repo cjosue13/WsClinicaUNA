@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package cr.ac.una.wsclinicauna.controller;
+
 import cr.ac.una.wsclinicauna.model.AgendaDto;
 import cr.ac.una.wsclinicauna.service.AgendaService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
@@ -24,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 /**
  *
  * @author Jose Pablo Bermudez
@@ -50,7 +52,7 @@ public class AgendaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el Agenda").build();
         }
     }
-    
+
     @GET
     @Path("/Agendas")
     @Produces(MediaType.APPLICATION_JSON)
@@ -62,26 +64,27 @@ public class AgendaController {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
             ArrayList<AgendaDto> AgendasDto = (ArrayList<AgendaDto>) respuesta.getResultado("Agendas");
-            
-            return Response.ok(new GenericEntity<List<AgendaDto>>(AgendasDto){}).build();
+
+            return Response.ok(new GenericEntity<List<AgendaDto>>(AgendasDto) {
+            }).build();
 
         } catch (Exception ex) {
             Logger.getLogger(AgendaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Agenda").build();
         }
     }
-    
+
     @GET
-    @Path("/agenda/{fecha}")
+    @Path("/agenda/{fecha}/{Id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getAgenda(@PathParam("fecha")String fecha) {
+    public Response getAgenda(@PathParam("fecha") String fecha, @PathParam("Id") Long Id) {
         try {
-            Respuesta respuesta = AgendaService.getAgenda(fecha);
+            Respuesta respuesta = AgendaService.getAgenda(fecha, Id);
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-             if (!respuesta.getEstado()) {
+            if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
             return Response.ok((AgendaDto) respuesta.getResultado("Agenda")).build();
@@ -91,7 +94,7 @@ public class AgendaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la Agenda").build();
         }
     }
-    
+
     @DELETE
     @Path("/eliminar/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -108,6 +111,5 @@ public class AgendaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error Eliminar el Agenda").build();
         }
     }
-    
-}
 
+}
