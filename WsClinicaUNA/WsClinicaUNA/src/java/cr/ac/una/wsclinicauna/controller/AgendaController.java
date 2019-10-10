@@ -75,10 +75,10 @@ public class AgendaController {
     }
 
     @GET
-    @Path("/agenda/{fecha}/{Id}")
+    @Path("/agenda/{fecha}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getAgenda(@PathParam("fecha") String fecha, @PathParam("Id") Long Id) {
+    public Response getAgenda(@PathParam("fecha") String fecha, @PathParam("id") Long Id) {
         try {
             Respuesta respuesta = AgendaService.getAgenda(fecha, Id);
             if (!respuesta.getEstado()) {

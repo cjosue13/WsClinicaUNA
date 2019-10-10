@@ -5,11 +5,9 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
-import cr.ac.una.wsclinicauna.model.Agenda;
 import cr.ac.una.wsclinicauna.model.AgendaDto;
 import cr.ac.una.wsclinicauna.model.Agenda;
-import cr.ac.una.wsclinicauna.model.Usuario;
-import cr.ac.una.wsclinicauna.model.UsuarioDto;
+import cr.ac.una.wsclinicauna.model.Medico;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -113,23 +111,19 @@ public class AgendaService {
     public Respuesta getAgenda(String fecha, Long Id) {
         try {
             Query qryAgenda = em.createNamedQuery("Agenda.findByAgeFecha", Agenda.class);
+
             LocalDate localDate1 = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             Date date = Date.from(localDate1.atStartOfDay()
                     .atZone(ZoneId.systemDefault())
                     .toInstant());
 
-            Agenda Agenda;
-            if (Id != null && Id > 0) {
-                Agenda = em.find(Agenda.class, Id);
-                if (Agenda == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró la agenda.", "BuscarAgenda NoResultException");
-                } else {
-                    qryAgenda.setParameter("ageFecha", date);
-                    return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new AgendaDto((Agenda) qryAgenda.getSingleResult()));
-                }
-            } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_CLIENTE, "Debe cargar el Agenda a eliminar.", "EliminarAgenda NoResultException");
+            Medico medico = em.find(Medico.class, Id);
+            if(medico==null){
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró la Agenda a eliminar.", "EliminarAgenda NoResultException");
             }
+            qryAgenda.setParameter("ageFecha", date);
+            qryAgenda.setParameter("ageMedico", medico);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new AgendaDto((Agenda) qryAgenda.getSingleResult()));
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe una agenda con las credenciales ingresadas.", "getAgenda NoResultException");
         } catch (NonUniqueResultException ex) {
