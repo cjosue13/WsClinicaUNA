@@ -83,10 +83,6 @@ public class ExamenController {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
             ArrayList<ExamenDto> ExamenesDto = (ArrayList<ExamenDto>) respuesta.getResultado("Examenes");
-           /* ExamenesDto.stream().forEach(x->{
-                System.out.println(x.toString());
-            });*/
-            
             return Response.ok(new GenericEntity<List<ExamenDto>>(ExamenesDto){}).build();
 
         } catch (Exception ex) {
