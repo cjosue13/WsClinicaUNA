@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -32,11 +34,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_ESPACIOS", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_ESPACIOS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Espacio.findAll", query = "SELECT e FROM Espacio e")
-    , @NamedQuery(name = "Espacio.findByEspId", query = "SELECT e FROM Espacio e WHERE e.espId = :espId")
+    @NamedQuery(name = "Espacio.findAll", query = "SELECT e FROM Espacio e", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Espacio.findByEspId", query = "SELECT e FROM Espacio e WHERE e.espId = :espId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Espacio.findByEspHoraFin", query = "SELECT e FROM Espacio e WHERE e.espHoraFin = :espHoraFin")
     , @NamedQuery(name = "Espacio.findByEspHoraInicio", query = "SELECT e FROM Espacio e WHERE e.espHoraInicio = :espHoraInicio")
     , @NamedQuery(name = "Espacio.findByEspVersion", query = "SELECT e FROM Espacio e WHERE e.espVersion = :espVersion")})
@@ -61,25 +63,15 @@ public class Espacio implements Serializable {
     @Basic(optional = false)
     @Column(name = "ESP_VERSION")
     private Long espVersion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctxespEspacio")
-    private List<CitasPorEspacio> citasPorEspacioList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctxespEspacio", fetch = FetchType.LAZY)
+    private List<CitaPorEspacio> citaPorEspacioList;
     @JoinColumn(name = "ESP_AGENDA", referencedColumnName = "AGE_ID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Agenda espAgenda;
 
     public Espacio() {
     }
-
-    public Espacio(Long espId) {
-        this.espId = espId;
-    }
-
-    public Espacio(Long espId, Date espHoraFin, Date espHoraInicio, Long espVersion) {
-        this.espId = espId;
-        this.espHoraFin = espHoraFin;
-        this.espHoraInicio = espHoraInicio;
-        this.espVersion = espVersion;
-    }
+    
     public Espacio(EspacioDto espacioHoraDto) {
         this.espId = espacioHoraDto.getEspId();
         actualizarEspacio(espacioHoraDto);
@@ -92,6 +84,18 @@ public class Espacio implements Serializable {
         this.espAgenda = new Agenda(espacioh.getEspAgenda());
         
     }
+
+    public Espacio(Long espId) {
+        this.espId = espId;
+    }
+
+    public Espacio(Long espId, Date espHoraFin, Date espHoraInicio, Long espVersion) {
+        this.espId = espId;
+        this.espHoraFin = espHoraFin;
+        this.espHoraInicio = espHoraInicio;
+        this.espVersion = espVersion;
+    }
+
     public Long getEspId() {
         return espId;
     }
@@ -124,13 +128,12 @@ public class Espacio implements Serializable {
         this.espVersion = espVersion;
     }
 
-    @XmlTransient
-    public List<CitasPorEspacio> getCitasPorEspacioList() {
-        return citasPorEspacioList;
+    public List<CitaPorEspacio> getCitaPorEspacioList() {
+        return citaPorEspacioList;
     }
 
-    public void setCitasPorEspacioList(List<CitasPorEspacio> citasPorEspacioList) {
-        this.citasPorEspacioList = citasPorEspacioList;
+    public void setCitaPorEspacioList(List<CitaPorEspacio> citaPorEspacioList) {
+        this.citaPorEspacioList = citaPorEspacioList;
     }
 
     public Agenda getEspAgenda() {
@@ -163,7 +166,7 @@ public class Espacio implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Espacio[ espId=" + espId + " ]";
+        return "cr.ac.una.unaplanillaws2.model.Espacio[ espId=" + espId + " ]";
     }
     
 }

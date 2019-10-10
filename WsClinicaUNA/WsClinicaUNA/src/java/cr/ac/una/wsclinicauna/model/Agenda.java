@@ -6,14 +6,13 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -34,12 +34,12 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_AGENDAS", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_AGENDAS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Agenda.findAll", query = "SELECT a FROM Agenda a")
-    , @NamedQuery(name = "Agenda.findByAgeId", query = "SELECT a FROM Agenda a WHERE a.ageId = :ageId")
-    , @NamedQuery(name = "Agenda.findByAgeFecha", query = "SELECT a FROM Agenda a WHERE a.ageFecha = :ageFecha")
+    , @NamedQuery(name = "Agenda.findByAgeId", query = "SELECT a FROM Agenda a WHERE a.ageId = :ageId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Agenda.findByAgeFecha", query = "SELECT a FROM Agenda a WHERE a.ageFecha = :ageFecha", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Agenda.findByAgeVersion", query = "SELECT a FROM Agenda a WHERE a.ageVersion = :ageVersion")})
 public class Agenda implements Serializable {
 
@@ -59,26 +59,14 @@ public class Agenda implements Serializable {
     @Column(name = "AGE_VERSION")
     private Long ageVersion;
     @JoinColumn(name = "AGE_MEDICO", referencedColumnName = "MED_ID")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Medico ageMedico;
-    @OneToMany(mappedBy = "espAgenda")
+    @OneToMany(mappedBy = "espAgenda", fetch = FetchType.LAZY)
     private List<Espacio> espacioList;
 
     public Agenda() {
     }
-
-    public Agenda(Long ageId) {
-        this.ageId = ageId;
-    }
-
-    public Agenda(Long ageId, Date ageFecha, Long ageVersion, Medico ageMedico, List<Espacio> espacioList) {
-        this.ageId = ageId;
-        this.ageFecha = ageFecha;
-        this.ageVersion = ageVersion;
-        this.ageMedico = ageMedico;
-        this.espacioList = espacioList;
-    }
-
+    
     public Agenda(AgendaDto agendaDto) {
         this.ageId = agendaDto.getAgeId();
         actualizarAgenda(agendaDto);
@@ -90,6 +78,16 @@ public class Agenda implements Serializable {
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
         this.ageVersion = agenda.getAgeVersion();
+    }
+
+    public Agenda(Long ageId) {
+        this.ageId = ageId;
+    }
+
+    public Agenda(Long ageId, Date ageFecha, Long ageVersion) {
+        this.ageId = ageId;
+        this.ageFecha = ageFecha;
+        this.ageVersion = ageVersion;
     }
 
     public Long getAgeId() {
@@ -124,7 +122,6 @@ public class Agenda implements Serializable {
         this.ageMedico = ageMedico;
     }
 
-    @XmlTransient
     public List<Espacio> getEspacioList() {
         return espacioList;
     }
@@ -155,7 +152,7 @@ public class Agenda implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Agenda[ ageId=" + ageId + " ]";
+        return "cr.ac.una.unaplanillaws2.model.Agenda[ ageId=" + ageId + " ]";
     }
-
+    
 }

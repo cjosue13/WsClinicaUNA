@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CitaPorEspacioDto {
     private Long ctxespId;
-    private Long ctxespTiempoCita;
+    private Integer ctxespTiempoCita;
     private Long ctxespVersion;
     private CitaDto ctxespCita;
     private EspacioDto ctxespEspacio;
@@ -25,7 +25,7 @@ public class CitaPorEspacioDto {
     public CitaPorEspacioDto() {
     }
     
-    public CitaPorEspacioDto(CitasPorEspacio cxp) {
+    public CitaPorEspacioDto(CitaPorEspacio cxp) {
         this.ctxespCita = new CitaDto(cxp.getCtxespCita());
         this.ctxespEspacio = new EspacioDto(cxp.getCtxespEspacio());
         this.ctxespTiempoCita = cxp.getCtxespTiempoCita();
@@ -41,11 +41,11 @@ public class CitaPorEspacioDto {
         this.ctxespId = ctxespId;
     }
 
-    public Long getCtxespTiempoCita() {
+    public Integer getCtxespTiempoCita() {
         return ctxespTiempoCita;
     }
 
-    public void setCtxespTiempoCita(Long ctxespTiempoCita) {
+    public void setCtxespTiempoCita(Integer ctxespTiempoCita) {
         this.ctxespTiempoCita = ctxespTiempoCita;
     }
 

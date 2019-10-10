@@ -11,6 +11,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,15 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_EXAMENES", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_EXAMENES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Examen.findAll", query = "SELECT e FROM Examen e")
+    @NamedQuery(name = "Examen.findAll", query = "SELECT e FROM Examen e", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Examen.findByExmId", query = "SELECT e FROM Examen e WHERE e.exmId = :exmId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Examen.findByExmNombreExamen", query = "SELECT e FROM Examen e WHERE e.exmNombreExamen = :exmNombreExamen")
     , @NamedQuery(name = "Examen.findByExmFecha", query = "SELECT e FROM Examen e WHERE e.exmFecha = :exmFecha")
     , @NamedQuery(name = "Examen.findByExmAnotaciones", query = "SELECT e FROM Examen e WHERE e.exmAnotaciones = :exmAnotaciones")
-    , @NamedQuery(name = "Examen.findByExmExpediente", query = "SELECT e FROM Examen e WHERE e.exmExpediente = :exmExpediente")    
     , @NamedQuery(name = "Examen.findByExmVersion", query = "SELECT e FROM Examen e WHERE e.exmVersion = :exmVersion")})
 public class Examen implements Serializable {
 
@@ -64,23 +64,12 @@ public class Examen implements Serializable {
     @Column(name = "EXM_VERSION")
     private Long exmVersion;
     @JoinColumn(name = "EXM_EXPEDIENTE", referencedColumnName = "EXP_ID")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Expediente exmExpediente;
 
     public Examen() {
     }
-
-    public Examen(Long exmId) {
-        this.exmId = exmId;
-    }
-
-    public Examen(Long exmId, String exmNombreExamen, Date exmFecha, String exmAnotaciones, Long exmVersion) {
-        this.exmId = exmId;
-        this.exmNombreExamen = exmNombreExamen;
-        this.exmFecha = exmFecha;
-        this.exmAnotaciones = exmAnotaciones;
-        this.exmVersion = exmVersion;
-    }
+    
     public void actualizarExamen(ExamenDto examen){
         this.exmVersion = examen.getExmVersion();
         this.exmNombreExamen = examen.getNombreExamen();
@@ -95,6 +84,19 @@ public class Examen implements Serializable {
         this.exmId = examenDto.getExmID();
         actualizarExamen(examenDto);
     }
+
+    public Examen(Long exmId) {
+        this.exmId = exmId;
+    }
+
+    public Examen(Long exmId, String exmNombreExamen, Date exmFecha, String exmAnotaciones, Long exmVersion) {
+        this.exmId = exmId;
+        this.exmNombreExamen = exmNombreExamen;
+        this.exmFecha = exmFecha;
+        this.exmAnotaciones = exmAnotaciones;
+        this.exmVersion = exmVersion;
+    }
+
     public Long getExmId() {
         return exmId;
     }
@@ -165,7 +167,7 @@ public class Examen implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Examen[ exmId=" + exmId + " ]";
+        return "cr.ac.una.unaplanillaws2.model.Examen[ exmId=" + exmId + " ]";
     }
     
 }

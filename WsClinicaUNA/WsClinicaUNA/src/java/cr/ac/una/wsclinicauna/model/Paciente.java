@@ -6,7 +6,6 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -14,26 +13,27 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_PACIENTES", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_PACIENTES")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Paciente.findAll", query = "SELECT p FROM Paciente p")
@@ -82,28 +82,12 @@ public class Paciente implements Serializable {
     @Basic(optional = false)
     @Column(name = "PAC_VERSION")
     private Long pacVersion;
-    @OneToMany(mappedBy = "ctPaciente")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "ctPaciente", fetch = FetchType.LAZY)
     private List<Cita> citaList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "expPaciente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "expPaciente", fetch = FetchType.LAZY)
     private List<Expediente> expedienteList;
 
     public Paciente() {
-    }
-
-    public Paciente(Long pacId) {
-        this.pacId = pacId;
-    }
-
-    public Paciente(Long pacId, String pacNombre, String pacPapellido, String pacSapellido, String pacCedula, String pacCorreo, String pacGenero, Date pacFechanacimiento, Long pacVersion) {
-        this.pacId = pacId;
-        this.pacNombre = pacNombre;
-        this.pacPapellido = pacPapellido;
-        this.pacSapellido = pacSapellido;
-        this.pacCedula = pacCedula;
-        this.pacCorreo = pacCorreo;
-        this.pacGenero = pacGenero;
-        this.pacFechanacimiento = pacFechanacimiento;
-        this.pacVersion = pacVersion;
     }
 
     public Paciente(PacienteDto PacienteDto) {
@@ -122,6 +106,22 @@ public class Paciente implements Serializable {
         this.pacPapellido = PacienteDto.getpApellido();
         this.pacSapellido = PacienteDto.getsApellido();
         this.pacVersion = PacienteDto.getPacVersion();
+    }
+
+    public Paciente(Long pacId) {
+        this.pacId = pacId;
+    }
+
+    public Paciente(Long pacId, String pacNombre, String pacPapellido, String pacSapellido, String pacCedula, String pacCorreo, String pacGenero, Date pacFechanacimiento, Long pacVersion) {
+        this.pacId = pacId;
+        this.pacNombre = pacNombre;
+        this.pacPapellido = pacPapellido;
+        this.pacSapellido = pacSapellido;
+        this.pacCedula = pacCedula;
+        this.pacCorreo = pacCorreo;
+        this.pacGenero = pacGenero;
+        this.pacFechanacimiento = pacFechanacimiento;
+        this.pacVersion = pacVersion;
     }
 
     public Long getPacId() {
@@ -234,7 +234,7 @@ public class Paciente implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Paciente[ pacId=" + pacId + " ]";
+        return "cr.ac.una.unaplanillaws2.model.Paciente[ pacId=" + pacId + " ]";
     }
 
 }

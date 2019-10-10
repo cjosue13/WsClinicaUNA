@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AntecedenteDto {
     private Long antId;
     private String antEnfermedad;
-    private String antParentezco;
+    private String antParentesco;
     private Long antVersion;
     private ExpedienteDto antExpediente;
 
@@ -26,13 +26,13 @@ public class AntecedenteDto {
     }
     public AntecedenteDto(Antecedente antecedente) {
         this.antEnfermedad = antecedente.getAntEnfermedad();
-        this.antParentezco = antecedente.getAntParentezco();
+        this.antParentesco = antecedente.getAntParentesco();
         this.antExpediente = new ExpedienteDto(antecedente.getAntExpediente(),false);
         //this.antExpediente = new ExpedienteDto(antecedente.getAntExpediente());
         this.antId = antecedente.getAntId();
         this.antVersion = antecedente.getAntVersion();
     }
-    
+
     public Long getAntId() {
         return antId;
     }
@@ -49,12 +49,12 @@ public class AntecedenteDto {
         this.antEnfermedad = antEnfermedad;
     }
 
-    public String getAntParentezco() {
-        return antParentezco;
+    public String getAntParentesco() {
+        return antParentesco;
     }
 
-    public void setAntParentezco(String antParentezco) {
-        this.antParentezco = antParentezco;
+    public void setAntParentesco(String antParentesco) {
+        this.antParentesco = antParentesco;
     }
 
     public Long getAntVersion() {
@@ -72,5 +72,7 @@ public class AntecedenteDto {
     public void setAntExpediente(ExpedienteDto antExpediente) {
         this.antExpediente = antExpediente;
     }
+    
+    
     
 }

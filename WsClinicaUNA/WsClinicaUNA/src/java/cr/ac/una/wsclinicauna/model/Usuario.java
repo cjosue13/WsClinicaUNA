@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_USUARIOS", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_USUARIOS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
@@ -42,10 +43,11 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByUsIdioma", query = "SELECT u FROM Usuario u WHERE u.usIdioma = :usIdioma")
     , @NamedQuery(name = "Usuario.findByUsEstado", query = "SELECT u FROM Usuario u WHERE u.usEstado = :usEstado")
     , @NamedQuery(name = "Usuario.findByUsNombreUsuario", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usNombreUsuario")
-    , @NamedQuery(name = "Usuario.findByUsContrasena", query = "SELECT u FROM Usuario u WHERE u.usContrasena = :usContrasena", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Usuario.findByUsContrasena", query = "SELECT u FROM Usuario u WHERE u.usContrasena = :usContrasena")
     , @NamedQuery(name = "Usuario.findByUsContrasenatemp", query = "SELECT u FROM Usuario u WHERE u.usContrasenatemp = :usContrasenatemp", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Usuario.findByUsVersion", query = "SELECT u FROM Usuario u WHERE u.usVersion = :usVersion")
     , @NamedQuery(name = "Usuario.findByUsuClave", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario and (u.usContrasena = :usClave OR u.usContrasenatemp =:usClaveTemp)", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+        
 })
 public class Usuario implements Serializable {
 
@@ -92,10 +94,31 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "US_VERSION")
     private Long usVersion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medUsuario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medUsuario", fetch = FetchType.LAZY)
     private List<Medico> medicoList;
 
     public Usuario() {
+    }
+
+    public Usuario(UsuarioDto UsuarioDto) {
+        this.usId = UsuarioDto.getID();
+        actualizarUsuario(UsuarioDto);
+    }
+
+    public void actualizarUsuario(UsuarioDto UsuarioDto) {
+        this.usCedula = UsuarioDto.getCedula();
+        this.usContrasena = UsuarioDto.getContrasenna();
+        this.usContrasenatemp = UsuarioDto.getContrasennaTemp();
+        this.usCorreo = UsuarioDto.getCorreo();
+        this.usEstado = UsuarioDto.getEstado();
+        this.usIdioma = UsuarioDto.getIdioma();
+        this.usNombre = UsuarioDto.getNombre();
+        this.usNombreUsuario = UsuarioDto.getNombreUsuario();
+        this.usPapellido = UsuarioDto.getpApellido();
+        this.usSapellido = UsuarioDto.getsApellido();
+        this.usTipousuario = UsuarioDto.getTipoUsuario();
+        this.usVersion = UsuarioDto.getUsVersion();
+        //this.medicoList = UsuarioDto.get
     }
 
     public Usuario(Long usId) {
@@ -116,26 +139,7 @@ public class Usuario implements Serializable {
         this.usContrasena = usContrasena;
         this.usVersion = usVersion;
     }
-    public Usuario(UsuarioDto UsuarioDto) {
-        this.usId = UsuarioDto.getID();
-        actualizarUsuario(UsuarioDto);
-    }
 
-    public void actualizarUsuario(UsuarioDto UsuarioDto) {
-        this.usCedula = UsuarioDto.getCedula();
-        this.usContrasena =  UsuarioDto.getContrasenna();
-        this.usContrasenatemp =  UsuarioDto.getContrasennaTemp();
-        this.usCorreo = UsuarioDto.getCorreo();
-        this.usEstado = UsuarioDto.getEstado();
-        this.usIdioma = UsuarioDto.getIdioma();
-        this.usNombre = UsuarioDto.getNombre();
-        this.usNombreUsuario = UsuarioDto.getNombreUsuario();
-        this.usPapellido = UsuarioDto.getpApellido();
-        this.usSapellido = UsuarioDto.getsApellido();
-        this.usTipousuario = UsuarioDto.getTipoUsuario();
-        this.usVersion = UsuarioDto.getUsVersion();
-        //this.medicoList = UsuarioDto.get
-    }
     public Long getUsId() {
         return usId;
     }
@@ -240,7 +244,6 @@ public class Usuario implements Serializable {
         this.usVersion = usVersion;
     }
 
-    @XmlTransient
     public List<Medico> getMedicoList() {
         return medicoList;
     }
@@ -271,7 +274,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Usuario[ usId=" + usId + " ]";
+        return "cr.ac.una.unaplanillaws2.model.Usuario[ usId=" + usId + " ]";
     }
-    
+
 }

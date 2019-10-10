@@ -16,33 +16,34 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_EXPEDIENTES", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_EXPEDIENTES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Expediente.findAll", query = "SELECT e FROM Expediente e")
-    , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId",hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    @NamedQuery(name = "Expediente.findAll", query = "SELECT e FROM Expediente e", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId")
     , @NamedQuery(name = "Expediente.findByExpHospitalizaciones", query = "SELECT e FROM Expediente e WHERE e.expHospitalizaciones = :expHospitalizaciones")
     , @NamedQuery(name = "Expediente.findByExpOperaciones", query = "SELECT e FROM Expediente e WHERE e.expOperaciones = :expOperaciones")
     , @NamedQuery(name = "Expediente.findByExpAlergias", query = "SELECT e FROM Expediente e WHERE e.expAlergias = :expAlergias")
     , @NamedQuery(name = "Expediente.findByExpTratamientos", query = "SELECT e FROM Expediente e WHERE e.expTratamientos = :expTratamientos")
-    , @NamedQuery(name = "Expediente.findByExpVersion", query = "SELECT e FROM Expediente e WHERE e.expVersion = :expVersion")})
+    , @NamedQuery(name = "Expediente.findByExpVersion", query = "SELECT e FROM Expediente e WHERE e.expVersion = :expVersion")
+    , @NamedQuery(name = "Expediente.findByExpAntecedentePatologicos", query = "SELECT e FROM Expediente e WHERE e.expAntecedentePatologicos = :expAntecedentePatologicos")})
 public class Expediente implements Serializable {
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -52,48 +53,36 @@ public class Expediente implements Serializable {
     @Column(name = "EXP_ID")
     private Long expId;
     @Basic(optional = false)
-    @Column(name = "EXP_ANTECEDENTE_PATOLOGICOS")
-    private String expAntecedentePatologicos;
-    @Basic(optional = false)
     @Column(name = "EXP_HOSPITALIZACIONES")
     private String expHospitalizaciones;
     @Basic(optional = false)
     @Column(name = "EXP_OPERACIONES")
     private String expOperaciones;
-    @Basic(optional = false)
     @Column(name = "EXP_ALERGIAS")
     private String expAlergias;
-    @Basic(optional = false)
     @Column(name = "EXP_TRATAMIENTOS")
     private String expTratamientos;
     @Basic(optional = false)
     @Column(name = "EXP_VERSION")
     private Long expVersion;
-    @OneToMany(mappedBy = "cntExpediente")
-    private List <Control> controlList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "exmExpediente")
-    private List <Examen> examenList;
-    @JoinColumn(name = "EXP_PACIENTE", referencedColumnName = "PAC_ID")
-    @OneToOne(optional = false)
-    private Paciente expPaciente;
+    @Column(name = "EXP_ANTECEDENTE_PATOLOGICOS")
+    private String expAntecedentePatologicos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "antExpediente", fetch = FetchType.LAZY)
     private List<Antecedente> antecedenteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cntExpediente", fetch = FetchType.LAZY)
+    private List<Control> controlList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "exmExpediente", fetch = FetchType.LAZY)
+    private List<Examen> examenList;
+    @JoinColumn(name = "EXP_PACIENTE", referencedColumnName = "PAC_ID")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Paciente expPaciente;
 
     public Expediente() {
     }
-
-    public Expediente(Long expId, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos, Long expVersion, List<Control> controlList, List<Examen> examenList, Paciente expPaciente, List<Antecedente> antecedenteList) {
-        this.expId = expId;
-        this.expAntecedentePatologicos = expAntecedentePatologicos;
-        this.expHospitalizaciones = expHospitalizaciones;
-        this.expOperaciones = expOperaciones;
-        this.expAlergias = expAlergias;
-        this.expTratamientos = expTratamientos;
-        this.expVersion = expVersion;
-        this.controlList = controlList;
-        this.examenList = examenList;
-        this.expPaciente = expPaciente;
-        this.antecedenteList = antecedenteList;
+    
+    public Expediente(ExpedienteDto expedienteDto) {
+        this.expId = expedienteDto.getExpID();
+        actualizarExpediente(expedienteDto);
     }
     
     public void actualizarExpediente(ExpedienteDto expediente) {
@@ -106,22 +95,14 @@ public class Expediente implements Serializable {
         this.expPaciente = new Paciente(expediente.getPaciente());
     }
 
-    public Expediente(ExpedienteDto expedienteDto) {
-        this.expId = expedienteDto.getExpID();
-        actualizarExpediente(expedienteDto);
+    public Expediente(Long expId) {
+        this.expId = expId;
     }
 
-    public Expediente(Long plClnExpediente) {
-        this.expId = plClnExpediente;
-    }
-
-    public Expediente(Long plClnExpediente, String expAntecedentePatologicos, String expHospitalizaciones, String expOperaciones, String expAlergias, String expTratamientos,/* String expAntecedentesFamiliares,*/ Long expVersion) {
-        this.expId = plClnExpediente;
-        this.expAntecedentePatologicos = expAntecedentePatologicos;
+    public Expediente(Long expId, String expHospitalizaciones, String expOperaciones, Long expVersion) {
+        this.expId = expId;
         this.expHospitalizaciones = expHospitalizaciones;
         this.expOperaciones = expOperaciones;
-        this.expAlergias = expAlergias;
-        this.expTratamientos = expTratamientos;
         this.expVersion = expVersion;
     }
 
@@ -131,14 +112,6 @@ public class Expediente implements Serializable {
 
     public void setExpId(Long expId) {
         this.expId = expId;
-    }
-
-    public String getExpAntecedentePatologicos() {
-        return expAntecedentePatologicos;
-    }
-
-    public void setExpAntecedentePatologicos(String expAntecedentePatologicos) {
-        this.expAntecedentePatologicos = expAntecedentePatologicos;
     }
 
     public String getExpHospitalizaciones() {
@@ -181,6 +154,22 @@ public class Expediente implements Serializable {
         this.expVersion = expVersion;
     }
 
+    public String getExpAntecedentePatologicos() {
+        return expAntecedentePatologicos;
+    }
+
+    public void setExpAntecedentePatologicos(String expAntecedentePatologicos) {
+        this.expAntecedentePatologicos = expAntecedentePatologicos;
+    }
+
+    public List<Antecedente> getAntecedenteList() {
+        return antecedenteList;
+    }
+
+    public void setAntecedenteList(List<Antecedente> antecedenteList) {
+        this.antecedenteList = antecedenteList;
+    }
+
     public List<Control> getControlList() {
         return controlList;
     }
@@ -205,12 +194,29 @@ public class Expediente implements Serializable {
         this.expPaciente = expPaciente;
     }
 
-    public List<Antecedente> getAntecedenteList() {
-        return antecedenteList;
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (expId != null ? expId.hashCode() : 0);
+        return hash;
     }
 
-    public void setAntecedenteList(List<Antecedente> antecedenteList) {
-        this.antecedenteList = antecedenteList;
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Expediente)) {
+            return false;
+        }
+        Expediente other = (Expediente) object;
+        if ((this.expId == null && other.expId != null) || (this.expId != null && !this.expId.equals(other.expId))) {
+            return false;
+        }
+        return true;
     }
 
+    @Override
+    public String toString() {
+        return "cr.ac.una.unaplanillaws2.model.Expediente[ expId=" + expId + " ]";
+    }
+    
 }

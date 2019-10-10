@@ -6,17 +6,14 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,11 +33,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_CONTROLES", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_CONTROLES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Control.findAll", query = "SELECT c FROM Control c")
-    , @NamedQuery(name = "Control.findByCntId", query = "SELECT c FROM Control c WHERE c.cntId = :cntId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    @NamedQuery(name = "Control.findAll", query = "SELECT c FROM Control c", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Control.findByCntId", query = "SELECT c FROM Control c WHERE c.cntId = :cntId")
     , @NamedQuery(name = "Control.findByCntFecha", query = "SELECT c FROM Control c WHERE c.cntFecha = :cntFecha")
     , @NamedQuery(name = "Control.findByCntHora", query = "SELECT c FROM Control c WHERE c.cntHora = :cntHora")
     , @NamedQuery(name = "Control.findByCntPresion", query = "SELECT c FROM Control c WHERE c.cntPresion = :cntPresion")
@@ -55,13 +52,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Control.findByCntObservaciones", query = "SELECT c FROM Control c WHERE c.cntObservaciones = :cntObservaciones")
     , @NamedQuery(name = "Control.findByCntExamenFisico", query = "SELECT c FROM Control c WHERE c.cntExamenFisico = :cntExamenFisico")
     , @NamedQuery(name = "Control.findByCntTratamiento", query = "SELECT c FROM Control c WHERE c.cntTratamiento = :cntTratamiento")
-    , @NamedQuery(name = "Control.findByCntExpediente", query = "SELECT c FROM Control c WHERE c.cntExpediente = :cntExpediente")    
     , @NamedQuery(name = "Control.findByCntVersion", query = "SELECT c FROM Control c WHERE c.cntVersion = :cntVersion")})
 public class Control implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-
     @Id
     @SequenceGenerator(name = "CNT_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_CONTROL_PACIENTES", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CNT_ID_GENERATOR")
@@ -116,37 +111,13 @@ public class Control implements Serializable {
     @Column(name = "CNT_VERSION")
     private Long cntVersion;
     @JoinColumn(name = "CNT_EXPEDIENTE", referencedColumnName = "EXP_ID")
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Expediente cntExpediente;
 
     public Control() {
     }
-
-    public Control(Long cntId) {
-        this.cntId = cntId;
-    }
-
-    public Control(Long cntId, Date cntFecha, Date cntHora, Double cntPresion, Double cntFrecuenciaCardiaca, Double cntPeso, Double cntTalla, Double cntTemperatura, Double cntImc, String cntAnotacionEnfermeria, String cntRazonConsulta, String cntPlanAtencion, String cntObservaciones, String cntExamenFisico, String cntTratamiento, Long cntVersion, Expediente cntExpediente) {
-        this.cntId = cntId;
-        this.cntFecha = cntFecha;
-        this.cntHora = cntHora;
-        this.cntPresion = cntPresion;
-        this.cntFrecuenciaCardiaca = cntFrecuenciaCardiaca;
-        this.cntPeso = cntPeso;
-        this.cntTalla = cntTalla;
-        this.cntTemperatura = cntTemperatura;
-        this.cntImc = cntImc;
-        this.cntAnotacionEnfermeria = cntAnotacionEnfermeria;
-        this.cntRazonConsulta = cntRazonConsulta;
-        this.cntPlanAtencion = cntPlanAtencion;
-        this.cntObservaciones = cntObservaciones;
-        this.cntExamenFisico = cntExamenFisico;
-        this.cntTratamiento = cntTratamiento;
-        this.cntVersion = cntVersion;
-        this.cntExpediente = cntExpediente;
-    }
-
-    public Control(ControlDto control) {
+    
+     public Control(ControlDto control) {
         this.cntId = control.getCntId();
         this.actualizarControl(control);
     }
@@ -175,6 +146,33 @@ public class Control implements Serializable {
         this.cntTratamiento = control.getCntTratamiento();
         this.cntExpediente = new Expediente(control.getCntExpediente());
     }
+
+    
+    public Control(Long cntId) {
+        this.cntId = cntId;
+    }
+
+    public Control(Long cntId, Date cntFecha, Date cntHora, Double cntPresion, Double cntFrecuenciaCardiaca, Double cntPeso, Double cntTalla, Double cntTemperatura, Double cntImc, String cntAnotacionEnfermeria, String cntRazonConsulta, String cntPlanAtencion, String cntObservaciones, String cntExamenFisico, String cntTratamiento, Long cntVersion, Expediente cntExpediente) {
+        this.cntId = cntId;
+        this.cntFecha = cntFecha;
+        this.cntHora = cntHora;
+        this.cntPresion = cntPresion;
+        this.cntFrecuenciaCardiaca = cntFrecuenciaCardiaca;
+        this.cntPeso = cntPeso;
+        this.cntTalla = cntTalla;
+        this.cntTemperatura = cntTemperatura;
+        this.cntImc = cntImc;
+        this.cntAnotacionEnfermeria = cntAnotacionEnfermeria;
+        this.cntRazonConsulta = cntRazonConsulta;
+        this.cntPlanAtencion = cntPlanAtencion;
+        this.cntObservaciones = cntObservaciones;
+        this.cntExamenFisico = cntExamenFisico;
+        this.cntTratamiento = cntTratamiento;
+        this.cntVersion = cntVersion;
+        this.cntExpediente = cntExpediente;
+    }
+
+    
 
     public Long getCntId() {
         return cntId;
@@ -247,6 +245,8 @@ public class Control implements Serializable {
     public void setCntImc(Double cntImc) {
         this.cntImc = cntImc;
     }
+
+    
 
     public String getCntAnotacionEnfermeria() {
         return cntAnotacionEnfermeria;
@@ -334,7 +334,7 @@ public class Control implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Control[ cntId=" + cntId + " ]";
+        return "cr.ac.una.unaplanillaws2.model.Control[ cntId=" + cntId + " ]";
     }
 
 }

@@ -22,12 +22,10 @@ public class CitaDto {
     private Long CtID;
     private Long CtVersion;
     private PacienteDto paciente;
-//    EspacioHoraDto espacioHora;
     private String motivo;
     private String estado;
     private String telefono;
     private String correo;
-    private String hora;
 
     public CitaDto(){
     }
@@ -40,12 +38,6 @@ public class CitaDto {
         this.estado = cita.getCtEstado();
         this.telefono = cita.getCtTelefono();
         this.correo = cita.getCtCorreo();
-        if (cita.getCtHora() != null) {
-            LocalDateTime localDateTime = cita.getCtHora().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDateTime();
-            this.hora = localDateTime.toLocalTime().toString();
-        }
     }
 
     public String getTelefono() {
@@ -88,14 +80,6 @@ public class CitaDto {
         this.paciente = paciente;
     }
 
-   /* public EspacioHoraDto getEspacioHora() {
-        return espacioHora;
-    }
-
-    public void setEspacioHora(EspacioHoraDto espacioHora) {
-        this.espacioHora = espacioHora;
-    }*/
-
     public String getMotivo() {
         return motivo;
     }
@@ -112,12 +96,5 @@ public class CitaDto {
         this.estado = estado;
     }
 
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
     
 }

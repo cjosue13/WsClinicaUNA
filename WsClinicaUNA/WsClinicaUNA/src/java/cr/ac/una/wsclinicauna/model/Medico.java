@@ -9,13 +9,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos Olivares
  */
 @Entity
-@Table(name = "CLN_MEDICOS", catalog = "", schema = "CLINICAUNA")
+@Table(name = "CLN_MEDICOS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Medico.findAll", query = "SELECT m FROM Medico m", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
@@ -57,7 +57,6 @@ public class Medico implements Serializable {
     @Id
     @SequenceGenerator(name = "MED_ID_GENERATOR", sequenceName = "ClinicaUNA.SEQ_MEDICOS", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MED_ID_GENERATOR")
-
     @Basic(optional = false)
     @Column(name = "MED_ID")
     private Long medId;
@@ -88,32 +87,14 @@ public class Medico implements Serializable {
     @Column(name = "MED_VERSION")
     private Long medVersion;
     @JoinColumn(name = "MED_USUARIO", referencedColumnName = "US_ID")
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.REMOVE,optional = false, fetch = FetchType.LAZY)
     private Usuario medUsuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ageMedico")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ageMedico", fetch = FetchType.LAZY)
     private List<Agenda> agendaList;
 
     public Medico() {
     }
-
-    public Medico(Long medId) {
-        this.medId = medId;
-    }
-
-    public Medico(Long medId, String medCodigo, String medFolio, String medCarne, String medEstado, Date medIniciojornada, Date medFinjornada, Integer medEspaciosporhora, Long medVersion, Usuario medUsuario, List<Agenda> agendaList) {
-        this.medId = medId;
-        this.medCodigo = medCodigo;
-        this.medFolio = medFolio;
-        this.medCarne = medCarne;
-        this.medEstado = medEstado;
-        this.medIniciojornada = medIniciojornada;
-        this.medFinjornada = medFinjornada;
-        this.medEspaciosporhora = medEspaciosporhora;
-        this.medVersion = medVersion;
-        this.medUsuario = medUsuario;
-        this.agendaList = agendaList;
-    }
-
+    
     public Medico(MedicoDto MedicoDto) {
         this.medId = MedicoDto.getID();
         actualizarMedico(MedicoDto);
@@ -134,6 +115,22 @@ public class Medico implements Serializable {
         this.medFolio = MedicoDto.getFolio();
         this.medUsuario = new Usuario(MedicoDto.getUs());
         this.medVersion = MedicoDto.getMedVersion();
+    }
+
+    public Medico(Long medId) {
+        this.medId = medId;
+    }
+
+    public Medico(Long medId, String medCodigo, String medFolio, String medCarne, String medEstado, Date medIniciojornada, Date medFinjornada, Integer medEspaciosporhora, Long medVersion) {
+        this.medId = medId;
+        this.medCodigo = medCodigo;
+        this.medFolio = medFolio;
+        this.medCarne = medCarne;
+        this.medEstado = medEstado;
+        this.medIniciojornada = medIniciojornada;
+        this.medFinjornada = medFinjornada;
+        this.medEspaciosporhora = medEspaciosporhora;
+        this.medVersion = medVersion;
     }
 
     public Long getMedId() {
@@ -216,7 +213,6 @@ public class Medico implements Serializable {
         this.medUsuario = medUsuario;
     }
 
-    @XmlTransient
     public List<Agenda> getAgendaList() {
         return agendaList;
     }
@@ -247,7 +243,7 @@ public class Medico implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Medico[ medId=" + medId + " ]";
+        return "cr.ac.una.unaplanillaws2.model.Medico[ medId=" + medId + " ]";
     }
-
+    
 }
