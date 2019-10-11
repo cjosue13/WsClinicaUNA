@@ -25,7 +25,7 @@ public class EspacioDto {
     private String espHoraFin;
     private String espHoraInicio;
     private Long espVersion;
-    private List<CitaPorEspacioDto> citasPorEspacioList;
+    private CitaDto espCita;
     private AgendaDto espAgenda;
 
     public EspacioDto(){
@@ -34,7 +34,7 @@ public class EspacioDto {
     public EspacioDto(Espacio espacio) {
         this.espId = espacio.getEspId();
         this.espVersion = espacio.getEspVersion();
-        this.espAgenda = new AgendaDto(espacio.getEspAgenda());
+        //this.espAgenda = new AgendaDto(espacio.getEspAgenda());
         LocalDateTime localDateTime = espacio.getEspHoraFin().toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
@@ -43,6 +43,7 @@ public class EspacioDto {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
         this.espHoraInicio = localDateTime2.toLocalTime().toString();
+        this.espCita = new CitaDto(espacio.getEspCita());
     }
 
     public String getEspHoraFin() {
@@ -78,13 +79,15 @@ public class EspacioDto {
         this.espId = espId;
     }
 
-    public List<CitaPorEspacioDto> getCitasPorEspacioList() {
-        return citasPorEspacioList;
+    public CitaDto getEspCita() {
+        return espCita;
     }
 
-    public void setCitasPorEspacioList(List<CitaPorEspacioDto> citasPorEspacioList) {
-        this.citasPorEspacioList = citasPorEspacioList;
+    public void setEspCita(CitaDto espCita) {
+        this.espCita = espCita;
     }
+
+    
 
     public AgendaDto getEspAgenda() {
         return espAgenda;
@@ -93,5 +96,11 @@ public class EspacioDto {
     public void setEspAgenda(AgendaDto espAgenda) {
         this.espAgenda = espAgenda;
     }
+
+    @Override
+    public String toString() {
+        return "EspacioDto{" + "espId=" + espId + ", espHoraFin=" + espHoraFin + ", espHoraInicio=" + espHoraInicio + ", espVersion=" + espVersion + ", espCita=" + espCita + ", espAgenda=" + espAgenda + '}';
+    }
+
     
 }

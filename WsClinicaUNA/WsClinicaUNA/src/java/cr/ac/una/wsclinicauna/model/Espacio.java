@@ -6,6 +6,9 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -63,8 +66,9 @@ public class Espacio implements Serializable {
     @Basic(optional = false)
     @Column(name = "ESP_VERSION")
     private Long espVersion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctxespEspacio", fetch = FetchType.LAZY)
-    private List<CitaPorEspacio> citaPorEspacioList;
+    @JoinColumn(name = "ESP_CITA", referencedColumnName = "CT_ID")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Cita espCita;
     @JoinColumn(name = "ESP_AGENDA", referencedColumnName = "AGE_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Agenda espAgenda;
@@ -82,7 +86,13 @@ public class Espacio implements Serializable {
         this.espVersion = espacioh.getEspVersion();
         //Agregar conversion de fecha 
         this.espAgenda = new Agenda(espacioh.getEspAgenda());
-        
+        if (espacioh.getEspHoraInicio() != null && espacioh.getEspHoraFin() != null) {
+            LocalDateTime inicioJornada = LocalDateTime.parse(espacioh.getEspHoraInicio(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+            LocalDateTime finJornada = LocalDateTime.parse( espacioh.getEspHoraFin(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+            this.espHoraInicio = Date.from(inicioJornada.atZone(ZoneId.systemDefault()).toInstant());
+            this.espHoraFin = Date.from(finJornada.atZone(ZoneId.systemDefault()).toInstant());
+        }
+        this.espCita = new Cita(espacioh.getEspCita());
     }
 
     public Espacio(Long espId) {
@@ -128,13 +138,15 @@ public class Espacio implements Serializable {
         this.espVersion = espVersion;
     }
 
-    public List<CitaPorEspacio> getCitaPorEspacioList() {
-        return citaPorEspacioList;
+    public Cita getEspCita() {
+        return espCita;
     }
 
-    public void setCitaPorEspacioList(List<CitaPorEspacio> citaPorEspacioList) {
-        this.citaPorEspacioList = citaPorEspacioList;
+    public void setEspCita(Cita espCita) {
+        this.espCita = espCita;
     }
+
+    
 
     public Agenda getEspAgenda() {
         return espAgenda;

@@ -9,6 +9,7 @@ package cr.ac.una.wsclinicauna.model;
 import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -40,6 +41,13 @@ public class AgendaDto {
         this.ageFecha = agenda.getAgeFecha().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+        this.espacioList = new ArrayList();
+        if(agenda.getEspacioList()!=null && !agenda.getEspacioList().isEmpty()){
+            agenda.getEspacioList().stream().forEach((espacio) -> {
+                this.espacioList.add(new EspacioDto(espacio));
+            });
+            
+        }
     }
 
     public Long getAgeId() {

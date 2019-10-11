@@ -7,6 +7,8 @@ package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +29,7 @@ public class CitaDto {
     private String telefono;
     private String correo;
     private String correoEnviado;
+    private List<EspacioDto> espacios;
 
     public CitaDto(){
     }
@@ -40,6 +43,13 @@ public class CitaDto {
         this.telefono = cita.getCtTelefono();
         this.correo = cita.getCtCorreo();
         this.correoEnviado = cita.getCtCorreoenviado();
+        this.espacios = new ArrayList();
+        if(cita.getEspacioList()!=null && !cita.getEspacioList().isEmpty()){
+           cita.getEspacioList().stream().forEach((espacio) -> {
+                this.espacios.add(new EspacioDto(espacio));
+           });
+            
+        }
     }
 
     public String getTelefono() {
@@ -104,6 +114,14 @@ public class CitaDto {
 
     public void setCorreoEnviado(String correoEnviado) {
         this.correoEnviado = correoEnviado;
+    }
+
+    public List<EspacioDto> getEspacios() {
+        return espacios;
+    }
+
+    public void setEspacios(List<EspacioDto> espacios) {
+        this.espacios = espacios;
     }
     
     

@@ -72,8 +72,8 @@ public class Cita implements Serializable {
     @JoinColumn(name = "CT_PACIENTE", referencedColumnName = "PAC_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Paciente ctPaciente;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctxespCita", fetch = FetchType.LAZY)
-    private List<CitaPorEspacio> citaPorEspacioList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "espCita", fetch = FetchType.LAZY)
+    private List<Espacio> espacioList;
 
     public Cita() {
     }
@@ -170,13 +170,15 @@ public class Cita implements Serializable {
         this.ctPaciente = ctPaciente;
     }
 
-    public List<CitaPorEspacio> getCitaPorEspacioList() {
-        return citaPorEspacioList;
+    public List<Espacio> getEspacioList() {
+        return espacioList;
     }
 
-    public void setCitaPorEspacioList(List<CitaPorEspacio> citaPorEspacioList) {
-        this.citaPorEspacioList = citaPorEspacioList;
+    public void setEspacioList(List<Espacio> espacioList) {
+        this.espacioList = espacioList;
     }
+
+    
 
     @Override
     public int hashCode() {
