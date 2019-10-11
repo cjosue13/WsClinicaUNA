@@ -10,6 +10,7 @@ import cr.ac.una.wsclinicauna.model.PacienteDto;
 import cr.ac.una.wsclinicauna.model.Paciente;
 import cr.ac.una.wsclinicauna.model.PacienteDto;
 import cr.ac.una.wsclinicauna.model.Paciente;
+import cr.ac.una.wsclinicauna.util.CampoException;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -79,8 +80,14 @@ public class PacienteService {
             em.flush();
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", new PacienteDto(Paciente));
-        } catch (Exception ex) {
+       } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Paciente.", ex);
+            if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class){
+                SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Paciente. Ya existe un Paciente con el mismo campo "
+                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN")
+                        , "guardarPaciente " + sqle.getMessage());
+            }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Paciente.", "guardarPaciente " + ex.getMessage());
         }
     }

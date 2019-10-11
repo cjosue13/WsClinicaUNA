@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.Usuario;
 import cr.ac.una.wsclinicauna.model.UsuarioDto;
+import cr.ac.una.wsclinicauna.util.CampoException;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import cr.ac.una.wsclinicauna.util.generadorContrasennas;
@@ -100,6 +101,12 @@ public class UsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new UsuarioDto(Usuario));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Usuario.", ex);
+            if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class){
+                SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Usuario. Ya existe un Usuario con el mismo campo "
+                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN")
+                        , "guardarUsuario " + sqle.getMessage());
+            }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Usuario.", "guardarUsuario " + ex.getMessage());
         }
     }

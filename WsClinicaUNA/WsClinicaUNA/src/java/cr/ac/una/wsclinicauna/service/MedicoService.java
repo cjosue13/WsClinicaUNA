@@ -11,6 +11,7 @@ import cr.ac.una.wsclinicauna.model.Medico;
 import cr.ac.una.wsclinicauna.model.MedicoDto;
 import cr.ac.una.wsclinicauna.model.Medico;
 import cr.ac.una.wsclinicauna.model.MedicoDto;
+import cr.ac.una.wsclinicauna.util.CampoException;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -76,13 +77,16 @@ public class MedicoService {
                 Medico = new Medico(MedicoDto);
                 em.persist(Medico);
             }
-            
-            
             em.flush();
-
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medico", new MedicoDto(Medico));
-        } catch (Exception ex) {
+         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Medico.", ex);
+            if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class){
+                SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Medico. Ya existe un Medico con el mismo campo "
+                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN")
+                        , "guardarMedico " + sqle.getMessage());
+            }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Medico.", "guardarMedico " + ex.getMessage());
         }
     }
