@@ -44,12 +44,11 @@ public class CitaDto {
         this.correo = cita.getCtCorreo();
         this.correoEnviado = cita.getCtCorreoenviado();
         this.espacios = new ArrayList();
-        if(cita.getEspacioList()!=null && !cita.getEspacioList().isEmpty()){
+        /*if(cita.getEspacioList()!=null && !cita.getEspacioList().isEmpty()){
            cita.getEspacioList().stream().forEach((espacio) -> {
                 this.espacios.add(new EspacioDto(espacio));
            });
-            
-        }
+        }*/
     }
 
     public String getTelefono() {
