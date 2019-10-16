@@ -84,7 +84,7 @@ public class MedicoService {
             if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class){
                 SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
                 return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Medico. Ya existe un Medico con el mismo campo "
-                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN")
+                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN",3)
                         , "guardarMedico " + sqle.getMessage());
             }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Medico.", "guardarMedico " + ex.getMessage());

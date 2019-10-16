@@ -83,9 +83,10 @@ public class PacienteService {
        } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Paciente.", ex);
             if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class){
+                
                 SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
                 return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Paciente. Ya existe un Paciente con el mismo campo "
-                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN")
+                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN",3)
                         , "guardarPaciente " + sqle.getMessage());
             }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Paciente.", "guardarPaciente " + ex.getMessage());
