@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -61,7 +62,7 @@ public class Agenda implements Serializable {
     @JoinColumn(name = "AGE_MEDICO", referencedColumnName = "MED_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Medico ageMedico;
-    @OneToMany(mappedBy = "espAgenda", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "espAgenda", fetch = FetchType.LAZY)
     private List<Espacio> espacioList;
 
     public Agenda() {
