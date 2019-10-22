@@ -72,7 +72,7 @@ public class Cita implements Serializable {
     @JoinColumn(name = "CT_PACIENTE", referencedColumnName = "PAC_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Paciente ctPaciente;
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "espCita", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "espCita", fetch = FetchType.EAGER)
     private List<Espacio> espacioList;
 
     public Cita() {
