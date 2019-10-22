@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CLN_AGENDAS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Agenda.findAll", query = "SELECT a FROM Agenda a")
+    @NamedQuery(name = "Agenda.findAll", query = "SELECT a FROM Agenda a", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Agenda.findByAgeId", query = "SELECT a FROM Agenda a WHERE a.ageId = :ageId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Agenda.findByAgeFecha", query = "SELECT a FROM Agenda a WHERE a.ageFecha = :ageFecha AND a.ageMedico = :ageMedico", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Agenda.findByAgeVersion", query = "SELECT a FROM Agenda a WHERE a.ageVersion = :ageVersion")})
