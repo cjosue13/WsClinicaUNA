@@ -84,9 +84,6 @@ public class AgendaController {
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            if (!respuesta.getEstado()) {
-                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
-            }
             return Response.ok((AgendaDto) respuesta.getResultado("Agenda")).build();
 
         } catch (Exception ex) {
@@ -94,6 +91,29 @@ public class AgendaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la Agenda").build();
         }
     }
+    
+    @GET
+    @Path("/agendas/{fechaInicio}/{fechaFinal}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAgendas(@PathParam("fechaInicio") String fechaInicio, @PathParam("fechaFinal") String fechaFinal) {
+        try {
+            Respuesta respuesta = AgendaService.getAgendas(fechaInicio, fechaFinal);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            
+            ArrayList<AgendaDto> AgendasDto = (ArrayList<AgendaDto>) respuesta.getResultado("Agendas");
+
+            return Response.ok(new GenericEntity<List<AgendaDto>>(AgendasDto) {
+            }).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(AgendaController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo las Agendas").build();
+        }
+    }
+    
 
     @DELETE
     @Path("/eliminar/{id}")

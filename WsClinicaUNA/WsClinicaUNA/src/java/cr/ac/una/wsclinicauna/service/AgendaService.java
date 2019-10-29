@@ -118,7 +118,7 @@ public class AgendaService {
                     .toInstant());
 
             Medico medico = em.find(Medico.class, Id);
-            if(medico==null){
+            if (medico == null) {
                 return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró la Agenda a eliminar.", "EliminarAgenda NoResultException");
             }
             qryAgenda.setParameter("ageFecha", date);
@@ -126,6 +126,37 @@ public class AgendaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new AgendaDto((Agenda) qryAgenda.getSingleResult()));
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe una agenda con las credenciales ingresadas.", "getAgenda NoResultException");
+        } catch (NonUniqueResultException ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar la Agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar la Agenda.", "getAgenda NonUniqueResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar la Agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar la Agenda.", "getAgenda " + ex.getMessage());
+        }
+    }
+
+    public Respuesta getAgendas(String fechaInicio, String fechaFinal) {
+        try {
+            Query qryAgenda = em.createNamedQuery("Agenda.findByAgendas", Agenda.class);
+
+            LocalDate localDate1 = LocalDate.parse(fechaInicio, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            Date fechaInicioD = Date.from(localDate1.atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+            localDate1 = LocalDate.parse(fechaFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            Date fechaFinalD = Date.from(localDate1.atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+            qryAgenda.setParameter("fechaInicio", fechaInicioD);
+            qryAgenda.setParameter("fechaFinal", fechaFinalD);
+            ArrayList <AgendaDto> agendas = new ArrayList<>();
+           ((List<Agenda>)qryAgenda.getResultList()).stream().forEach((agenda) -> {
+               agendas.add(new AgendaDto(agenda));
+           });
+           
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agendas", agendas);
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen agendas ingresadas en las fechas asignadas.", "getAgenda NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar la Agenda.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar la Agenda.", "getAgenda NonUniqueResultException");

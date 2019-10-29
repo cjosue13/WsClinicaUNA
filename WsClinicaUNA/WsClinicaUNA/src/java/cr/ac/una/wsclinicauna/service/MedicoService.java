@@ -7,10 +7,6 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.Medico;
 import cr.ac.una.wsclinicauna.model.MedicoDto;
-import cr.ac.una.wsclinicauna.model.Medico;
-import cr.ac.una.wsclinicauna.model.MedicoDto;
-import cr.ac.una.wsclinicauna.model.Medico;
-import cr.ac.una.wsclinicauna.model.MedicoDto;
 import cr.ac.una.wsclinicauna.util.CampoException;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -24,7 +20,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -39,7 +34,6 @@ public class MedicoService {
     private static final Logger LOG = Logger.getLogger(MedicoService.class.getName());//imprime el error en payara
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    private EntityTransaction et;
     
     public Respuesta getMedicos() {
         try {
@@ -49,7 +43,6 @@ public class MedicoService {
             for (Medico Medicos1 : Medicos) {
                 MedicosDto.add(new MedicoDto(Medicos1));
             }
-
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medicos", MedicosDto);
 
         } catch (NoResultException ex) {
