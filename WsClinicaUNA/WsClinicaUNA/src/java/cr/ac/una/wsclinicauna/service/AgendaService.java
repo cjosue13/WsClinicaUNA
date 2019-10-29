@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.AgendaDto;
@@ -26,6 +21,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -153,6 +154,11 @@ public class AgendaService {
            ((List<Agenda>)qryAgenda.getResultList()).stream().forEach((agenda) -> {
                agendas.add(new AgendaDto(agenda));
            });
+           
+           JasperReport jr = (JasperReport) JRLoader.loadObject(getClass().getResource(""));
+           JasperPrint jp = JasperFillManager.fillReport(jr, null, new JREmptyDataSource());
+           JasperViewer jv = new JasperViewer(jp,false);
+           
            
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agendas", agendas);
         } catch (NoResultException ex) {
