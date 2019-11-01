@@ -41,7 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Agenda.findAll", query = "SELECT a FROM Agenda a", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Agenda.findByAgeId", query = "SELECT a FROM Agenda a WHERE a.ageId = :ageId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Agenda.findByAgeFecha", query = "SELECT a FROM Agenda a WHERE a.ageFecha = :ageFecha AND a.ageMedico = :ageMedico", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
-    , @NamedQuery(name = "Agenda.findByAgeVersion", query = "SELECT a FROM Agenda a WHERE a.ageVersion = :ageVersion")})
+    , @NamedQuery(name = "Agenda.findByAgeVersion", query = "SELECT a FROM Agenda a WHERE a.ageVersion = :ageVersion")
+    , @NamedQuery(name = "Agenda.findByAgendas", query = "SELECT a FROM Agenda a WHERE a.ageFecha >= :fechaInicio AND a.ageFecha <= :fechaFinal", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))    
+})
 public class Agenda implements Serializable {
 
     private static final long serialVersionUID = 1L;
