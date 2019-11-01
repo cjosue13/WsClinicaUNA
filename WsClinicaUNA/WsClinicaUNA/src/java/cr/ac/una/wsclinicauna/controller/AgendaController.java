@@ -6,6 +6,7 @@
 package cr.ac.una.wsclinicauna.controller;
 
 import cr.ac.una.wsclinicauna.model.AgendaDto;
+import cr.ac.una.wsclinicauna.report.ReportManager;
 import cr.ac.una.wsclinicauna.service.AgendaService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -25,6 +26,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -104,9 +106,12 @@ public class AgendaController {
             }
             
             ArrayList<AgendaDto> AgendasDto = (ArrayList<AgendaDto>) respuesta.getResultado("Agendas");
-
-            return Response.ok(new GenericEntity<List<AgendaDto>>(AgendasDto) {
-            }).build();
+            ReportManager reporte = new ReportManager();
+        reporte.ReporteAgenda(AgendasDto);
+                    
+            //System.out.println(reporte);
+                    //ReporteAgenda(AgendasDto);
+            return Response.ok(reporte).build();
 
         } catch (Exception ex) {
             Logger.getLogger(AgendaController.class.getName()).log(Level.SEVERE, null, ex);

@@ -155,9 +155,9 @@ public class AgendaService {
                agendas.add(new AgendaDto(agenda));
            });
            
-           JasperReport jr = (JasperReport) JRLoader.loadObject(getClass().getResource(""));
+           /*JasperReport jr = (JasperReport) JRLoader.loadObject(getClass().getResource(""));
            JasperPrint jp = JasperFillManager.fillReport(jr, null, new JREmptyDataSource());
-           JasperViewer jv = new JasperViewer(jp,false);
+           JasperViewer jv = new JasperViewer(jp,false);*/
            
            
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agendas", agendas);
