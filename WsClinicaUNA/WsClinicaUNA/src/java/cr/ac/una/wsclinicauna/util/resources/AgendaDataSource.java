@@ -22,8 +22,8 @@ import net.sf.jasperreports.engine.JRField;
 
 public class AgendaDataSource implements JRDataSource {
 
-    private List<AgendaDto> agendas = new ArrayList<>();
-    private int indice = -1;
+    public List<AgendaDto> agendas = new ArrayList<>();
+    public int indice = -1;
     
     public AgendaDataSource(){
         

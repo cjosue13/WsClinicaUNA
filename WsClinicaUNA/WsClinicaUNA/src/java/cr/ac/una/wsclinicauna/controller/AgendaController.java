@@ -93,7 +93,7 @@ public class AgendaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la Agenda").build();
         }
     }
-    
+
     @GET
     @Path("/agendas/{fechaInicio}/{fechaFinal}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -104,21 +104,17 @@ public class AgendaController {
             if (!respuesta.getEstado()) {
                 return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
             }
-            
+
             ArrayList<AgendaDto> AgendasDto = (ArrayList<AgendaDto>) respuesta.getResultado("Agendas");
             ReportManager reporte = new ReportManager();
-        reporte.ReporteAgenda(AgendasDto);
-                    
-            //System.out.println(reporte);
-                    //ReporteAgenda(AgendasDto);
-            return Response.ok(reporte).build();
+            reporte.ReporteAgenda(AgendasDto);
 
+            return Response.ok(reporte).build();
         } catch (Exception ex) {
             Logger.getLogger(AgendaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo las Agendas").build();
         }
     }
-    
 
     @DELETE
     @Path("/eliminar/{id}")

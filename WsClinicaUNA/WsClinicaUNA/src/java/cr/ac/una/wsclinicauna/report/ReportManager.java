@@ -39,11 +39,9 @@ import net.sf.jasperreports.view.JasperViewer;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ReportManager {
 
-    //private static ReportManager INSTANCE = null;
-    //private final Map parametros;
     private JasperViewer jv;
     private JasperPrint print;
-    private JRDataSource dataSource;
+    private AgendaDataSource dataSource;
 
     public ReportManager() {
     }
@@ -64,35 +62,15 @@ public class ReportManager {
         this.print = print;
     }
 
-    public JRDataSource getDataSource() {
+    public AgendaDataSource getDataSource() {
         return dataSource;
     }
 
-    public void setDataSource(JRDataSource dataSource) {
+    public void setDataSource(AgendaDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    /*public ReportManager(){
-        this.parametros = new HashMap();
-    }
- 
-    private static void createInstance(){
-        if(INSTANCE == null){
-            synchronized (ReportManager.class){
-                if(INSTANCE == null){
-                    INSTANCE = new ReportManager();
-                }
-            }
-        }
-    }
-    public static ReportManager getInstance(){
-        if(INSTANCE==null){
-            createInstance();
-        }
-        
-        return INSTANCE;
-    }*/
-    private void generarReporte(String nombreArchivo) {
+  /*  private void generarReporte(String nombreArchivo) {
         try {
             //JRBeanDataSource jrb
             JasperReport report;
@@ -100,14 +78,12 @@ public class ReportManager {
             System.out.println("sjdnjksdnjksndjn");
             print = JasperFillManager.fillReport(report, null, dataSource);
             jv = new JasperViewer(print, false);
-            /*jv.setVisible(true);
-            jv.setTitle("Agenda Medica");*/
         } catch (JRException e) {
             e.getStackTrace();
         }
-    }
+    }*/
 
-    public void ReporteAgenda(ArrayList<AgendaDto> agendas) {
+    public void ReporteAgenda(ArrayList<AgendaDto> agendas) throws JRException {
         InputStream inputStream = null;
         dataSource = new AgendaDataSource();
 
@@ -119,28 +95,30 @@ public class ReportManager {
         });
         //System.out.println(dataSource);
         try{
-            File f1 = new File(".");
-                String dir1 = f1.getAbsolutePath();
-        inputStream = new FileInputStream ("src\\java\\cr\\ac\\una\\wsclinicauna\\report\\AgendaM.jrxml");
+            //System.out.println(getClass().getResource("AgendaM.jrxml"));
+        inputStream = new FileInputStream ("C:\\Users\\Jordy\\Documents\\GitHub\\WsClinicaUNA\\WsClinicaUNA\\WsClinicaUNA\\src\\java\\cr\\ac\\una\\wsclinicauna\\report\\AgendaM.jasper");
         }catch(FileNotFoundException ex){
-                System.out.println(ex.getMessage());
+                //System.out.println(ex.getMessage());
         }
-        
-        try {
+            //JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(inputStream);
+            print = JasperFillManager.fillReport(jasperReport, null, dataSource);
+           // jv = new JasperViewer(print, false);
+        /*try {
              JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
             print = JasperFillManager.fillReport(jasperReport, null, dataSource);
+            //jv = new JasperViewer(print, false);
         } catch (JRException e) {
-            System.out.println(e.getMessage());
-        }
+            //System.out.println(e.getMessage());
+        }*/
        // System.out.println(print);
-           
-        //generarReporte("AgendaM");
+     // generarReporte("AgendaM");
     }
 
     @Override
     public String toString() {
-        return "ReportManager{" + "jv=" + jv + ", print=" + print + ", dataSource=" + dataSource + '}';
+        return "ReportManager{" + "jv=" + jv + '}';
     }
 
 }
