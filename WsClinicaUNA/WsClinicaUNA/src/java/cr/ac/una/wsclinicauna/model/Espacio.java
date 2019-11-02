@@ -67,7 +67,7 @@ public class Espacio implements Serializable {
     @Column(name = "ESP_VERSION")
     private Long espVersion;
     @JoinColumn(name = "ESP_CITA", referencedColumnName = "CT_ID")
-    @ManyToOne(cascade = CascadeType.REMOVE, optional = false, fetch = FetchType.EAGER)
+    @ManyToOne( optional = false, fetch = FetchType.LAZY)
     private Cita espCita;
     @JoinColumn(name = "ESP_AGENDA", referencedColumnName = "AGE_ID")
     @ManyToOne(fetch = FetchType.LAZY)

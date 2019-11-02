@@ -97,10 +97,6 @@ public class EspacioDto {
         this.espAgenda = espAgenda;
     }
 
-    @Override
-    public String toString() {
-        return "EspacioDto{" + "espId=" + espId + ", espHoraFin=" + espHoraFin + ", espHoraInicio=" + espHoraInicio + ", espVersion=" + espVersion + ", espCita=" + espCita + ", espAgenda=" + espAgenda + '}';
-    }
 
     
 }
