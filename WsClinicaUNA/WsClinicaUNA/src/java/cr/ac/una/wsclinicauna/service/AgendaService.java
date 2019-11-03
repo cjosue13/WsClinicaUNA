@@ -3,8 +3,14 @@ package cr.ac.una.wsclinicauna.service;
 import cr.ac.una.wsclinicauna.model.AgendaDto;
 import cr.ac.una.wsclinicauna.model.Agenda;
 import cr.ac.una.wsclinicauna.model.Medico;
+import jasper.generadorJasper;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -137,38 +143,34 @@ public class AgendaService {
     }
 
     public Respuesta getAgendas(String fechaInicio, String fechaFinal) {
-        try {
-            Query qryAgenda = em.createNamedQuery("Agenda.findByAgendas", Agenda.class);
+        generadorJasper generador = new generadorJasper();
+        Connection connection = em.unwrap(Connection.class);
+        Respuesta resp = generador.generaReporte(fechaInicio, fechaFinal, connection);
+        if(resp.getEstado()){
+            return pdf();
+        }else{
+            return resp;
+        }
+    }
 
-            LocalDate localDate1 = LocalDate.parse(fechaInicio, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            Date fechaInicioD = Date.from(localDate1.atStartOfDay()
-                    .atZone(ZoneId.systemDefault())
-                    .toInstant());
-            localDate1 = LocalDate.parse(fechaFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            Date fechaFinalD = Date.from(localDate1.atStartOfDay()
-                    .atZone(ZoneId.systemDefault())
-                    .toInstant());
-            qryAgenda.setParameter("fechaInicio", fechaInicioD);
-            qryAgenda.setParameter("fechaFinal", fechaFinalD);
-            ArrayList <AgendaDto> agendas = new ArrayList<>();
-           ((List<Agenda>)qryAgenda.getResultList()).stream().forEach((agenda) -> {
-               agendas.add(new AgendaDto(agenda,true));
-           });
-           
-           /*JasperReport jr = (JasperReport) JRLoader.loadObject(getClass().getResource(""));
-           JasperPrint jp = JasperFillManager.fillReport(jr, null, new JREmptyDataSource());
-           JasperViewer jv = new JasperViewer(jp,false);*/
-           
-           
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agendas", agendas);
-        } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen agendas ingresadas en las fechas asignadas.", "getAgenda NoResultException");
-        } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar la Agenda.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar la Agenda.", "getAgenda NonUniqueResultException");
-        } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar la Agenda.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar la Agenda.", "getAgenda " + ex.getMessage());
+    public Respuesta pdf() {
+        /*
+            Cargo el pdf con los datos del reporte y lo convierto a bytes para poder serializarlo y mandarlo al Cliente
+         */
+        try {
+            File archivo;
+            archivo = new File("ReporteAgenda.pdf");
+            System.out.println(archivo.getAbsolutePath());
+            File file = new File(archivo.getAbsolutePath());
+            FileInputStream fis = new FileInputStream(file);
+            BufferedInputStream input = new BufferedInputStream(fis);
+            byte[] salida = new byte[(int) file.length()];
+            input.read(salida);
+            fis.close();
+            input.close();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "","","reporte", salida);
+        } catch (IOException e) {
+            return new Respuesta(false,CodigoRespuesta.ERROR_INTERNO,"Error en reporte",e.getMessage());
         }
     }
 

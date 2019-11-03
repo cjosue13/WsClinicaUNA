@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Expediente.findAll", query = "SELECT e FROM Expediente e", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
-    , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId")
+    , @NamedQuery(name = "Expediente.findByExpId", query = "SELECT e FROM Expediente e WHERE e.expId = :expId" ,hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Expediente.findByExpHospitalizaciones", query = "SELECT e FROM Expediente e WHERE e.expHospitalizaciones = :expHospitalizaciones")
     , @NamedQuery(name = "Expediente.findByExpOperaciones", query = "SELECT e FROM Expediente e WHERE e.expOperaciones = :expOperaciones")
     , @NamedQuery(name = "Expediente.findByExpAlergias", query = "SELECT e FROM Expediente e WHERE e.expAlergias = :expAlergias")
