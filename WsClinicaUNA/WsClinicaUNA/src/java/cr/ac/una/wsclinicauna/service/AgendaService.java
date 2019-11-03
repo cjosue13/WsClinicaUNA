@@ -46,7 +46,7 @@ public class AgendaService {
             List<Agenda> Agendas = qryAgendas.getResultList();
             List<AgendaDto> AgendasDto = new ArrayList<>();
             for (Agenda Agendas1 : Agendas) {
-                AgendasDto.add(new AgendaDto(Agendas1));
+                AgendasDto.add(new AgendaDto(Agendas1,true));
             }
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agendas", AgendasDto);
@@ -79,7 +79,7 @@ public class AgendaService {
 
             em.flush();
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new AgendaDto(Agenda));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new AgendaDto(Agenda,true));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Agenda.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Agenda.", "guardarAgenda " + ex.getMessage());
@@ -124,7 +124,7 @@ public class AgendaService {
             }
             qryAgenda.setParameter("ageFecha", date);
             qryAgenda.setParameter("ageMedico", medico);
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new AgendaDto((Agenda) qryAgenda.getSingleResult()));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new AgendaDto(((Agenda) qryAgenda.getSingleResult()),true));
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe una agenda con las credenciales ingresadas.", "getAgenda NoResultException");
         } catch (NonUniqueResultException ex) {
@@ -152,7 +152,7 @@ public class AgendaService {
             qryAgenda.setParameter("fechaFinal", fechaFinalD);
             ArrayList <AgendaDto> agendas = new ArrayList<>();
            ((List<Agenda>)qryAgenda.getResultList()).stream().forEach((agenda) -> {
-               agendas.add(new AgendaDto(agenda));
+               agendas.add(new AgendaDto(agenda,true));
            });
            
            /*JasperReport jr = (JasperReport) JRLoader.loadObject(getClass().getResource(""));
