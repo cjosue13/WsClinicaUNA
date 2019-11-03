@@ -34,12 +34,12 @@ import javax.persistence.Query;
 @Stateless
 @LocalBean
 public class PacienteService {
-    
+
     private static final Logger LOG = Logger.getLogger(PacienteService.class.getName());//imprime el error en payara
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
     private EntityTransaction et;
-    
+
     public Respuesta getPacientes() {
         try {
             Query qrypacientes = em.createNamedQuery("Paciente.findAll", Paciente.class);
@@ -58,7 +58,7 @@ public class PacienteService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el paciente.", "getPacientes " + ex.getMessage());
         }
     }
-    
+
     public Respuesta guardarPaciente(PacienteDto PacienteDto) {
         try {
             Paciente Paciente;
@@ -80,40 +80,55 @@ public class PacienteService {
             em.flush();
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", new PacienteDto(Paciente));
-       } catch (Exception ex) {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Paciente.", ex);
-            if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class){
-                
+            if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
+
                 SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
                 return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Paciente. Ya existe un Paciente con el mismo campo "
-                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN",3)
-                        , "guardarPaciente " + sqle.getMessage());
+                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN", 3),
+                        "guardarPaciente " + sqle.getMessage());
             }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Paciente.", "guardarPaciente " + ex.getMessage());
         }
     }
-    
+
     public Respuesta eliminarPaciente(Long id) {
-        try {
-            //Empleado empleado;
-            Paciente Paciente;
-            if (id != null && id > 0) {
-                Paciente = em.find(Paciente.class, id);
-                if (Paciente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO,"No se encontró el empleado a eliminar.", "EliminarPaciente NoResultException");
-                }
-                em.remove(Paciente);
-            } else {
-                return new Respuesta(false,CodigoRespuesta.ERROR_CLIENTE, "Debe cargar el Paciente a eliminar.", "EliminarPaciente NoResultException");
+        Paciente Paciente;
+        if (id != null && id > 0) {
+            Paciente = em.find(Paciente.class, id);
+            System.out.println("VALOR PACIENTE " + Paciente);
+            if (Paciente == null) {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el empleado a eliminar.", "EliminarPaciente NoResultException");
             }
-            return new Respuesta(true,CodigoRespuesta.CORRECTO, "", "");
+            System.out.println("CONDICION");
+            if (!Paciente.getCitaList().isEmpty()) {
+                
+                Paciente.getCitaList().stream().forEach((cita) -> {
+                    if (!cita.getEspacioList().isEmpty()) {
+                        System.out.println("CITA");
+                        cita.getEspacioList().stream().forEach((espacio) -> {
+                            System.out.println("ESPACIO");
+                            em.remove(espacio);
+                        });
+                    }
+                    em.remove(cita);
+                });
+            }
+            em.remove(Paciente);
+        } else {
+            return new Respuesta(false, CodigoRespuesta.ERROR_CLIENTE, "Debe cargar el Paciente a eliminar.", "EliminarPaciente NoResultException");
+        }
+        return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+        /*try {
+            
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_PERMISOS,"No se puede eliminar el Paciente porque tiene relaciones con otros registros.", "EliminarPaciente " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_PERMISOS, "No se puede eliminar el Paciente porque tiene relaciones con otros registros.", "EliminarPaciente " + ex.getMessage());
             }
             Logger.getLogger(PacienteService.class.getName()).log(Level.SEVERE, "Ocurrio un error al guardar el Paciente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO,"Ocurrio un error al eliminar el Paciente.", "EliminarPaciente " + ex.getMessage());
-        }
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el Paciente.", "EliminarPaciente " + ex.getMessage());
+        }*/
     }
 
     public Respuesta getPacientes(String cedula, String nombre, String pApellido) {
@@ -122,13 +137,13 @@ public class PacienteService {
             qryEmpleado.setParameter("pacCedula", cedula);
             qryEmpleado.setParameter("pacNombre", nombre);
             qryEmpleado.setParameter("pacPapellido", pApellido);
-            
+
             List<Paciente> pacientes = qryEmpleado.getResultList();
             List<PacienteDto> pacientesDto = new ArrayList<>();
             for (Paciente paciente : pacientes) {
-                pacientesDto.add(new PacienteDto(paciente)); 
+                pacientesDto.add(new PacienteDto(paciente));
             }
-            
+
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Pacientes", pacientesDto);
 
         } catch (NoResultException ex) {

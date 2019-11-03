@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6a8315f2-f964-44ee-91ad-7721a427a744">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="129"/>
+	<parameter name="fechaIni" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaFin" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select u.us_nombre as nombre,u.us_papellido as pApellido, u.us_sapellido as sApellido, t.age_fecha as fecha
+from clinicauna.cln_agendas t join clinicauna.cln_medicos m 
+on m.med_id = t.age_medico join clinicauna.cln_usuarios u on u.us_id = m.med_usuario 
+WHERE t.age_fecha BETWEEN TO_DATE($P{fechaIni}, 'YYYY-MM-DD') and TO_DATE($P{fechaFin}, 'YYYY-MM-DD')
+and m.med_estado = 'A'
+order by u.us_nombre, t.age_fecha asc]]>
+	</queryString>
+	<field name="NOMBRE" class="java.lang.String"/>
+	<field name="PAPELLIDO" class="java.lang.String"/>
+	<field name="SAPELLIDO" class="java.lang.String"/>
+	<field name="FECHA" class="java.sql.Timestamp"/>
+	<field name="HInicio" class="java.lang.String"/>
+	<field name="HFinal" class="java.lang.String"/>
+	<field name="Paciente" class="java.lang.String"/>
+	<field name="Motivo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement uuid="714dc43a-9685-4b89-9bb5-9eabb6885850" x="442" y="10" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{fechaIni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="94b1a4a8-dd08-43b8-b43a-e5eb0ffc3d70" x="442" y="43" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{fechaFin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="79c959a5-79b8-440d-a92a-bbef575d1d5b" x="0" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre del Medico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8f1aa9fb-00d0-406a-868c-7fec99db01f1" x="432" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha de la Agenda]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9a04bd0d-1d91-42d3-8c7f-76df0a5bcda5" x="100" y="1" width="113" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PAPELLIDO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5119965d-e4e6-4f08-bf25-0394f28292e4" x="213" y="1" width="130" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{SAPELLIDO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="782eefa4-a38b-4f24-9312-1c43a71dafa8" x="0" y="1" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e5153516-a428-4741-9f7c-d5c9cb10c2a2" x="432" y="1" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<subreport>
+					<reportElement uuid="9cec457d-9bc2-46e8-baef-d907a78a18db" x="0" y="21" width="555" height="100"/>
+				</subreport>
+			</elementGroup>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="246bc906-f198-4eb7-9163-0423b27a57a3" x="442" y="22" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

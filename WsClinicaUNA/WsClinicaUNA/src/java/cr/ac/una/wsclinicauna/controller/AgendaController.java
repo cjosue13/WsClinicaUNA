@@ -6,10 +6,10 @@
 package cr.ac.una.wsclinicauna.controller;
 
 import cr.ac.una.wsclinicauna.model.AgendaDto;
-import cr.ac.una.wsclinicauna.report.ReportManager;
 import cr.ac.una.wsclinicauna.service.AgendaService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import jasper.generadorJasper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,21 +98,17 @@ public class AgendaController {
     @Path("/agendas/{fechaInicio}/{fechaFinal}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getAgendas(@PathParam("fechaInicio") String fechaInicio, @PathParam("fechaFinal") String fechaFinal) {
+    public byte[] getAgendas(@PathParam("fechaInicio") String fechaInicio, @PathParam("fechaFinal") String fechaFinal) {
         try {
             Respuesta respuesta = AgendaService.getAgendas(fechaInicio, fechaFinal);
             if (!respuesta.getEstado()) {
-                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+                return null;
             }
 
-            ArrayList<AgendaDto> AgendasDto = (ArrayList<AgendaDto>) respuesta.getResultado("Agendas");
-            ReportManager reporte = new ReportManager();
-            reporte.ReporteAgenda(AgendasDto);
-
-            return Response.ok(reporte).build();
+            return (byte[]) respuesta.getResultado("reporte");
         } catch (Exception ex) {
             Logger.getLogger(AgendaController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo las Agendas").build();
+            return null;
         }
     }
 
