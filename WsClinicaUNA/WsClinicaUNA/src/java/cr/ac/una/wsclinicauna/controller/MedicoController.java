@@ -90,6 +90,23 @@ public class MedicoController {
         }
     }
     
-    
+    @GET
+    @Path("/medicos/{codigo}/{carne}/{folio}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getPacientes(@PathParam("codigo")String codigo, @PathParam("carne") String carne,@PathParam("folio") String folio) {
+        try {
+            Respuesta respuesta = medicoService.getMedicos(codigo,carne,folio);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            ArrayList<MedicoDto> medicosDto = (ArrayList<MedicoDto>) respuesta.getResultado("Medicos");
+            return Response.ok(new GenericEntity<List<MedicoDto>>(medicosDto){}).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(PacienteController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el medico").build();
+        }
+    }
     
 }

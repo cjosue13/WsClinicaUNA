@@ -47,8 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByUsContrasenatemp", query = "SELECT u FROM Usuario u WHERE u.usContrasenatemp = :usContrasenatemp", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Usuario.findByUsVersion", query = "SELECT u FROM Usuario u WHERE u.usVersion = :usVersion")
     , @NamedQuery(name = "Usuario.findByUsuClave", query = "SELECT u FROM Usuario u WHERE u.usNombreUsuario = :usUsuario and (u.usContrasena = :usClave OR u.usContrasenatemp =:usClaveTemp)", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
-        
-})
+    , @NamedQuery(name = "Usuario.findByUsNombreCedulaApellido", query = "SELECT u FROM Usuario u WHERE UPPER(u.usNombre) like :UsNombre and UPPER(u.usCedula) like :UsCedula and UPPER(u.usPapellido) like :UsPapellido",hints = @QueryHint(name = "eclipselink.refresh", value = "true"))})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;

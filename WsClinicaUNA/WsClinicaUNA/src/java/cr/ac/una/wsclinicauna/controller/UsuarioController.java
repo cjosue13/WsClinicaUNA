@@ -139,5 +139,22 @@ public class UsuarioController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();
         }
     }
+    @GET
+    @Path("/Usuarios/{cedula}/{nombre}/{pApellido}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getPacientes(@PathParam("cedula")String cedula, @PathParam("nombre") String nombre,@PathParam("pApellido") String pApellido) {
+        try {
+            Respuesta respuesta = usuarioService.getUsuarios(cedula,nombre,pApellido);
+            if (!respuesta.getEstado()) {
+                return Response.status(respuesta.getCodigoRespuesta().getValue()).entity(respuesta.getMensaje()).build();
+            }
+            ArrayList<UsuarioDto> usuariosDto = (ArrayList<UsuarioDto>) respuesta.getResultado("Usuarios");
+            return Response.ok(new GenericEntity<List<UsuarioDto>>(usuariosDto){}).build();
 
+        } catch (Exception ex) {
+            Logger.getLogger(PacienteController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();
+        }
+    }
 }

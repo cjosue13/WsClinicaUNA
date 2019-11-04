@@ -49,7 +49,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Medico.findByMedIniciojornada", query = "SELECT m FROM Medico m WHERE m.medIniciojornada = :medIniciojornada")
     , @NamedQuery(name = "Medico.findByMedFinjornada", query = "SELECT m FROM Medico m WHERE m.medFinjornada = :medFinjornada")
     , @NamedQuery(name = "Medico.findByMedEspaciosporhora", query = "SELECT m FROM Medico m WHERE m.medEspaciosporhora = :medEspaciosporhora")
-    , @NamedQuery(name = "Medico.findByMedVersion", query = "SELECT m FROM Medico m WHERE m.medVersion = :medVersion")})
+    , @NamedQuery(name = "Medico.findByMedVersion", query = "SELECT m FROM Medico m WHERE m.medVersion = :medVersion")
+    , @NamedQuery(name = "Medico.findbyCodigoCarneFolio", query = "SELECT m FROM Medico m WHERE UPPER(m.medCodigo) like :MedCodigo and UPPER(m.medCarne) like :MedCarne and UPPER(m.medFolio) like :MedFolio", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+})
 public class Medico implements Serializable {
 
     private static final long serialVersionUID = 1L;
