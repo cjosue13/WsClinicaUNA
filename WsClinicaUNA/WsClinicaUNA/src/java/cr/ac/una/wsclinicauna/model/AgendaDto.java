@@ -5,7 +5,6 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
-
 import cr.ac.una.wsclinicauna.util.LocalDateAdapter;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -23,18 +22,18 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name = "AgendaDto")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AgendaDto {
-    
+
     private Long ageId;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate ageFecha;
     private Long ageVersion;
     private MedicoDto ageMedico;
     private List<EspacioDto> espacioList;
-    
-    public AgendaDto(){
+
+    public AgendaDto() {
     }
-    
-    public AgendaDto(Agenda agenda) {
+
+    public AgendaDto(Agenda agenda, boolean nuevo) {
         this.ageId = agenda.getAgeId();
         this.ageMedico = new MedicoDto(agenda.getAgeMedico());
         this.ageVersion = agenda.getAgeVersion();
@@ -42,12 +41,14 @@ public class AgendaDto {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
         this.espacioList = new ArrayList();
-        if(agenda.getEspacioList()!=null && !agenda.getEspacioList().isEmpty()){
-            agenda.getEspacioList().stream().forEach((espacio) -> {
-                this.espacioList.add(new EspacioDto(espacio));
-            });
-            
+        if (nuevo) {
+            if (agenda.getEspacioList() != null && !agenda.getEspacioList().isEmpty()) {
+                agenda.getEspacioList().stream().forEach((espacio) -> {
+                    this.espacioList.add(new EspacioDto(espacio));
+                });
+            }
         }
+
     }
 
     public Long getAgeId() {

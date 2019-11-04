@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CLN_PACIENTES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Paciente.findAll", query = "SELECT p FROM Paciente p")
-    , @NamedQuery(name = "Paciente.findByPacId", query = "SELECT p FROM Paciente p WHERE p.pacId = :pacId")
+    @NamedQuery(name = "Paciente.findAll", query = "SELECT p FROM Paciente p", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
+    , @NamedQuery(name = "Paciente.findByPacId", query = "SELECT p FROM Paciente p WHERE p.pacId = :pacId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Paciente.findByPacNombre", query = "SELECT p FROM Paciente p WHERE p.pacNombre = :pacNombre")
     , @NamedQuery(name = "Paciente.findByPacPapellido", query = "SELECT p FROM Paciente p WHERE p.pacPapellido = :pacPapellido")
     , @NamedQuery(name = "Paciente.findByPacSapellido", query = "SELECT p FROM Paciente p WHERE p.pacSapellido = :pacSapellido")
@@ -82,7 +82,7 @@ public class Paciente implements Serializable {
     @Basic(optional = false)
     @Column(name = "PAC_VERSION")
     private Long pacVersion;
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "ctPaciente", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ctPaciente", fetch = FetchType.LAZY)
     private List<Cita> citaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "expPaciente", fetch = FetchType.LAZY)
     private List<Expediente> expedienteList;

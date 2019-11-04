@@ -44,6 +44,7 @@ public class EspacioDto {
                     .toLocalDateTime();
         this.espHoraInicio = localDateTime2.toLocalTime().toString();
         this.espCita = new CitaDto(espacio.getEspCita());
+        this.espAgenda = new AgendaDto(espacio.getEspAgenda(),false);
     }
 
     public String getEspHoraFin() {

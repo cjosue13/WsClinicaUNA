@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Control.findAll", query = "SELECT c FROM Control c", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
-    , @NamedQuery(name = "Control.findByCntId", query = "SELECT c FROM Control c WHERE c.cntId = :cntId")
+    , @NamedQuery(name = "Control.findByCntId", query = "SELECT c FROM Control c WHERE c.cntId = :cntId", hints = @QueryHint(name = "eclipselink.refresh", value = "true"))
     , @NamedQuery(name = "Control.findByCntFecha", query = "SELECT c FROM Control c WHERE c.cntFecha = :cntFecha")
     , @NamedQuery(name = "Control.findByCntHora", query = "SELECT c FROM Control c WHERE c.cntHora = :cntHora")
     , @NamedQuery(name = "Control.findByCntPresion", query = "SELECT c FROM Control c WHERE c.cntPresion = :cntPresion")
