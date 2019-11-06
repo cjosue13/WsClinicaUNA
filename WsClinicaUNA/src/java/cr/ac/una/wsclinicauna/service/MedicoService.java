@@ -105,4 +105,27 @@ public class MedicoService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO,"Ocurrio un error al eliminar el Medico.", "EliminarMedico " + ex.getMessage());
         }
     }
+    
+    public Respuesta getMedicos(String cod, String carne, String folio){
+         try {
+            Query qryEmpleado = em.createNamedQuery("Medico.findbyCodigoCarneFolio",  Medico.class);
+            qryEmpleado.setParameter("MedCodigo", cod);
+            qryEmpleado.setParameter("MedCarne", carne);
+            qryEmpleado.setParameter("MedFolio", folio);
+            
+            List<Medico> medicos = qryEmpleado.getResultList();
+            List<MedicoDto> medicosDto = new ArrayList<>();
+            for (Medico med : medicos) {
+                medicosDto.add(new MedicoDto(med)); 
+            }
+            
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medicos", medicosDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen medicos con los criterios ingresados.", "getMedicos NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el medico.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el medico.", "getMedicos" + ex.getMessage());
+        }
+    }
 }

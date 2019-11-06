@@ -104,8 +104,8 @@ public class UsuarioService {
             if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
                 SQLIntegrityConstraintViolationException sqle = new SQLIntegrityConstraintViolationException(ex.getCause().getCause());
                 return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Usuario. Ya existe un Usuario con el mismo campo "
-                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN",2),
-                         "guardarUsuario " + sqle.getMessage());
+                        + CampoException.getCampo(sqle.getMessage(), "CLINICAUNA", "CLN", 2),
+                        "guardarUsuario " + sqle.getMessage());
             }
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Usuario.", "guardarUsuario " + ex.getMessage());
         }
@@ -177,4 +177,26 @@ public class UsuarioService {
         }
     }
 
+    public Respuesta getUsuarios(String cedula, String nombre, String pApellido) {
+        try {
+            Query qryEmpleado = em.createNamedQuery("Usuario.findByUsNombreCedulaApellido", Usuario.class);
+            qryEmpleado.setParameter("UsCedula", cedula);
+            qryEmpleado.setParameter("UsNombre", nombre);
+            qryEmpleado.setParameter("UsPapellido", pApellido);
+
+            List<Usuario> usuarios = qryEmpleado.getResultList();
+            List<UsuarioDto> usuariosDto = new ArrayList<>();
+            for (Usuario us : usuarios) {
+                usuariosDto.add(new UsuarioDto(us));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuarios", usuariosDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen usuarios con los criterios ingresados.", "getUsuarios NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getUsuarios " + ex.getMessage());
+        }
+    }
 }
