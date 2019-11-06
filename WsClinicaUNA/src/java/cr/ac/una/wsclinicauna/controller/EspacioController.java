@@ -40,7 +40,6 @@ public class EspacioController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarEspacio(EspacioDto Espacio) {
-        System.out.println("hola");
         try {
             Respuesta respuesta = EspacioService.guardarEspacio(Espacio);
             if (!respuesta.getEstado()) {

@@ -36,6 +36,7 @@ public class MedicoDto {
         this.carne = medico.getMedCarne();
         this.Estado = medico.getMedEstado();
         this.Espacios = medico.getMedEspaciosporhora();
+        
         if (medico.getMedIniciojornada() != null && medico.getMedFinjornada() != null) {
             LocalDateTime localDateTime = medico.getMedIniciojornada().toInstant()
                     .atZone(ZoneId.systemDefault())
